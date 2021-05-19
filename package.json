@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "craco start",
-    "build": "craco build"
+    "build": "craco build",
+    "parse-docs": "node ./scripts/parse-docs.mjs"
   },
   "eslintConfig": {
     "extends": [
@@ -41,5 +42,8 @@
     "semantic-ui-react": "^2.0.3",
     "typescript": "^4.2.4",
     "web-vitals": "^1.1.2"
+  },
+  "devDependencies": {
+    "satisfactory-docs-parser": "^1.0.1"
   }
 }

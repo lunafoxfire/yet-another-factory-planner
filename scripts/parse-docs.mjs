@@ -6,7 +6,7 @@ import parseDocs from 'satisfactory-docs-parser';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, '..');
 const DOCS_PATH = path.join(ROOT_DIR, 'data/Docs.json');
-const OUTPUT_DIR = path.join(ROOT_DIR, 'src/data');
+const OUTPUT_DIR = path.join(ROOT_DIR, 'src/data/json');
 
 const data = parseDocs(fs.readFileSync(DOCS_PATH));
 

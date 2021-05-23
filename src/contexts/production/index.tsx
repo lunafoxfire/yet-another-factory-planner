@@ -5,7 +5,7 @@ import { resources, recipes } from '../../data'
 // TYPES
 export type ProductionItemOptions = {
   key: string,
-  itemKey: string | null,
+  itemKey: string,
   mode: 'rate-target'|'building-target'|'maximize',
   value: string,
 };
@@ -70,6 +70,20 @@ function getDefaultInputItem(): InputItemOptions {
   });
 }
 
+const ORDERED_RESOURCES = [
+  'Desc_OreIron_C',
+  'Desc_OreCopper_C',
+  'Desc_Stone_C',
+  'Desc_Coal_C',
+  'Desc_OreGold_C',
+  'Desc_RawQuartz_C',
+  'Desc_Sulfur_C',
+  'Desc_LiquidOil_C',
+  'Desc_OreBauxite_C',
+  'Desc_OreUranium_C',
+  'Desc_NitrogenGas_C',
+  'Desc_Water_C',
+];
 function getInitialInputResources(): InputItemOptions[] {
   return Object.entries(resources)
     .map(([key, data]) => {
@@ -88,9 +102,11 @@ function getInitialInputResources(): InputItemOptions[] {
       };
     })
     .sort((a, b) => {
-      if (a.key === 'Desc_Water_C') return 1;
-      if (b.key === 'Desc_Water_C') return -1;
-      return a.itemKey > b.itemKey ? 1 : -1;
+      let aIndex = ORDERED_RESOURCES.findIndex((r) => r === a.itemKey);
+      if (aIndex === -1) aIndex = Infinity;
+      let bIndex = ORDERED_RESOURCES.findIndex((r) => r === b.itemKey);
+      if (bIndex === -1) bIndex = Infinity;
+      return aIndex < bIndex ? -1 : 1;
     });
 }
 

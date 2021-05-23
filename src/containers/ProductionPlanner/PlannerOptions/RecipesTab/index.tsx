@@ -32,7 +32,7 @@ const RecipesTab = () => {
     return recipeList.map(({ key, label }) => ({
       label,
       component: (
-        <List.Item>
+        <List.Item key={key}>
           <Checkbox
             label={label}
             checked={ctx.state.allowedRecipes[key]}

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import 'semantic-ui-less/semantic.less';
 import './index.css';
 import App from './App';
-// import reportWebVitals from './utilities/reportWebVitals';
+// import reportWebVitals from './utilities/debug/reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -12,4 +12,4 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// reportWebVitals();
+// reportWebVitals(console.log);

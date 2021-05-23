@@ -49,9 +49,9 @@ const PlannerOptions = () => {
           Recipes
         </Menu.Item>
       </Menu>
-      <Container style={{ padding: '20px 0px' }}>
+      <div style={{ padding: '20px 0px' }}>
         {renderTab()}
-      </Container>
+      </div>
     </Container>
   );
 };

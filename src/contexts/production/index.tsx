@@ -1,6 +1,9 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
+import { usePrevious } from '../../hooks/usePrevious';
 import { resources, recipes } from '../../data'
+
+const LOCAL_STORAGE_KEY = 'factory-data';
 
 // TYPES
 export type ProductionItemOptions = {
@@ -143,7 +146,8 @@ export type FactoryAction =
   | { type: 'SET_RESOURCES_TO_MAP_LIMITS' }
   | { type: 'SET_RESOURCES_TO_0' }
   | { type: 'SET_RECIPE_ACTIVE', key: string, active: boolean }
-  | { type: 'MASS_SET_RECIPES_ACTIVE', alternates: boolean, active: boolean };
+  | { type: 'MASS_SET_RECIPES_ACTIVE', alternates: boolean, active: boolean }
+  | { type: 'LOAD_LOCAL_STORAGE' };
 
 function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
   switch (action.type) {
@@ -214,6 +218,18 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
       })
       return { ...state, allowedRecipes: newAllowedRecipes };
     }
+    case 'LOAD_LOCAL_STORAGE': {
+      const data = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (data) {
+        try {
+          const loadedState = JSON.parse(data);
+          return loadedState;
+        } catch (e) {
+          console.error('LOAD FROM LOCAL STORAGE FAILED');
+        }
+      }
+      return state;
+    }
     default:
       return state;
   }
@@ -224,6 +240,22 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
 type PropTypes = { children: React.ReactNode };
 export const ProductionProvider = ({ children }: PropTypes) => {
   const [state, dispatch] = useReducer(reducer, getInitialState());
+  const [loaded, setLoaded] = useState(false);
+
+  const prevState = usePrevious(state);
+
+  useEffect(() => {
+    if (!loaded) {
+      dispatch({ type: 'LOAD_LOCAL_STORAGE' });
+      setLoaded(true);
+    }
+  }, [loaded]);
+
+  useEffect(() => {
+    if (prevState !== state) {
+      window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+    }
+  }, [prevState, state]);
 
   return (
     <ProductionContext.Provider value={{ state, dispatch }}>

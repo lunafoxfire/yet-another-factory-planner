@@ -45,7 +45,7 @@ export type GraphEdge = {
   productionRate: number,
 };
 
-export class ProductionGraphAlgorithm {
+export class ProductionSolver {
   private inputs: InputMap;
   private outputs: OutputMap;
   private allowedRecipes: RecipeMap;

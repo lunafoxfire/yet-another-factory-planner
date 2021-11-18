@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
-import { Container, Menu, Button } from 'semantic-ui-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Container, Menu, Button, Checkbox } from 'semantic-ui-react';
 import GraphTab from './GraphTab';
 import BuildingsTab from './BuildingsTab';
-import { ProductionGraphAlgorithm, ProductionGraph } from '../../../utilities/production-calculator';
+import { ProductionSolver, ProductionGraph } from '../../../utilities/production-solver';
 import { useProductionContext } from '../../../contexts/production';
+import { usePrevious } from '../../../hooks/usePrevious';
 
 const PlannerResults = () => {
   const [activeTab, setActiveTab] = useState('graph');
+  const [autoCalc, setAutoCalc] = useState(true);
+  const [loaded, setLoaded] = useState(false);
   const [graph, setGraph] = useState<ProductionGraph | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
   const ctx = useProductionContext();
+  const prevState = usePrevious(ctx.state);
 
-  function handleCalculateFactory() {
-    const alg = new ProductionGraphAlgorithm(ctx.state);
+  const handleCalculateFactory = useCallback(() => {
+    const alg = new ProductionSolver(ctx.state);
     try {
       const graphResults = alg.exec();
       setGraph(graphResults);
@@ -21,7 +25,7 @@ const PlannerResults = () => {
       setGraph(null);
       setErrorMessage(e.message);
     }
-  }
+  }, [ctx.state]);
 
   function handleSetTab(e: any, data: any) {
     setActiveTab(data.name);
@@ -37,6 +41,15 @@ const PlannerResults = () => {
         return null;
     }
   }
+
+  useEffect(() => {
+    if (!loaded) {
+      handleCalculateFactory();
+      setLoaded(true);
+    } else if (autoCalc && prevState !== ctx.state) {
+      handleCalculateFactory();
+    }
+  }, [autoCalc, ctx.state, handleCalculateFactory, loaded, prevState]);
 
   return (
     <Container fluid>
@@ -57,9 +70,14 @@ const PlannerResults = () => {
         </Menu.Item>
       </Menu>
       <div style={{ padding: '20px 0px' }}>
-        <Button primary onClick={handleCalculateFactory} style={{ marginBottom: '10px' }}>
+        <Button primary onClick={handleCalculateFactory} disabled={autoCalc} style={{ marginBottom: '10px', marginRight: '15px' }}>
           Calculate
         </Button>
+        <Checkbox
+          label='Auto-calculate on change'
+          checked={autoCalc}
+          onChange={(e, { checked }) => { setAutoCalc(!!checked); }}
+        />
         {renderTab()}
       </div>
     </Container>

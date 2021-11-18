@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import GraphVis from '../../../../components/GraphVis';
-import { ProductionGraph, GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-calculator';
+import { ProductionGraph, GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes, buildings } from '../../../../data';
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const graphOptions = {
+  autoResize: true,
   layout: {
     hierarchical: {
       enabled: true,
@@ -17,10 +18,29 @@ const graphOptions = {
       shakeTowards: 'leaves',
       levelSeparation: 280,
       nodeSpacing: 100,
+      treeSpacing: 100,
     },
   },
   physics: {
     enabled: false,
+  },
+  interaction: {
+    selectable: false,
+    selectConnectedEdges: false,
+    zoomSpeed: 0.8,
+  },
+  nodes: {
+    borderWidth: 1,
+    chosen: false,
+  },
+  edges: {
+    arrows: {
+      to: {
+        enabled: true,
+        scaleFactor: 0.8,
+      }
+    },
+    chosen: false,
   }
 }
 
@@ -81,7 +101,7 @@ const GraphTab = (props: Props) => {
       label: getNodeLabel(node, activeGraph.edges),
       shape: (node.type === NODE_TYPE.RECIPE) ? 'box' : 'ellipse',
       heightConstraint: (node.type === NODE_TYPE.RECIPE) ?  50 : 30,
-      widthConstraint: (node.type === NODE_TYPE.RECIPE) ?  150: 130,
+      widthConstraint: (node.type === NODE_TYPE.RECIPE) ?  150: 120,
     }));
     graphData.edges = activeGraph.edges.map((edge) => ({
       from: edge.from,

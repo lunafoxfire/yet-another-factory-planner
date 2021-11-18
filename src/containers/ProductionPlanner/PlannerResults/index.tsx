@@ -1,28 +1,29 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Menu, Button, Checkbox } from 'semantic-ui-react';
-import GraphTab from './GraphTab';
+import ProductionGraphTab from './ProductionGraphTab';
+import RecipeGraphTab from './RecipeGraphTab';
 import BuildingsTab from './BuildingsTab';
-import { ProductionSolver, ProductionGraph } from '../../../utilities/production-solver';
+import { ProductionSolver, SolverResults } from '../../../utilities/production-solver';
 import { useProductionContext } from '../../../contexts/production';
 import { usePrevious } from '../../../hooks/usePrevious';
 
 const PlannerResults = () => {
-  const [activeTab, setActiveTab] = useState('graph');
+  const [activeTab, setActiveTab] = useState('production-graph');
   const [autoCalc, setAutoCalc] = useState(true);
   const [loaded, setLoaded] = useState(false);
-  const [graph, setGraph] = useState<ProductionGraph | null>(null);
+  const [solverResults, setSolverResults] = useState<SolverResults | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
   const ctx = useProductionContext();
   const prevState = usePrevious(ctx.state);
 
   const handleCalculateFactory = useCallback(() => {
-    const alg = new ProductionSolver(ctx.state);
+    const solver = new ProductionSolver(ctx.state);
     try {
-      const graphResults = alg.exec();
-      setGraph(graphResults);
+      const results = solver.exec();
+      setSolverResults(results);
       setErrorMessage('');
     } catch (e: any) {
-      setGraph(null);
+      setSolverResults(null);
       setErrorMessage(e.message);
     }
   }, [ctx.state]);
@@ -33,8 +34,10 @@ const PlannerResults = () => {
 
   function renderTab() {
     switch (activeTab) {
-      case 'graph':
-        return <GraphTab activeGraph={graph} errorMessage={errorMessage} />
+      case 'production-graph':
+        return <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={errorMessage} />
+      case 'recipe-graph':
+        return <RecipeGraphTab activeGraph={solverResults?.recipeGraph || null} errorMessage={errorMessage} />
       case 'buildings':
         return <BuildingsTab />
       default:
@@ -55,11 +58,18 @@ const PlannerResults = () => {
     <Container fluid>
       <Menu pointing secondary attached="top">
         <Menu.Item
-          name='graph'
-          active={activeTab === 'graph'}
+          name='production-graph'
+          active={activeTab === 'production-graph'}
           onClick={handleSetTab}
         >
           Production Graph
+        </Menu.Item>
+        <Menu.Item
+          name='recipe-graph'
+          active={activeTab === 'recipe-graph'}
+          onClick={handleSetTab}
+        >
+          Recipe Graph
         </Menu.Item>
         <Menu.Item
           name='buildings'

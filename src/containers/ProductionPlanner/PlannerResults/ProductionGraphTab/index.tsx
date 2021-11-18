@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import GraphVis from '../../../../components/GraphVis';
-import { ProductionGraph, GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
+import { ProductionGraph, ProductionGraphNode, ProductionGraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes, buildings } from '../../../../data';
 
 interface Props {
@@ -25,7 +25,6 @@ const graphOptions = {
     enabled: false,
   },
   interaction: {
-    selectable: false,
     selectConnectedEdges: false,
     zoomSpeed: 0.8,
   },
@@ -48,11 +47,11 @@ function truncateFloat(n: number) {
   return n.toFixed(4).replace(/\.?0+$/, '');
 }
 
-function getNodeLabel(node: GraphNode, edges: GraphEdge[]) {
+function getNodeLabel(node: ProductionGraphNode, edges: ProductionGraphEdge[]) {
   let label = '';
   let amountText = '';
   if (node.type === NODE_TYPE.RECIPE) {
-    const recipe = recipes[node.recipe];
+    const recipe = recipes[node.key];
     label = `${recipe.name}`;
     amountText = `${truncateFloat(node.multiplier)}x ${buildings[recipe.producedIn].name}`;
   } else if (node.type === NODE_TYPE.FINAL_PRODUCT || node.type === NODE_TYPE.SIDE_PRODUCT) {
@@ -62,7 +61,7 @@ function getNodeLabel(node: GraphNode, edges: GraphEdge[]) {
         val += edge.productionRate;
       }
     });
-    const item = items[node.recipe];
+    const item = items[node.key];
     label = `${item.name}`;
     amountText = `${truncateFloat(val)} / min`;
   } else if (node.type === NODE_TYPE.INPUT || node.type === NODE_TYPE.RESOURCE) {
@@ -72,7 +71,7 @@ function getNodeLabel(node: GraphNode, edges: GraphEdge[]) {
         val += edge.productionRate;
       }
     });
-    const item = items[node.recipe];
+    const item = items[node.key];
     label = `${item.name}`;
     amountText = `${truncateFloat(val)} / min`;
   } else if (node.type === NODE_TYPE.ROOT) {
@@ -81,17 +80,17 @@ function getNodeLabel(node: GraphNode, edges: GraphEdge[]) {
   return `${label}\n${amountText}`;
 }
 
-function getEdgeLabel(edge: GraphEdge) {
-  const item = items[edge.item];
+function getEdgeLabel(edge: ProductionGraphEdge) {
+  const item = items[edge.key];
   const label = `${item.name}`;
   const amountText = `${truncateFloat(edge.productionRate)} / min`;
   return `${label}\n${amountText}`;
 }
 
-const GraphTab = (props: Props) => {
+const ProductionGraphTab = (props: Props) => {
   const { activeGraph, errorMessage } = props;
 
-  const graphData = useMemo(() => {
+  const graphData = useMemo<any>(() => {
     if (activeGraph == null) {
       return null;
     }
@@ -141,4 +140,4 @@ const GraphTab = (props: Props) => {
   );
 };
 
-export default GraphTab;
+export default ProductionGraphTab;

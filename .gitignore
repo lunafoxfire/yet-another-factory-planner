@@ -1,5 +1,5 @@
-data/
-src/data
+/data/
+/src/data/json
 
 # dependencies
 /node_modules

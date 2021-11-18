@@ -36,7 +36,7 @@ const ProductionTab = () => {
             onChange={(e, { value }) => {
               ctx.dispatch({
                 type: 'UPDATE_PRODUCTION_ITEM',
-                data: { ...data, itemKey: String(value) },
+                data: { ...data, itemKey: (value as string) },
               });
             }}
           />

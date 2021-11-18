@@ -31,7 +31,7 @@ const InputsTab = () => {
             onChange={(e, { value }) => {
               ctx.dispatch({
                 type: 'UPDATE_INPUT_ITEM',
-                data: { ...data, itemKey: String(value) },
+                data: { ...data, itemKey: (value as string) },
               });
             }}
           />

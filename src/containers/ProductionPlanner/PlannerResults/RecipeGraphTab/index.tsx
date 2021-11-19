@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import GraphVis from '../../../../components/GraphVis';
-import { RecipeGraph, RecipeGraphNode, RecipeGraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
+import { RecipeGraph, RecipeGraphNode, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes } from '../../../../data';
 
 interface Props {
@@ -46,18 +46,30 @@ const graphOptions = {
   }
 }
 
-function getNodeLabel(node: RecipeGraphNode, edges: RecipeGraphEdge[]) {
+function truncateFloat(n: number) {
+  return n.toFixed(4).replace(/\.?0+$/, '');
+}
+
+function getNodeLabel(node: RecipeGraphNode) {
   let label = '';
+  let score = '';
   if (node.type === NODE_TYPE.RECIPE) {
     const recipe = recipes[node.key];
+    score = '\n' + Object.entries(node.recipeScore)
+      .map(([itemKey, itemScore]) => {
+        const item = items[itemKey];
+        return `${item.name}: ${truncateFloat(itemScore)}`;
+      })
+      .join('\n');
     label = recipe.name;
   } else if (node.type === NODE_TYPE.INPUT || node.type === NODE_TYPE.RESOURCE || node.type === NODE_TYPE.ITEM) {
     const item = items[node.key];
     label = item.name;
+    score = `Score: ${node.itemScore == null ? 'null' : truncateFloat(node.itemScore)}`;
   } else if (node.type === NODE_TYPE.ROOT) {
     label = 'ROOT';
   }
-  return label;
+  return `${label}\n${score}`;
 }
 
 function getNodeLevel(node: RecipeGraphNode, graph: RecipeGraph) {
@@ -78,17 +90,17 @@ const RecipeGraphTab = (props: Props) => {
       return null;
     }
     const graphData: any = {};
-    graphData.nodes = activeGraph.nodes.map((node) => ({
-      id: node.id,
-      label: getNodeLabel(node, activeGraph.edges),
+    graphData.nodes = Object.entries(activeGraph.nodes).map(([key, node]) => ({
+      id: key,
+      label: getNodeLabel(node),
       level: getNodeLevel(node, activeGraph),
       shape: (node.type === NODE_TYPE.RECIPE) ? 'box' : 'ellipse',
       heightConstraint: (node.type === NODE_TYPE.RECIPE) ? 50 : 30,
       widthConstraint: (node.type === NODE_TYPE.RECIPE) ? 150 : 120,
     }));
     graphData.edges = activeGraph.edges.map((edge) => ({
-      from: edge.from,
-      to: edge.to,
+      from: edge.from.key,
+      to: edge.to.key,
     }));
     return graphData;
   }, [activeGraph]);

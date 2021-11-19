@@ -7,6 +7,8 @@ import { ProductionSolver, SolverResults } from '../../../utilities/production-s
 import { useProductionContext } from '../../../contexts/production';
 import { usePrevious } from '../../../hooks/usePrevious';
 
+const RECIPE_GRAPH_ACTIVE = process.env.NODE_ENV === 'development';
+
 const PlannerResults = () => {
   const [activeTab, setActiveTab] = useState('production-graph');
   const [autoCalc, setAutoCalc] = useState(true);
@@ -37,7 +39,11 @@ const PlannerResults = () => {
       case 'production-graph':
         return <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={errorMessage} />
       case 'recipe-graph':
-        return <RecipeGraphTab activeGraph={solverResults?.recipeGraph || null} errorMessage={errorMessage} />
+        return (
+          RECIPE_GRAPH_ACTIVE
+            ? <RecipeGraphTab activeGraph={solverResults?.recipeGraph || null} errorMessage={errorMessage} />
+            : null
+        );
       case 'buildings':
         return <BuildingsTab />
       default:
@@ -64,13 +70,15 @@ const PlannerResults = () => {
         >
           Production Graph
         </Menu.Item>
-        <Menu.Item
-          name='recipe-graph'
-          active={activeTab === 'recipe-graph'}
-          onClick={handleSetTab}
-        >
-          Recipe Graph
-        </Menu.Item>
+        {RECIPE_GRAPH_ACTIVE && (
+          <Menu.Item
+            name='recipe-graph'
+            active={activeTab === 'recipe-graph'}
+            onClick={handleSetTab}
+          >
+            Recipe Graph
+          </Menu.Item>
+        )}
         <Menu.Item
           name='buildings'
           active={activeTab === 'buildings'}
@@ -84,7 +92,7 @@ const PlannerResults = () => {
           Calculate
         </Button>
         <Checkbox
-          label='Auto-calculate on change'
+          label='Auto-calculate on update (uncheck this if changing options is slow)'
           checked={autoCalc}
           onChange={(e, { checked }) => { setAutoCalc(!!checked); }}
         />

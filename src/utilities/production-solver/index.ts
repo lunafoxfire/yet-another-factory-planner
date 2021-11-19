@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { FactoryOptions } from '../../contexts/production';
 import { itemRecipeMap, recipes, resources, uncraftableItems, ItemRate, items } from '../../data';
 import { RecipeMap } from '../../contexts/production';
@@ -37,7 +38,7 @@ export type RecipeGraph = {
 };
 
 export type ItemNode = {
-  id: number,
+  id: string,
   key: string,
   type: string,
   depth: number,
@@ -46,7 +47,7 @@ export type ItemNode = {
 };
 
 export type RecipeNode = {
-  id: number,
+  id: string,
   key: string,
   type: string,
   depth: number,
@@ -55,8 +56,8 @@ export type RecipeNode = {
 };
 
 export type GraphEdge = {
-  from: number,
-  to: number,
+  from: string,
+  to: string,
 };
 
 export type ProductionGraph = {
@@ -68,7 +69,7 @@ export type ProductionGraph = {
 };
 
 export type ProductionGraphNode = {
-  id: number,
+  id: string,
   key: string,
   type: string,
   multiplier: number,
@@ -76,8 +77,8 @@ export type ProductionGraphNode = {
 };
 
 export type ProductionGraphEdge = {
-  from: number,
-  to: number,
+  from: string,
+  to: string,
   key: string,
   productionRate: number,
 };
@@ -187,10 +188,6 @@ export class ProductionSolver {
     };
   }
 
-  private nextId() {
-    return this.currentId++;
-  }
-
   private generateRecipeGraph(): RecipeGraph {
     const graph: RecipeGraph = {
       itemNodes: {},
@@ -200,7 +197,7 @@ export class ProductionSolver {
     };
 
     const initialNode: RecipeNode = {
-      id: this.nextId(),
+      id: nanoid(),
       key: NODE_TYPE.ROOT,
       type: NODE_TYPE.ROOT,
       depth: -1,
@@ -225,7 +222,7 @@ export class ProductionSolver {
       let productNode = graph.itemNodes[product];
       if (!productNode) {
         productNode = {
-          id: this.nextId(),
+          id: nanoid(),
           key: product,
           type: NODE_TYPE.SIDE_PRODUCT,
           depth,
@@ -255,7 +252,7 @@ export class ProductionSolver {
           type = this.inputs[ingredient].type;
         }
         ingredientNode = {
-          id: this.nextId(),
+          id: nanoid(),
           key: ingredient,
           type,
           depth,
@@ -306,7 +303,7 @@ export class ProductionSolver {
         if (!recipeNode) {
           const recipeInfo = recipes[recipe];
           recipeNode = {
-            id: this.nextId(),
+            id: nanoid(),
             key: recipe,
             type: NODE_TYPE.RECIPE,
             depth,
@@ -432,7 +429,7 @@ export class ProductionSolver {
   //   };
 
   //   const initialNode: ProductionGraphNode = {
-  //     id: this.nextId(),
+  //     id: nanoid(),
   //     key: NODE_TYPE.ROOT,
   //     type: NODE_TYPE.ROOT,
   //     multiplier: 1,
@@ -530,7 +527,7 @@ export class ProductionSolver {
 
   //     if (this.inputs[item]) {
   //       const node: ProductionGraphNode = {
-  //         id: this.nextId(),
+  //         id: nanoid(),
   //         key: item,
   //         type: this.inputs[item].type,
   //         multiplier: 1,
@@ -561,7 +558,7 @@ export class ProductionSolver {
   //     }
 
   //     const node: ProductionGraphNode = {
-  //       id: this.nextId(),
+  //       id: nanoid(),
   //       key: selectedRecipe,
   //       multiplier,
   //       type: NODE_TYPE.RECIPE,
@@ -570,7 +567,7 @@ export class ProductionSolver {
 
   //     if (parentNode.type === NODE_TYPE.ROOT) {
   //       const productNode: ProductionGraphNode = {
-  //         id: this.nextId(),
+  //         id: nanoid(),
   //         key: item,
   //         multiplier: 1,
   //         type: NODE_TYPE.FINAL_PRODUCT,
@@ -597,7 +594,7 @@ export class ProductionSolver {
 
   //     sideProducts.forEach((sideProduct) => {
   //       const productNode: ProductionGraphNode = {
-  //         id: this.nextId(),
+  //         id: nanoid(),
   //         key: sideProduct.itemClass,
   //         multiplier: 1,
   //         type: NODE_TYPE.SIDE_PRODUCT,

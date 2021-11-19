@@ -1,83 +1,166 @@
 import React, { useMemo, useState } from 'react';
-import GraphVis from '../../../../components/GraphVis';
+import { nanoid } from 'nanoid';
+import Cytoscape, { Stylesheet } from 'cytoscape';
+import klay from 'cytoscape-klay';
+import dagre from 'cytoscape-dagre';
+import GraphVisualizer from 'react-cytoscapejs';
 import { Checkbox } from 'semantic-ui-react';
 import { RecipeGraph, ItemNode, RecipeNode, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes } from '../../../../data';
+
+Cytoscape.use(klay);
+Cytoscape.use(dagre);
+
+const layout = {
+  name: 'klay',
+  padding: 50,
+  klay: {
+    direction: 'RIGHT',
+    edgeRouting: 'POLYLINE',
+    nodePlacement: 'LINEAR_SEGMENTS',
+    spacing: 20,
+    thoroughness: 3,
+  },
+};
+
+// const layout = {
+//   name: 'dagre',
+//   padding: 50,
+//   rankDir: 'LR',
+//   ranker: 'tight-tree',
+//   nodeSep: 20,
+//   edgeSep: 1,
+//   rankSep: 30,
+// };
+
+const stylesheet: Stylesheet[] = [
+  {
+    selector: 'core',
+    style: {
+      'active-bg-color': '#000',
+      'active-bg-opacity': 0,
+      'active-bg-size': 0,
+      'selection-box-color': '#000',
+      'selection-box-border-color': '#000',
+      'selection-box-border-width': 0,
+      'selection-box-opacity': 0,
+      'outside-texture-bg-color': '#000',
+      'outside-texture-bg-opacity': 0,
+    },
+  },
+  {
+    selector: 'node',
+    style: {
+      'label': 'data(label)',
+      'text-valign': 'center',
+      'text-halign': 'center',
+      'height': 'label',
+      'width': '140px',
+      'text-max-width': '160px',
+      'padding-top': '20px',
+      'overlay-padding': 0,
+      'overlay-opacity': 0,
+      'text-wrap': 'wrap',
+      'font-size': '16px',
+    },
+  },
+  {
+    selector: 'edge',
+    style: {
+      'label': 'data(label)',
+      'width': 2,
+      'curve-style': 'straight',
+      'target-arrow-shape': 'triangle-backcurve',
+      'arrow-scale': 1.5,
+      'overlay-padding': 0,
+      'overlay-opacity': 0,
+    },
+  },
+  {
+    selector: 'node.item',
+    style: {
+      'shape': 'ellipse',
+    },
+  },
+  {
+    selector: 'node.recipe',
+    style: {
+      'shape': 'round-rectangle',
+    },
+  },
+];
 
 interface Props {
   activeGraph: RecipeGraph | null,
   errorMessage: string,
 }
 
-const graphOptions = {
-  autoResize: true,
-  layout: {
-    hierarchical: {
-      enabled: true,
-      direction: 'LR',
-      sortMethod: 'directed',
-      shakeTowards: 'leaves',
-      blockShifting: true,
-      edgeMinimization: true,
-      parentCentralization: true,
-      levelSeparation: 280,
-      nodeSpacing: 100,
-      treeSpacing: 100,
-    },
-  },
-  physics: {
-    enabled: false,
-  },
-  interaction: {
-    selectConnectedEdges: false,
-    zoomSpeed: 0.8,
-  },
-  nodes: {
-    borderWidth: 1,
-    chosen: false,
-  },
-  edges: {
-    arrows: {
-      to: {
-        enabled: true,
-        scaleFactor: 0.8,
-      }
-    },
-    chosen: false,
-  }
-}
-
 const RecipeGraphTab = (props: Props) => {
   const { activeGraph, errorMessage } = props;
-  const [fullRecipeGraph, setFullRecipeGraph] = useState(false);
+  const [fullRecipeGraph, setFullRecipeGraph] = useState(true);
 
-  const graphData = useMemo<any>(() => {
+  const graphProps = useMemo<any>(() => {
     if (activeGraph == null) {
       return null;
     }
 
-    const itemDependencies: any = {}
-    const recipeRelations: any = {}
+    const key = nanoid();
+    const itemDependencies: any[] = [];
+    const recipeRelations: any[] = [];
 
-    itemDependencies.nodes = Object.entries(activeGraph.itemNodes).map(([key, node]) => ({
-      id: node.id,
-      label: items[key].name,
-      shape: 'ellipse',
-      heightConstraint: 30,
-      widthConstraint: 120,
-    }));
-    itemDependencies.edges = activeGraph.itemDependencyEdges;
+    // ==== ITEM DEPENDENCIES ==== //
+    Object.entries(activeGraph.itemNodes).forEach(([key, node]) => {
+      itemDependencies.push({
+        group: 'nodes',
+        data: {
+          id: node.id,
+          label: items[key].name,
+        },
+        classes: ['item'],
+      });
+    });
+    activeGraph.itemDependencyEdges.forEach((edge) => {
+      itemDependencies.push({
+        group: 'edges',
+        data: {
+          source: edge.from,
+          target: edge.to,
+        },
+      });
+    });
 
-    recipeRelations.nodes = Object.entries({ ...activeGraph.itemNodes, ...activeGraph.recipeNodes }).map(([key, node]) => ({
-      id: node.id,
-      label: (node.type === NODE_TYPE.RECIPE) ? recipes[key].name : items[key].name,
-      shape: (node.type === NODE_TYPE.RECIPE) ? 'box' : 'ellipse',
-      heightConstraint: (node.type === NODE_TYPE.RECIPE) ? 50 : 30,
-      widthConstraint: (node.type === NODE_TYPE.RECIPE) ? 150 : 120,
-    }));
-    recipeRelations.edges = activeGraph.recipeRelationEdges;
+    // ==== RECIPE RELATIONS ==== //
+    Object.entries(activeGraph.itemNodes).forEach(([key, node]) => {
+      recipeRelations.push({
+        group: 'nodes',
+        data: {
+          id: node.id,
+          label: items[key].name,
+        },
+        classes: ['item'],
+      });
+    });
+    Object.entries(activeGraph.recipeNodes).forEach(([key, node]) => {
+      recipeRelations.push({
+        group: 'nodes',
+        data: {
+          id: node.id,
+          label: recipes[key].name,
+        },
+        classes: ['recipe'],
+      });
+    });
+    activeGraph.recipeRelationEdges.forEach((edge) => {
+      recipeRelations.push({
+        group: 'edges',
+        data: {
+          source: edge.from,
+          target: edge.to,
+        },
+      });
+    });
 
-    return { itemDependencies, recipeRelations };
+    return { key, itemDependencies, recipeRelations };
   }, [activeGraph]);
 
   return (
@@ -91,23 +174,31 @@ const RecipeGraphTab = (props: Props) => {
       />
       <div style={{ height: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px solid black' }}>
         {
-          graphData != null
+          graphProps != null
             ? (
               fullRecipeGraph
                 ? (
-                  <GraphVis
-                    key="recipeRelations"
-                    graph={graphData.recipeRelations}
-                    options={graphOptions}
-                    style={{ height: '100%', width: '100%' }}
+                  <GraphVisualizer
+                    key={`${graphProps.key}-recipeRelations`}
+                    elements={graphProps.recipeRelations}
+                    layout={layout}
+                    stylesheet={stylesheet}
+                    boxSelectionEnabled={false}
+                    autounselectify={true}
+                    wheelSensitivity={0.2}
+                    style={{ height: '100%', width: '100%', overflow: 'hidden' }}
                   />
                 )
                 : (
-                  <GraphVis
-                    key="itemDependencies"
-                    graph={graphData.itemDependencies}
-                    options={graphOptions}
-                    style={{ height: '100%', width: '100%' }}
+                  <GraphVisualizer
+                    key={`${graphProps.key}-itemDependencies`}
+                    elements={graphProps.itemDependencies}
+                    layout={layout}
+                    stylesheet={stylesheet}
+                    boxSelectionEnabled={false}
+                    autounselectify={true}
+                    wheelSensitivity={0.2}
+                    style={{ height: '100%', width: '100%', overflow: 'hidden' }}
                   />
                 )
             )

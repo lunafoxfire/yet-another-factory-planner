@@ -1,12 +1,6 @@
 import React, { useMemo } from 'react';
-import GraphVis from '../../../../components/GraphVis';
 import { ProductionGraph, ProductionGraphNode, ProductionGraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes, buildings } from '../../../../data';
-
-interface Props {
-  activeGraph: ProductionGraph | null,
-  errorMessage: string,
-}
 
 const graphOptions = {
   autoResize: true,
@@ -87,6 +81,11 @@ function getEdgeLabel(edge: ProductionGraphEdge) {
   return `${label}\n${amountText}`;
 }
 
+interface Props {
+  activeGraph: ProductionGraph | null,
+  errorMessage: string,
+}
+
 const ProductionGraphTab = (props: Props) => {
   const { activeGraph, errorMessage } = props;
 
@@ -115,11 +114,12 @@ const ProductionGraphTab = (props: Props) => {
       {
         graphData != null
         ? (
-          <GraphVis
-            graph={graphData}
-            options={graphOptions}
-            style={{ height: '100%', width: '100%' }}
-          />
+          null
+          // <GraphVis
+          //   graph={graphData}
+          //   options={graphOptions}
+          //   style={{ height: '100%', width: '100%' }}
+          // />
         )
         : (
           <>

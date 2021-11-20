@@ -130,7 +130,7 @@ export class ProductionSolver {
     Object.keys(uncraftableItems).forEach((item) => {
       this.inputs[item] = {
         amount: Infinity,
-        value: 0,
+        value: 10000,
         type: NODE_TYPE.RESOURCE,
       };
     });
@@ -222,7 +222,7 @@ export class ProductionSolver {
   }
 
   private buildRecipeTree(parentNode: RecipeNode, graph: RecipeGraph, depth: number) {
-    if (depth > 20) {
+    if (depth > 50) {
       throw new Error('INFINITE LOOP DETECTED');
     }
 
@@ -461,6 +461,11 @@ export class ProductionSolver {
         while (j < producedBy.length) {
           const productionInfo = producedBy[j];
           const productionNode = graph.nodes[productionInfo.recipeKey];
+
+          if (productionInfo.amount < EPSILON) {
+            j++
+            continue;
+          }
 
           if (usageInfo.amount <= productionInfo.amount || j === producedBy.length - 1) {
             graph.edges.push({

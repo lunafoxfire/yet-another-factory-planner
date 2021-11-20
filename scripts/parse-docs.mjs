@@ -9,16 +9,7 @@ const DOCS_PATH = path.join(ROOT_DIR, 'data/Docs.json');
 const OUTPUT_DIR = path.join(ROOT_DIR, 'src/data/json');
 
 const EXCLUDED_RECIPES = [
-  'Recipe_UnpackageBioFuel_C',
-  'Recipe_UnpackageFuel_C',
-  'Recipe_UnpackageOil_C',
-  'Recipe_UnpackageOilResidue_C',
-  'Recipe_UnpackageWater_C',
-  'Recipe_UnpackageAlumina_C',
-  'Recipe_UnpackageTurboFuel_C',
-  'Recipe_UnpackageSulfuricAcid_C',
-  'Recipe_UnpackageNitrogen_C',
-  'Recipe_UnpackageNitricAcid_C',
+  
 ];
 
 const data = parseDocs(fs.readFileSync(DOCS_PATH));
@@ -86,11 +77,9 @@ Object.entries((data.itemRecipes)).forEach(([recipeKey, recipeData]) => {
 });
 
 const resources = {};
-// let totalExtraction = 0;
 let maxExtraction = 0;
 Object.entries(data.resources).forEach(([resourceKey, resourceData]) => {
   if (resourceData.maxExtraction !== Infinity) {
-    // totalExtraction += resourceData.maxExtraction;
     if (resourceData.maxExtraction > maxExtraction) {
       maxExtraction = resourceData.maxExtraction;
     }
@@ -98,13 +87,13 @@ Object.entries(data.resources).forEach(([resourceKey, resourceData]) => {
   resources[resourceKey] = {
     itemClass: resourceData.itemClass,
     maxExtraction: resourceData.maxExtraction,
-    relativeValue: 0,
+    relativeValue: 1,
   };
 });
 
 Object.entries(resources).forEach(([resourceKey, resourceData]) => {
-  if (resourceData.maxExtraction) {
-    resourceData.relativeValue = maxExtraction / resourceData.maxExtraction;
+  if (resourceData.maxExtraction && resourceData.maxExtraction !== Infinity) {
+    resourceData.relativeValue = Math.floor(maxExtraction / resourceData.maxExtraction * 100);
   }
 });
 

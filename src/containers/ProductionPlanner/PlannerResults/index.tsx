@@ -1,13 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Menu, Button, Checkbox } from 'semantic-ui-react';
 import ProductionGraphTab from './ProductionGraphTab';
-import RecipeGraphTab from './RecipeGraphTab';
 import BuildingsTab from './BuildingsTab';
 import { ProductionSolver, SolverResults } from '../../../utilities/production-solver';
 import { useProductionContext } from '../../../contexts/production';
 import { usePrevious } from '../../../hooks/usePrevious';
-
-const RECIPE_GRAPH_ACTIVE = process.env.NODE_ENV === 'development';
 
 const PlannerResults = () => {
   const [activeTab, setActiveTab] = useState('production-graph');
@@ -36,12 +33,6 @@ const PlannerResults = () => {
     switch (activeTab) {
       case 'production-graph':
         return <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={solverResults?.error || ''} />
-      case 'recipe-graph':
-        return (
-          RECIPE_GRAPH_ACTIVE
-            ? <RecipeGraphTab activeGraph={solverResults?.recipeGraph || null} errorMessage={solverResults?.error || ''} />
-            : null
-        );
       case 'buildings':
         return <BuildingsTab />
       default:
@@ -68,15 +59,6 @@ const PlannerResults = () => {
         >
           Production Graph
         </Menu.Item>
-        {RECIPE_GRAPH_ACTIVE && (
-          <Menu.Item
-            name='recipe-graph'
-            active={activeTab === 'recipe-graph'}
-            onClick={handleSetTab}
-          >
-            Recipe Graph
-          </Menu.Item>
-        )}
         <Menu.Item
           name='buildings'
           active={activeTab === 'buildings'}

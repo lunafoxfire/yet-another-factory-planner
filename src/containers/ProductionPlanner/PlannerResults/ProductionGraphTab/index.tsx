@@ -10,13 +10,15 @@ Cytoscape.use(klay);
 
 const layout = {
   name: 'klay',
-  padding: 50,
+  padding: 40,
   klay: {
     direction: 'RIGHT',
-    edgeRouting: 'POLYLINE',
+    edgeRouting: 'ORTHOGONAL',
     nodePlacement: 'LINEAR_SEGMENTS',
+    edgeSpacingFactor: 0.2,
+    inLayerSpacingFactor: 0.7,
     spacing: 70,
-    thoroughness: 3,
+    thoroughness: 10,
   },
 };
 
@@ -41,7 +43,7 @@ const stylesheet: Stylesheet[] = [
       'label': 'data(label)',
       'text-valign': 'center',
       'text-halign': 'center',
-      'height': 'label',
+      'height': '30px',
       'width': '140px',
       'text-max-width': '160px',
       'padding-top': '20px',
@@ -56,13 +58,23 @@ const stylesheet: Stylesheet[] = [
     style: {
       'label': 'data(label)',
       'width': 1,
-      'curve-style': 'straight',
+      'curve-style': 'bezier',
       'target-arrow-shape': 'triangle-backcurve',
       'arrow-scale': 1.2,
       'overlay-padding': 0,
       'overlay-opacity': 0,
       'text-wrap': 'wrap',
       'font-size': '13px',
+    },
+  },
+  {
+    selector: 'edge.loop',
+    style: {
+      'loop-direction': '180deg',
+      'loop-sweep': '-40deg',
+      'edge-distances': 'node-position',
+      'source-endpoint': '-15% 50%',
+      'target-endpoint': '15% 50%',
     },
   },
   {
@@ -185,6 +197,7 @@ const ProductionGraphTab = (props: Props) => {
           target: edge.to,
           label: getEdgeLabel(edge),
         },
+        classes: edge.from === edge.to ? ['loop'] : undefined,
       });
     });
     
@@ -192,7 +205,7 @@ const ProductionGraphTab = (props: Props) => {
   }, [activeGraph]);
 
   return (
-    <div style={{ height: '800px', display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center', border: '1px solid black' }}>
+    <div style={{ height: '900px', display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center', border: '1px solid black' }}>
       {
         graphProps != null
         ? (
@@ -203,7 +216,9 @@ const ProductionGraphTab = (props: Props) => {
               stylesheet={stylesheet}
               boxSelectionEnabled={false}
               autounselectify={true}
-              wheelSensitivity={0.2}
+              wheelSensitivity={0.1}
+              maxZoom={3.0}
+              minZoom={0.1}
               style={{ height: '100%', width: '100%', overflow: 'hidden' }}
             />
         )

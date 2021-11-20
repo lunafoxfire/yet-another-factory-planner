@@ -396,8 +396,7 @@ export class ProductionSolver {
       }
     }
 
-    console.log(await glpk.write(model));
-    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_DBG, presol: false });
+    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_OFF });
     if (solution.result.status !== glpk.GLP_OPT) {
       throw new Error("NO POSSIBLE SOLUTION");
     }
@@ -475,15 +474,14 @@ export class ProductionSolver {
             i++;
             continue nextDemand;
           } else {
-            const diff = usageInfo.amount - productionInfo.amount;
             graph.edges.push({
               key: itemKey,
               from: productionNode.id,
               to: usageNode.id,
-              productionRate: diff,
+              productionRate: productionInfo.amount,
             });
-            productionInfo.amount -= diff;
-            usageInfo.amount -= diff;
+            usageInfo.amount -= productionInfo.amount;
+            productionInfo.amount = 0;
           }
           j++;
         }

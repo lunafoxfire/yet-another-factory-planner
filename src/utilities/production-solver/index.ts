@@ -96,37 +96,25 @@ export class ProductionSolver {
   private inputs: InputMap;
   private outputs: OutputMap;
   private allowedRecipes: RecipeMap;
-  private itemRecipeTable: { [key: string]: string[] } = {};
-  private currentId: number = 0;
 
   public constructor(options: FactoryOptions) {
-    // TODO
-    // check NaN
-    // check output not zero
-    // sum multiple in/out of same item
-
     this.inputs = {};
 
     options.inputItems.forEach((item) => {
       if (!item.itemKey) return;
       const amount = item.unlimited ? Infinity : Number(item.value);
       if (!amount) return;
-      this.inputs[item.itemKey] = {
-        amount,
-        value: 0,
-        type: NODE_TYPE.INPUT_ITEM,
+      if (!this.inputs[item.itemKey]) {
+        this.inputs[item.itemKey] = {
+          amount,
+          value: 0,
+          type: NODE_TYPE.INPUT_ITEM,
+        }
+      } else {
+        this.inputs[item.itemKey].amount += amount;
       }
     });
 
-    let maxResourceAmount = 0;
-    options.inputResources.forEach((item) => {
-      const amount = item.unlimited ? Infinity : Number(item.value);
-      if (amount && !item.unlimited) {
-        if (amount > maxResourceAmount) {
-          maxResourceAmount = amount;
-        }
-      }
-    });
     options.inputResources.forEach((item) => {
       const resourceData = resources[item.itemKey];
       if (!resourceData) return;
@@ -150,20 +138,26 @@ export class ProductionSolver {
     this.outputs = {};
     options.productionItems.forEach((item) => {
       if (!item.itemKey) return;
+      let amount = 0;
       switch (item.mode) {
         case 'rate-target':
-          this.outputs[item.itemKey] = Number(item.value);
+          amount = Number(item.value);
           break;
         case 'maximize':
-          this.outputs[item.itemKey] = Infinity;
+          amount = Infinity;
           break;
         default:
           if (recipes[item.mode]) {
             const targetProduct = recipes[item.mode].products.find((p) => p.itemClass === item.itemKey)!;
-            this.outputs[item.itemKey] = Number(item.value) * targetProduct.perMinute;
-          } else {
-            throw new Error(`ITEM ${item.itemKey} HAS AN INVALID TARGET TYPE`);
+            amount = Number(item.value) * targetProduct.perMinute;
           }
+      }
+      if (amount) {
+        if (!this.outputs[item.itemKey]) {
+          this.outputs[item.itemKey] = amount;
+        } else {
+          this.outputs[item.itemKey] += amount;
+        }
       }
     });
 
@@ -173,6 +167,7 @@ export class ProductionSolver {
   public async exec(): Promise<SolverResults> {
     const t0 = performance.now();
     try {
+      this.validate();
       const recipeGraph = this.generateRecipeGraph();
       const productionSolution = await this.runSolver(recipeGraph);
       const productionGraph = this.generateProductionGraph(productionSolution);
@@ -195,6 +190,12 @@ export class ProductionSolver {
         error: e.message,
         success: false,
       };
+    }
+  }
+
+  private validate() {
+    if (Object.keys(this.outputs).length === 0) {
+      throw new Error('NO INPUTS SET');
     }
   }
 
@@ -345,7 +346,12 @@ export class ProductionSolver {
       for (const recipe of itemNode.outputFrom) {
         const recipeInfo = recipes[recipe];
         const target = recipeInfo.products.find((p) => p.itemClass === key)!;
-        vars.push({ name: recipe, coef: -target.perMinute });
+        const existingVar = vars.find((v) => v.name === recipe);
+        if (existingVar) {
+          existingVar.coef -= target.perMinute;
+        } else {
+          vars.push({ name: recipe, coef: -target.perMinute });
+        }
       }
 
       if (itemNode.type === NODE_TYPE.RESOURCE) {
@@ -390,7 +396,8 @@ export class ProductionSolver {
       }
     }
 
-    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_OFF });
+    console.log(await glpk.write(model));
+    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_DBG, presol: false });
     if (solution.result.status !== glpk.GLP_OPT) {
       throw new Error("NO POSSIBLE SOLUTION");
     }

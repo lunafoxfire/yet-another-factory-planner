@@ -1,82 +1,152 @@
 import React, { useMemo } from 'react';
-import { ProductionGraph, ProductionGraphNode, ProductionGraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
+import { nanoid } from 'nanoid';
+import Cytoscape, { Stylesheet } from 'cytoscape';
+import klay from 'cytoscape-klay';
+import GraphVisualizer from 'react-cytoscapejs';
+import { ProductionGraph, ProductionNode, ProductionEdge, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes, buildings } from '../../../../data';
 
-const graphOptions = {
-  autoResize: true,
-  layout: {
-    hierarchical: {
-      enabled: true,
-      direction: 'LR',
-      sortMethod: 'directed',
-      shakeTowards: 'leaves',
-      levelSeparation: 280,
-      nodeSpacing: 100,
-      treeSpacing: 100,
+Cytoscape.use(klay);
+
+const layout = {
+  name: 'klay',
+  padding: 50,
+  klay: {
+    direction: 'RIGHT',
+    edgeRouting: 'POLYLINE',
+    nodePlacement: 'LINEAR_SEGMENTS',
+    spacing: 70,
+    thoroughness: 3,
+  },
+};
+
+const stylesheet: Stylesheet[] = [
+  {
+    selector: 'core',
+    style: {
+      'active-bg-color': '#000',
+      'active-bg-opacity': 0,
+      'active-bg-size': 0,
+      'selection-box-color': '#000',
+      'selection-box-border-color': '#000',
+      'selection-box-border-width': 0,
+      'selection-box-opacity': 0,
+      'outside-texture-bg-color': '#000',
+      'outside-texture-bg-opacity': 0,
     },
   },
-  physics: {
-    enabled: false,
-  },
-  interaction: {
-    selectConnectedEdges: false,
-    zoomSpeed: 0.8,
-  },
-  nodes: {
-    borderWidth: 1,
-    chosen: false,
-  },
-  edges: {
-    arrows: {
-      to: {
-        enabled: true,
-        scaleFactor: 0.8,
-      }
+  {
+    selector: 'node',
+    style: {
+      'label': 'data(label)',
+      'text-valign': 'center',
+      'text-halign': 'center',
+      'height': 'label',
+      'width': '140px',
+      'text-max-width': '160px',
+      'padding-top': '20px',
+      'overlay-padding': 0,
+      'overlay-opacity': 0,
+      'text-wrap': 'wrap',
+      'font-size': '14px',
     },
-    chosen: false,
-  }
-}
+  },
+  {
+    selector: 'edge',
+    style: {
+      'label': 'data(label)',
+      'width': 1,
+      'curve-style': 'straight',
+      'target-arrow-shape': 'triangle-backcurve',
+      'arrow-scale': 1.2,
+      'overlay-padding': 0,
+      'overlay-opacity': 0,
+      'text-wrap': 'wrap',
+      'font-size': '13px',
+    },
+  },
+  {
+    selector: 'node.item-shape',
+    style: {
+      'shape': 'ellipse',
+    },
+  },
+  {
+    selector: 'node.recipe-shape',
+    style: {
+      'shape': 'round-rectangle',
+    },
+  },
+  {
+    selector: 'node.final-product',
+    style: {
+      'background-color': '#61e873',
+    },
+  },
+  {
+    selector: 'node.side-product',
+    style: {
+      'background-color': '#e1e861',
+    },
+  },
+  {
+    selector: 'node.input',
+    style: {
+      'background-color': '#e86161',
+    },
+  },
+  {
+    selector: 'node.resource',
+    style: {
+      'background-color': '#e8a761',
+    },
+  },
+  {
+    selector: 'node.recipe',
+    style: {
+      'background-color': '#61c2e8',
+    },
+  },
+  {
+    selector: 'node.item',
+    style: {
+      'background-color': '#61c2e8',
+    },
+  },
+];
+
+const NODE_COLOR_CLASS = {
+  [NODE_TYPE.FINAL_PRODUCT]: 'final-product',
+  [NODE_TYPE.SIDE_PRODUCT]: 'side-product',
+  [NODE_TYPE.INTERMEDIATE_ITEM]: 'item',
+  [NODE_TYPE.INPUT_ITEM]: 'input',
+  [NODE_TYPE.RESOURCE]: 'resource',
+  [NODE_TYPE.RECIPE]: 'recipe',
+};
+
 
 function truncateFloat(n: number) {
   return n.toFixed(4).replace(/\.?0+$/, '');
 }
 
-function getNodeLabel(node: ProductionGraphNode, edges: ProductionGraphEdge[]) {
+function getNodeLabel(node: ProductionNode) {
   let label = '';
   let amountText = '';
   if (node.type === NODE_TYPE.RECIPE) {
     const recipe = recipes[node.key];
-    label = `${recipe.name}`;
+    label = recipe.name;
     amountText = `${truncateFloat(node.multiplier)}x ${buildings[recipe.producedIn].name}`;
-  } else if (node.type === NODE_TYPE.FINAL_PRODUCT || node.type === NODE_TYPE.SIDE_PRODUCT) {
-    let val = 0;
-    edges.forEach((edge) => {
-      if (edge.to === node.id) {
-        val += edge.productionRate;
-      }
-    });
+  } else {
     const item = items[node.key];
-    label = `${item.name}`;
-    amountText = `${truncateFloat(val)} / min`;
-  } else if (node.type === NODE_TYPE.INPUT || node.type === NODE_TYPE.RESOURCE) {
-    let val = 0;
-    edges.forEach((edge) => {
-      if (edge.from === node.id) {
-        val += edge.productionRate;
-      }
-    });
-    const item = items[node.key];
-    label = `${item.name}`;
-    amountText = `${truncateFloat(val)} / min`;
-  } else if (node.type === NODE_TYPE.ROOT) {
-    label = 'ROOT';
+    label = item.name;
+    amountText = `${truncateFloat(node.multiplier)} / min`;
   }
   return `${label}\n${amountText}`;
 }
 
-function getEdgeLabel(edge: ProductionGraphEdge) {
+function getEdgeLabel(edge: ProductionEdge) {
   const item = items[edge.key];
-  const label = `${item.name}`;
+  const label = item.name;
   const amountText = `${truncateFloat(edge.productionRate)} / min`;
   return `${label}\n${amountText}`;
 }
@@ -89,37 +159,53 @@ interface Props {
 const ProductionGraphTab = (props: Props) => {
   const { activeGraph, errorMessage } = props;
 
-  const graphData = useMemo<any>(() => {
+  const graphProps = useMemo<any>(() => {
     if (activeGraph == null) {
       return null;
     }
-    const graphData: any = {};
-    graphData.nodes = activeGraph.nodes.map((node) => ({
-      id: node.id,
-      label: getNodeLabel(node, activeGraph.edges),
-      shape: (node.type === NODE_TYPE.RECIPE) ? 'box' : 'ellipse',
-      heightConstraint: (node.type === NODE_TYPE.RECIPE) ?  50 : 30,
-      widthConstraint: (node.type === NODE_TYPE.RECIPE) ?  150: 120,
-    }));
-    graphData.edges = activeGraph.edges.map((edge) => ({
-      from: edge.from,
-      to: edge.to,
-      label: getEdgeLabel(edge),
-    }));
-    return graphData;
+
+    const key = nanoid();
+    const elements: any[] = [];
+
+    Object.entries(activeGraph.nodes).forEach(([key, node]) => {
+      elements.push({
+        group: 'nodes',
+        data: {
+          id: node.id,
+          label: getNodeLabel(node),
+        },
+        classes: [node.type === NODE_TYPE.RECIPE ? 'recipe-shape' : 'item-shape', NODE_COLOR_CLASS[node.type]],
+      });
+    });
+    activeGraph.edges.forEach((edge) => {
+      elements.push({
+        group: 'edges',
+        data: {
+          source: edge.from,
+          target: edge.to,
+          label: getEdgeLabel(edge),
+        },
+      });
+    });
+    
+    return { key, elements };
   }, [activeGraph]);
 
   return (
     <div style={{ height: '800px', display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center', border: '1px solid black' }}>
       {
-        graphData != null
+        graphProps != null
         ? (
-          null
-          // <GraphVis
-          //   graph={graphData}
-          //   options={graphOptions}
-          //   style={{ height: '100%', width: '100%' }}
-          // />
+            <GraphVisualizer
+              key={graphProps.key}
+              elements={graphProps.elements}
+              layout={layout}
+              stylesheet={stylesheet}
+              boxSelectionEnabled={false}
+              autounselectify={true}
+              wheelSensitivity={0.2}
+              style={{ height: '100%', width: '100%', overflow: 'hidden' }}
+            />
         )
         : (
           <>

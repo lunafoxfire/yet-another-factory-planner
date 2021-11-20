@@ -84,7 +84,7 @@ const RecipesTab = () => {
   return (
     <>
       <p>
-        Select the items that you already have available and don't need to produce in this factory.
+        Select the recipes that are available to your factory
       </p>
       <Grid columns={2} divided={true}>
         <Grid.Row>

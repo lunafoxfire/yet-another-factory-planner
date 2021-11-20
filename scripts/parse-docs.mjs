@@ -19,10 +19,6 @@ const EXCLUDED_RECIPES = [
   'Recipe_UnpackageSulfuricAcid_C',
   'Recipe_UnpackageNitrogen_C',
   'Recipe_UnpackageNitricAcid_C',
-
-  // TODO: Figure out how to properly handle these
-  'Recipe_Alternate_Plastic_1_C',
-  'Recipe_Alternate_RecycledRubber_C',
 ];
 
 const data = parseDocs(fs.readFileSync(DOCS_PATH));

@@ -1,9 +1,10 @@
+import loadGLPK, { LP, Var } from 'glpk.js';
 import { nanoid } from 'nanoid';
 import { FactoryOptions } from '../../contexts/production';
-import { itemRecipeMap, recipes, resources, uncraftableItems, ItemRate, items } from '../../data';
+import { itemRecipeMap, recipes, resources, uncraftableItems } from '../../data';
 import { RecipeMap } from '../../contexts/production';
 
-const MAX_ITERATIONS = 100;
+const EPSILON = 1e-8;
 
 type InputMap = {
   [key: string]: {
@@ -12,47 +13,59 @@ type InputMap = {
     type: string,
   }
 };
-type OutputTargets = { productionRate: number | null, buildings: number | null };
-type OutputMap = { [key: string]: OutputTargets };
+type OutputMap = { [key: string]: number };
 
 export const NODE_TYPE = {
+  NONE: 'NONE',
   ROOT: 'ROOT',
   FINAL_PRODUCT: 'FINAL_PRODUCT',
   SIDE_PRODUCT: 'SIDE_PRODUCT',
-  INPUT: 'INPUT',
+  INTERMEDIATE_ITEM: 'INTERMEDIATE_ITEM',
+  INPUT_ITEM: 'INPUT_ITEM',
   RESOURCE: 'RESOURCE',
   RECIPE: 'RECIPE',
-  ITEM: 'ITEM',
+};
+
+type ProductionSolution = { [key: string]: number };
+type ProductionAmount = { recipeKey: string, amount: number };
+type ItemProductionTotals = {
+  [key: string]: {
+    producedBy: ProductionAmount[],
+    usedBy: ProductionAmount[],
+  }
 };
 
 export type SolverResults = {
-  productionGraph: ProductionGraph,
-  recipeGraph: RecipeGraph,
+  productionGraph: ProductionGraph | null,
+  recipeGraph: RecipeGraph | null,
+  timestamp: number,
+  elapsedTime: number,
+  error: string,
+  success: boolean,
 };
 
 export type RecipeGraph = {
   itemNodes: { [key: string]: ItemNode },
   recipeNodes: { [key: string]: RecipeNode },
-  itemDependencyEdges: GraphEdge[],
-  recipeRelationEdges: GraphEdge[],
+  edges: GraphEdge[],
 };
 
 export type ItemNode = {
   id: string,
-  key: string,
+  itemKey: string,
   type: string,
+  outputFrom: string[],
+  inputTo: string[],
   depth: number,
-  recipes: string[],
-  connectedItems: string[],
 };
 
 export type RecipeNode = {
   id: string,
-  key: string,
+  recipeKey: string,
   type: string,
-  depth: number,
   ingredients: string[],
   products: string[],
+  depth: number,
 };
 
 export type GraphEdge = {
@@ -61,25 +74,21 @@ export type GraphEdge = {
 };
 
 export type ProductionGraph = {
-  nodes: ProductionGraphNode[],
-  edges: ProductionGraphEdge[],
-  recipeSelection: { [key: string]: string },
-  usedItems: { [key: string]: boolean },
-  score: number,
+  nodes: { [key: string]: ProductionNode },
+  edges: ProductionEdge[],
 };
 
-export type ProductionGraphNode = {
+export type ProductionNode = {
   id: string,
   key: string,
   type: string,
   multiplier: number,
-  depth: number,
 };
 
-export type ProductionGraphEdge = {
+export type ProductionEdge = {
+  key: string,
   from: string,
   to: string,
-  key: string,
   productionRate: number,
 };
 
@@ -105,7 +114,7 @@ export class ProductionSolver {
       this.inputs[item.itemKey] = {
         amount,
         value: 0,
-        type: NODE_TYPE.INPUT,
+        type: NODE_TYPE.INPUT_ITEM,
       }
     });
 
@@ -141,72 +150,72 @@ export class ProductionSolver {
     this.outputs = {};
     options.productionItems.forEach((item) => {
       if (!item.itemKey) return;
-      const targets: OutputTargets = {
-        productionRate: null,
-        buildings: null,
-      };
       switch (item.mode) {
-        case 'building-target':
-          targets.buildings = Number(item.value);
-          break;
         case 'rate-target':
-          targets.productionRate = Number(item.value);
+          this.outputs[item.itemKey] = Number(item.value);
           break;
         case 'maximize':
-          targets.productionRate = Infinity;
+          this.outputs[item.itemKey] = Infinity;
           break;
         default:
-          throw new Error(`ITEM ${item.itemKey} HAS AN INVALID TARGET TYPE`);
+          if (recipes[item.mode]) {
+            const targetProduct = recipes[item.mode].products.find((p) => p.itemClass === item.itemKey)!;
+            this.outputs[item.itemKey] = Number(item.value) * targetProduct.perMinute;
+          } else {
+            throw new Error(`ITEM ${item.itemKey} HAS AN INVALID TARGET TYPE`);
+          }
       }
-      this.outputs[item.itemKey] = targets;
     });
 
     this.allowedRecipes = options.allowedRecipes;
   }
 
-  public exec(): SolverResults {
-    console.log('============================');
-    console.log('SOLVER START');
+  public async exec(): Promise<SolverResults> {
     const t0 = performance.now();
-
-    const recipeGraph = this.generateRecipeGraph();
-    // const productionGraph = this.generateProductionGraph();
-    const productionGraph: ProductionGraph = {
-      nodes: [],
-      edges: [],
-      recipeSelection: {},
-      usedItems: {},
-      score: 0,
-    };
-
-    const t = performance.now();
-    console.log(`SOLVER DONE IN ${t - t0}ms`);
-    console.log(`SCORE: ${productionGraph.score}`);
-    return {
-      productionGraph,
-      recipeGraph,
-    };
+    try {
+      const recipeGraph = this.generateRecipeGraph();
+      const productionSolution = await this.runSolver(recipeGraph);
+      const productionGraph = this.generateProductionGraph(productionSolution);
+      const t = performance.now() - t0;
+      return {
+        productionGraph,
+        recipeGraph,
+        timestamp: t0,
+        elapsedTime: t,
+        error: '',
+        success: true,
+      };
+    } catch (e: any) {
+      const t = performance.now() - t0;
+      return {
+        productionGraph: null,
+        recipeGraph: null,
+        timestamp: t0,
+        elapsedTime: t,
+        error: e.message,
+        success: false,
+      };
+    }
   }
 
   private generateRecipeGraph(): RecipeGraph {
     const graph: RecipeGraph = {
       itemNodes: {},
       recipeNodes: {},
-      itemDependencyEdges: [],
-      recipeRelationEdges: [],
+      edges: [],
     };
 
     const initialNode: RecipeNode = {
       id: nanoid(),
-      key: NODE_TYPE.ROOT,
+      recipeKey: NODE_TYPE.ROOT,
       type: NODE_TYPE.ROOT,
-      depth: -1,
       ingredients: Object.keys(this.outputs),
       products: [],
+      depth: -1,
     }
 
     this.buildRecipeTree(initialNode, graph, 0);
-    // this.scoreRecipes(graph);
+    this.classifyNodes(graph);
 
     return graph;
   }
@@ -223,21 +232,19 @@ export class ProductionSolver {
       if (!productNode) {
         productNode = {
           id: nanoid(),
-          key: product,
-          type: NODE_TYPE.SIDE_PRODUCT,
+          itemKey: product,
+          type: NODE_TYPE.NONE,
+          outputFrom: [],
+          inputTo: [],
           depth,
-          recipes: [],
-          connectedItems: [],
         };
         graph.itemNodes[product] = productNode;
       }
-      if (parentNode.type !== NODE_TYPE.ROOT) {
-        productNode.recipes.push(parentNode.key);
-        graph.recipeRelationEdges.push({
-          from: parentNode.id,
-          to: productNode.id,
-        });
-      }
+      productNode.outputFrom.push(parentNode.recipeKey);
+      graph.edges.push({
+        from: parentNode.id,
+        to: productNode.id,
+      });
     }
 
 
@@ -245,45 +252,22 @@ export class ProductionSolver {
     for (const ingredient of parentNode.ingredients) {
       let ingredientNode = graph.itemNodes[ingredient];
       if (!ingredientNode) {
-        let type = NODE_TYPE.ITEM;
-        if (parentNode.type === NODE_TYPE.ROOT) {
-          type = NODE_TYPE.FINAL_PRODUCT;
-        } else if (this.inputs[ingredient]) {
-          type = this.inputs[ingredient].type;
-        }
         ingredientNode = {
           id: nanoid(),
-          key: ingredient,
-          type,
+          itemKey: ingredient,
+          type: NODE_TYPE.NONE,
+          outputFrom: [],
+          inputTo: [],
           depth,
-          recipes: [],
-          connectedItems: [],
         };
         graph.itemNodes[ingredient] = ingredientNode;
-      } else if (ingredientNode.type === NODE_TYPE.SIDE_PRODUCT) {
-        ingredientNode.type = NODE_TYPE.ITEM;
       }
       if (parentNode.type !== NODE_TYPE.ROOT) {
-        graph.recipeRelationEdges.push({
+        ingredientNode.inputTo.push(parentNode.recipeKey);
+        graph.edges.push({
           from: ingredientNode.id,
           to: parentNode.id,
         });
-      }
-
-
-      // ==== ITEM RELATIONS ==== //
-      for (const product of parentNode.products) {
-        if (product === ingredient) {
-          continue;
-        }
-        const productNode = graph.itemNodes[product];
-        if (!productNode.connectedItems.includes(ingredient)) {
-          graph.itemDependencyEdges.push({
-            from: ingredientNode.id,
-            to: productNode.id,
-          });
-          productNode.connectedItems.push(ingredient);
-        }
       }
 
 
@@ -291,6 +275,9 @@ export class ProductionSolver {
       let recipeList: string[];
       if (this.inputs[ingredient]) {
         recipeList = [];
+        if (this.inputs[ingredient].type === NODE_TYPE.INPUT_ITEM) {
+          recipeList = itemRecipeMap[ingredient].filter((r) => this.allowedRecipes[r]);
+        }
       } else {
         recipeList = itemRecipeMap[ingredient].filter((r) => this.allowedRecipes[r]);
         if (recipeList.length === 0) {
@@ -304,11 +291,11 @@ export class ProductionSolver {
           const recipeInfo = recipes[recipe];
           recipeNode = {
             id: nanoid(),
-            key: recipe,
+            recipeKey: recipe,
             type: NODE_TYPE.RECIPE,
-            depth,
             ingredients: recipeInfo.ingredients.map((i) => i.itemClass),
             products: recipeInfo.products.map((p) => p.itemClass),
+            depth,
           };
           graph.recipeNodes[recipe] = recipeNode;
           this.buildRecipeTree(recipeNode, graph, depth + 1);
@@ -316,300 +303,242 @@ export class ProductionSolver {
       }
     }
   }
+  
+  private classifyNodes(graph: RecipeGraph) {
+    for (const [key, node] of Object.entries(graph.itemNodes)) {
+      if (this.outputs[key]) {
+        node.type = NODE_TYPE.FINAL_PRODUCT;
+      } else if (this.inputs[key]) {
+        const inputInfo = this.inputs[key];
+        node.type = inputInfo.type;
+      } else if (node.inputTo.length === 0) {
+        node.type = NODE_TYPE.SIDE_PRODUCT;
+      } else {
+        node.type = NODE_TYPE.INTERMEDIATE_ITEM;
+      }
+    }
+  }
 
-  // private scoreRecipes(graph: RecipeGraph) {
-  //   this.itemRecipeTable = {};
-  //   let iterations = 0;
-  //   let noUpdates = false;
+  private async runSolver(graph: RecipeGraph): Promise<ProductionSolution> {
+    const glpk = await loadGLPK();
+    const model: LP = {
+      name: 'production',
+      objective: {
+        name: 'score',
+        direction: glpk.GLP_MIN,
+        vars: [],
+      },
+      subjectTo: [],
+    };
 
-  //   const inputNodes = Object.entries(graph.nodes).filter(([key, node]) => node.type === NODE_TYPE.RESOURCE || node.type === NODE_TYPE.INPUT);
-  //   const itemNodes = Object.entries(graph.nodes).filter(([key, node]) => node.type === NODE_TYPE.ITEM);
+    for (const [key, itemNode] of Object.entries(graph.itemNodes)) {
+      if (itemNode.type === NODE_TYPE.SIDE_PRODUCT) continue;
 
-  //   for (const [key, node] of inputNodes) {
-  //     node.itemScore = this.inputs[key].value;
-  //   }
+      const vars: Var[] = [];
 
-  //   while (!noUpdates && iterations < 20) {
-  //     iterations++;
+      for (const recipe of itemNode.inputTo) {
+        const recipeInfo = recipes[recipe];
+        const target = recipeInfo.ingredients.find((i) => i.itemClass === key)!;
+        vars.push({ name: recipe, coef: target.perMinute });
+      }
 
-  //     nextItem:
-  //     for (const [itemKey, itemNode] of itemNodes) {
-  //       if (itemNode.itemScore != null) {
-  //         continue;
-  //       }
+      for (const recipe of itemNode.outputFrom) {
+        const recipeInfo = recipes[recipe];
+        const target = recipeInfo.products.find((p) => p.itemClass === key)!;
+        vars.push({ name: recipe, coef: -target.perMinute });
+      }
 
-  //       const recipeList = [];
+      if (itemNode.type === NODE_TYPE.RESOURCE) {
+        const inputInfo = this.inputs[key];
+        model.subjectTo.push({
+          name: `${key} resource constraint`,
+          vars,
+          bnds: { type: glpk.GLP_UP, ub: inputInfo.amount, lb: 0 },
+        });
 
-  //       let minRecipeScore = Infinity;
-  //       for (const recipeEdge of itemNode.edges.to) {
-  //         const recipeNode = recipeEdge.from;
-  //         const recipeInfo = recipes[recipeNode.key];
-  //         const targetProduct = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
-  //         let recipeScore = 0;
+        const objectiveVars = vars.map<Var>((v) => ({
+          name: v.name,
+          coef: v.coef * inputInfo.value,
+        }));
+        model.objective.vars.push(...objectiveVars);
+      }
 
-  //         for (const ingredientEdge of recipeNode.edges.to) {
-  //           const ingredientNode = ingredientEdge.from;
-  //           if (ingredientNode.itemScore == null) {
-  //             continue nextItem;
-  //           }
-  //           const ingredient = recipeInfo.ingredients.find((i) => i.itemClass === ingredientNode.key)!;
-  //           recipeScore += ingredientNode.itemScore * (ingredient.perMinute / targetProduct.perMinute);
-  //         }
+      else if (itemNode.type === NODE_TYPE.INPUT_ITEM) {
+        const inputInfo = this.inputs[key];
+        model.subjectTo.push({
+          name: `${key} input constraint`,
+          vars,
+          bnds: { type: glpk.GLP_UP, ub: inputInfo.amount, lb: 0 },
+        });
+      }
 
-  //         recipeNode.recipeScore[itemKey] = recipeScore;
-  //         recipeList.push(recipeNode.key);
+      else if (itemNode.type === NODE_TYPE.INTERMEDIATE_ITEM) {
+        model.subjectTo.push({
+          name: `${key} intermediates constraint`,
+          vars,
+          bnds: { type: glpk.GLP_UP, ub: 0, lb: 0 },
+        });
+      }
 
-  //         if (recipeScore < minRecipeScore) {
-  //           minRecipeScore = recipeScore;
-  //         }
-  //       }
+      else if (itemNode.type === NODE_TYPE.FINAL_PRODUCT) {
+        const productionTarget = this.outputs[key];
+        model.subjectTo.push({
+          name: `${key} final product constraint`,
+          vars,
+          bnds: { type: glpk.GLP_UP, ub: -productionTarget, lb: 0 },
+        });
+      }
+    }
 
-  //       recipeList.sort((a, b) => {
-  //         const scoreA = graph.nodes[a].recipeScore[itemKey];
-  //         const scoreB = graph.nodes[b].recipeScore[itemKey];
-  //         if (scoreA < scoreB) return -1;
-  //         if (scoreA > scoreB) return 1;
-  //         return 0;
-  //       });
-  //       this.itemRecipeTable[itemKey] = recipeList;
+    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_OFF });
+    if (solution.result.status !== glpk.GLP_OPT) {
+      throw new Error("NO POSSIBLE SOLUTION");
+    }
 
-  //       graph.complexity *= recipeList.length;
+    const result: ProductionSolution = {};
+    Object.entries(solution.result.vars).forEach(([key, val]) => {
+      if (Math.abs(val) > EPSILON) {
+        result[key] = val;
+      }
+    });
+    return result;
+  }
 
-  //       itemNode.itemScore = minRecipeScore;
-  //       noUpdates = false;
-  //     }
-  //   }
-  // }
+  private generateProductionGraph(productionSolution: ProductionSolution): ProductionGraph {
+    const itemProductionTotals: ItemProductionTotals = {};
+    const graph: ProductionGraph = {
+      nodes: {},
+      edges: [],
+    };
 
-  // private generateProductionGraph(): ProductionGraph {
-  //   const adjustableItems = Object.keys(this.itemRecipeTable).filter((key) => this.itemRecipeTable[key].length > 1);
-  //   const initialRecipeSelection: { [key: string]: string } = {};
-  //   Object.entries(this.itemRecipeTable).forEach(([item, recipeList]) => initialRecipeSelection[item] = recipeList[0]);
+    for (const [recipeKey, multiplier] of Object.entries(productionSolution)) {
+      const recipeInfo = recipes[recipeKey];
 
-  //   let currentGraph = this.buildProductionGraphFromRecipeSelection(initialRecipeSelection);
-  //   let iterations = 0;
+      for (const product of recipeInfo.products) {
+        const amount = multiplier * product.perMinute;
+        if (!itemProductionTotals[product.itemClass]) {
+          itemProductionTotals[product.itemClass] = {
+            producedBy: [],
+            usedBy: [],
+          };
+        }
+        itemProductionTotals[product.itemClass].producedBy.push({ recipeKey, amount });
+      }
 
-  //   nextPass:
-  //   while (iterations < MAX_ITERATIONS) {
-  //     // eslint-disable-next-line no-loop-func
-  //     const itemList = [...adjustableItems].filter((key) => currentGraph.usedItems[key]);
+      for (const ingredient of recipeInfo.ingredients) {
+        const amount = multiplier * ingredient.perMinute;
+        if (!itemProductionTotals[ingredient.itemClass]) {
+          itemProductionTotals[ingredient.itemClass] = {
+            producedBy: [],
+            usedBy: [],
+          };
+        }
+        itemProductionTotals[ingredient.itemClass].usedBy.push({ recipeKey, amount });
+      }
 
-  //     while (itemList.length > 0) {
-  //       const testItemIdx = Math.floor(Math.random() * itemList.length);
-  //       const testItem = itemList.splice(testItemIdx, 1)[0];
-  //       // eslint-disable-next-line no-loop-func
-  //       const testRecipeList = this.itemRecipeTable[testItem].filter((key) => key !== currentGraph.recipeSelection[testItem]);
-  //       const testRecipeSelection = { ...currentGraph.recipeSelection };
+      graph.nodes[recipeKey] = {
+        id: nanoid(),
+        key: recipeKey,
+        type: NODE_TYPE.RECIPE,
+        multiplier,
+      };
+    }
 
-  //       while (testRecipeList.length > 0 && iterations < MAX_ITERATIONS) {
-  //         const testRecipeIdx = Math.floor(Math.random() * testRecipeList.length);
-  //         testRecipeSelection[testItem] = testRecipeList.splice(testRecipeIdx, 1)[0];
+    for (const [itemKey, productionTotals] of Object.entries(itemProductionTotals)) {
+      const { producedBy, usedBy } = productionTotals;
+      let i = 0, j = 0;
+      nextDemand:
+      while (i < usedBy.length) {
+        const usageInfo = usedBy[i];
+        const usageNode = graph.nodes[usageInfo.recipeKey];
 
-  //         let testGraph = this.buildProductionGraphFromRecipeSelection(testRecipeSelection);
-  //         iterations++;
-  //         if (testGraph.score < currentGraph.score) {
-  //           currentGraph = testGraph;
-  //           continue nextPass;
-  //         }
-  //       }
-  //     }
+        while (j < producedBy.length) {
+          const productionInfo = producedBy[j];
+          const productionNode = graph.nodes[productionInfo.recipeKey];
 
-  //     break;
-  //   }
-  //   return currentGraph;
-  // }
+          if (usageInfo.amount <= productionInfo.amount || j === producedBy.length - 1) {
+            graph.edges.push({
+              key: itemKey,
+              from: productionNode.id,
+              to: usageNode.id,
+              productionRate: usageInfo.amount,
+            });
+            productionInfo.amount -= usageInfo.amount;
+            usageInfo.amount = 0;
+            i++;
+            continue nextDemand;
+          } else {
+            const diff = usageInfo.amount - productionInfo.amount;
+            graph.edges.push({
+              key: itemKey,
+              from: productionNode.id,
+              to: usageNode.id,
+              productionRate: diff,
+            });
+            productionInfo.amount -= diff;
+            usageInfo.amount -= diff;
+          }
+          j++;
+        }
+        break;
+      }
 
-  // private buildProductionGraphFromRecipeSelection(recipeSelection: { [key: string]: string }): ProductionGraph {
-  //   const graph: ProductionGraph = {
-  //     nodes: [],
-  //     edges: [],
-  //     recipeSelection,
-  //     usedItems: {},
-  //     score: 0,
-  //   };
+      while (i < usedBy.length) {
+        const usageInfo = usedBy[i];
+        const usageNode = graph.nodes[usageInfo.recipeKey];
+        if (usageInfo.amount > EPSILON && this.inputs[itemKey]) {
+          let itemNode = graph.nodes[itemKey];
+          if (!itemNode) {
+            const inputInfo = this.inputs[itemKey];
+            itemNode = {
+              id: nanoid(),
+              key: itemKey,
+              type: inputInfo.type,
+              multiplier: usageInfo.amount,
+            };
+            graph.nodes[itemKey] = itemNode;
+          } else {
+            itemNode.multiplier += usageInfo.amount;
+          }
+          graph.edges.push({
+            key: itemKey,
+            from: itemNode.id,
+            to: usageNode.id,
+            productionRate: usageInfo.amount,
+          });
+          usageInfo.amount = 0;
+        }
+        i++;
+      }
 
-  //   const initialNode: ProductionGraphNode = {
-  //     id: nanoid(),
-  //     key: NODE_TYPE.ROOT,
-  //     type: NODE_TYPE.ROOT,
-  //     multiplier: 1,
-  //     depth: -1,
-  //   }
-  //   this.buildItemTree(initialNode, graph, 0);
+      while (j < producedBy.length) {
+        const productionInfo = producedBy[j];
+        const productionNode = graph.nodes[productionInfo.recipeKey];
+        if (productionInfo.amount > EPSILON) {
+          let itemNode = graph.nodes[itemKey];
+          if (!itemNode) {
+            itemNode = {
+              id: nanoid(),
+              key: itemKey,
+              type: this.outputs[itemKey] ? NODE_TYPE.FINAL_PRODUCT : NODE_TYPE.SIDE_PRODUCT,
+              multiplier: productionInfo.amount
+            };
+            graph.nodes[itemKey] = itemNode;
+          } else {
+            itemNode.multiplier += productionInfo.amount;
+          }
+          graph.edges.push({
+            key: itemKey,
+            from: productionNode.id,
+            to: itemNode.id,
+            productionRate: productionInfo.amount,
+          });
+          productionInfo.amount = 0;
+        }
+        j++;
+      }
+    }
 
-  //   const collapsedGraph: ProductionGraph = {
-  //     nodes: [],
-  //     edges: [],
-  //     recipeSelection,
-  //     usedItems: graph.usedItems,
-  //     score: 0,
-  //   };
-    
-  //   const newEdges = graph.edges.map((e) => ({ ...e }));
-  //   for (const node of graph.nodes) {
-  //     let collapsedNode = collapsedGraph.nodes.find((n) => n.type === node.type && n.key === node.key);
-  //     if (!collapsedNode) {
-  //       collapsedNode = { ...node };
-  //       collapsedGraph.nodes.push(collapsedNode);
-  //     } else {
-  //       if (node.type === NODE_TYPE.RECIPE) {
-  //         collapsedNode.multiplier += node.multiplier;
-  //       }
-  //     }
-  //     for (const edge of newEdges) {
-  //       if (edge.to === node.id) {
-  //         edge.to = collapsedNode.id;
-  //       }
-  //       if (edge.from === node.id) {
-  //         edge.from = collapsedNode.id;
-  //       }
-  //     }
-  //   }
-
-  //   for (const edge of newEdges) {
-  //     let collapsedEdge = collapsedGraph.edges.find((e) => e.key === edge.key && e.to === edge.to && e.from === edge.from);
-  //     if (!collapsedEdge) {
-  //       collapsedEdge = { ...edge };
-  //       collapsedGraph.edges.push(collapsedEdge);
-  //     } else {
-  //       collapsedEdge.productionRate += edge.productionRate;
-  //     }
-  //   }
-
-  //   collapsedGraph.nodes.forEach((node) => {
-  //     if (node.type === NODE_TYPE.RESOURCE) {
-  //       let perMinute = 0;
-  //       collapsedGraph.edges.forEach((edge) => {
-  //         if (edge.from === node.id) {
-  //           perMinute += edge.productionRate;
-  //         }
-  //       });
-  //       collapsedGraph.score += this.inputs[node.key].value * perMinute;
-  //     }
-  //   });
-
-  //   return collapsedGraph;
-  // }
-
-  // private buildItemTree(parentNode: ProductionGraphNode, graph: ProductionGraph, depth: number) {
-  //   if (depth > 20) {
-  //     throw new Error('INFINITE LOOP DETECTED');
-  //   }
-
-  //   let ingredients: ItemRate[];
-  //   if (parentNode.type === NODE_TYPE.ROOT) {
-  //     ingredients = Object.entries(this.outputs).map(([itemClass, outputTargets]) => {
-  //       let perMinute;
-  //       if (outputTargets.buildings != null) {
-  //         perMinute = -1;
-  //       } else if (outputTargets.productionRate === Infinity) {
-  //         perMinute = 1;
-  //       } else {
-  //         perMinute = outputTargets.productionRate as number;
-  //       }
-  //       return {
-  //         itemClass,
-  //         perMinute,
-  //       };
-  //     });
-  //   } else {
-  //     const parentRecipeInfo = recipes[parentNode.key];
-  //     ingredients = parentRecipeInfo.ingredients.map((ingredient) => ({
-  //       itemClass: ingredient.itemClass,
-  //       perMinute: ingredient.perMinute * parentNode.multiplier,
-  //     }));
-  //   }
-
-  //   for (const ingredient of ingredients) {
-  //     const item = ingredient.itemClass;
-  //     let targetRate = ingredient.perMinute;
-  //     graph.usedItems[item] = true;
-
-  //     if (this.inputs[item]) {
-  //       const node: ProductionGraphNode = {
-  //         id: nanoid(),
-  //         key: item,
-  //         type: this.inputs[item].type,
-  //         multiplier: 1,
-  //         depth,
-  //       };
-  //       graph.nodes.push(node);
-  //       graph.edges.push({
-  //         from: node.id,
-  //         to: parentNode.id,
-  //         key: item,
-  //         productionRate: targetRate,
-  //       });
-  //       continue;
-  //     }
-      
-  //     const selectedRecipe = graph.recipeSelection[item];
-  //     const recipeInfo = recipes[selectedRecipe];
-
-  //     const primaryProduct = recipeInfo.products.find((p) => p.itemClass === item)!;
-  //     const sideProducts = recipeInfo.products.filter((p) => p.itemClass !== item);
-
-  //     let multiplier: number;
-  //     if (targetRate === -1) {
-  //       multiplier = this.outputs[item].buildings as number;
-  //       targetRate = primaryProduct.perMinute * multiplier;
-  //     } else {
-  //       multiplier = targetRate / primaryProduct.perMinute;
-  //     }
-
-  //     const node: ProductionGraphNode = {
-  //       id: nanoid(),
-  //       key: selectedRecipe,
-  //       multiplier,
-  //       type: NODE_TYPE.RECIPE,
-  //       depth,
-  //     };
-
-  //     if (parentNode.type === NODE_TYPE.ROOT) {
-  //       const productNode: ProductionGraphNode = {
-  //         id: nanoid(),
-  //         key: item,
-  //         multiplier: 1,
-  //         type: NODE_TYPE.FINAL_PRODUCT,
-  //         depth,
-  //       };
-
-  //       graph.nodes.push(node);
-  //       graph.nodes.push(productNode);
-  //       graph.edges.push({
-  //         from: node.id,
-  //         to: productNode.id,
-  //         key: item,
-  //         productionRate: targetRate,
-  //       });
-  //     } else {
-  //       graph.nodes.push(node);
-  //       graph.edges.push({
-  //         from: node.id,
-  //         to: parentNode.id,
-  //         key: item,
-  //         productionRate: targetRate,
-  //       });
-  //     }
-
-  //     sideProducts.forEach((sideProduct) => {
-  //       const productNode: ProductionGraphNode = {
-  //         id: nanoid(),
-  //         key: sideProduct.itemClass,
-  //         multiplier: 1,
-  //         type: NODE_TYPE.SIDE_PRODUCT,
-  //         depth,
-  //       };
-  //       graph.nodes.push(productNode);
-  //       graph.edges.push({
-  //         from: node.id,
-  //         to: productNode.id,
-  //         key: sideProduct.itemClass,
-  //         productionRate: sideProduct.perMinute * multiplier,
-  //       });
-  //     });
-
-  //     this.buildItemTree(node, graph, depth + 1);
-  //   }
-  // }
+    return graph;
+  }
 }

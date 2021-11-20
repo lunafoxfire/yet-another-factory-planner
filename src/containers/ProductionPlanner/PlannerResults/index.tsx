@@ -14,20 +14,18 @@ const PlannerResults = () => {
   const [autoCalc, setAutoCalc] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [solverResults, setSolverResults] = useState<SolverResults | null>(null);
-  const [errorMessage, setErrorMessage] = useState('');
   const ctx = useProductionContext();
   const prevState = usePrevious(ctx.state);
 
-  const handleCalculateFactory = useCallback(() => {
+  const handleCalculateFactory = useCallback(async () => {
     const solver = new ProductionSolver(ctx.state);
-    try {
-      const results = solver.exec();
-      setSolverResults(results);
-      setErrorMessage('');
-    } catch (e: any) {
-      setSolverResults(null);
-      setErrorMessage(e.message);
-    }
+    const results = await solver.exec();
+    setSolverResults((prevState) => {
+      if (!prevState || prevState.timestamp < results.timestamp) {
+        return results;
+      }
+      return prevState;
+    });
   }, [ctx.state]);
 
   function handleSetTab(e: any, data: any) {
@@ -37,11 +35,11 @@ const PlannerResults = () => {
   function renderTab() {
     switch (activeTab) {
       case 'production-graph':
-        return <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={errorMessage} />
+        return <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={solverResults?.error || ''} />
       case 'recipe-graph':
         return (
           RECIPE_GRAPH_ACTIVE
-            ? <RecipeGraphTab activeGraph={solverResults?.recipeGraph || null} errorMessage={errorMessage} />
+            ? <RecipeGraphTab activeGraph={solverResults?.recipeGraph || null} errorMessage={solverResults?.error || ''} />
             : null
         );
       case 'buildings':
@@ -92,7 +90,8 @@ const PlannerResults = () => {
           Calculate
         </Button>
         <Checkbox
-          label='Auto-calculate on update (uncheck this if changing options is slow)'
+          label='Auto-calculate (turn this off if changing options is slow)'
+          toggle
           checked={autoCalc}
           onChange={(e, { checked }) => { setAutoCalc(!!checked); }}
         />

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Dropdown, Input, Grid, Icon } from 'semantic-ui-react';
-import { items, recipes } from '../../../../data';
+import { items, recipes, resources } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
 
 const itemOptions = Object.keys(items)
-  .filter((key) => items[key].producedFromRecipes.length !== 0)
+  .filter((key) => items[key].producedFromRecipes.length !== 0 && !resources[key])
   .map((key) => ({
     value: key,
     text: items[key].name,

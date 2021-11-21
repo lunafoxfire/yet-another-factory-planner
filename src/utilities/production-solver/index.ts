@@ -224,7 +224,7 @@ export class ProductionSolver {
     try {
       const productionSolution = await this.solveProduction();
       if (Object.keys(productionSolution).length === 0) {
-        throw new Error('NO POSSIBLE SOLUTION. INSUFFICIENT CONSTRAINTS.');
+        throw new Error('SOLUTION IS EMPTY.');
       }
       const productionGraph = this.generateProductionGraph(productionSolution);
 
@@ -266,22 +266,28 @@ export class ProductionSolver {
     for (const [itemKey, itemInfo] of Object.entries(items)) {
       const vars: Var[] = [];
 
-      for (const recipe of itemInfo.usedInRecipes) {
-        const recipeInfo = recipes[recipe];
+      for (const recipeKey of itemInfo.usedInRecipes) {
+        if (!this.allowedRecipes[recipeKey]) continue;
+        const recipeInfo = recipes[recipeKey];
         const target = recipeInfo.ingredients.find((i) => i.itemClass === itemKey)!;
-        vars.push({ name: recipe, coef: target.perMinute });
+        vars.push({ name: recipeKey, coef: target.perMinute });
       }
 
-      for (const recipe of itemInfo.producedFromRecipes) {
-        const recipeInfo = recipes[recipe];
+      for (const recipeKey of itemInfo.producedFromRecipes) {
+        if (!this.allowedRecipes[recipeKey]) continue;
+        const recipeInfo = recipes[recipeKey];
         const target = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
-        const existingVar = vars.find((v) => v.name === recipe);
+        const existingVar = vars.find((v) => v.name === recipeKey);
         if (existingVar) {
           existingVar.coef -= target.perMinute;
         } else {
-          vars.push({ name: recipe, coef: -target.perMinute });
+          vars.push({ name: recipeKey, coef: -target.perMinute });
         }
       }
+
+      if (vars.length === 0) continue;
+
+      let objectiveVars: Var[] = [];
 
       if (this.inputs[itemKey]) {
         const inputInfo = this.inputs[itemKey];
@@ -294,11 +300,12 @@ export class ProductionSolver {
         }
 
         if (inputInfo.type === NODE_TYPE.RESOURCE || inputInfo.type === NODE_TYPE.HAND_GATHERED_RESOURCE) {
-          const objectiveVars = vars.map<Var>((v) => ({
-            name: v.name,
-            coef: v.coef * inputInfo.weight * this.globalWeights.resources,
-          }));
-          model.objective.vars.push(...objectiveVars);
+          objectiveVars = vars
+            .filter((v) => v.coef > 0)
+            .map<Var>((v) => ({
+              name: v.name,
+              coef: v.coef * inputInfo.weight * this.globalWeights.resources,
+            }));
         }
       }
 
@@ -311,11 +318,10 @@ export class ProductionSolver {
             bnds: { type: glpk.GLP_UP, ub: 0, lb: NaN },
           });
 
-          const objectiveVars = vars.map<Var>((v) => ({
+          objectiveVars = vars.map<Var>((v) => ({
             name: v.name,
             coef: v.coef * Math.pow(MAXIMIZE_OBJECTIVE_WEIGHT, outputInfo.value),
           }));
-          model.objective.vars.push(...objectiveVars);
 
         } else {
           model.subjectTo.push({
@@ -333,9 +339,18 @@ export class ProductionSolver {
           bnds: { type: glpk.GLP_UP, ub: 0, lb: NaN },
         });
       }
+
+      objectiveVars.forEach((v) => {
+        const existingVar = model.objective.vars.find((ov) => ov.name === v.name);
+        if (existingVar) {
+          existingVar.coef += v.coef;
+        } else {
+          model.objective.vars.push(v);
+        }
+      });
     }
 
-    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_DBG });
+    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_OFF });
     if (solution.result.status !== glpk.GLP_OPT) {
       throw new Error("NO POSSIBLE SOLUTION");
     }

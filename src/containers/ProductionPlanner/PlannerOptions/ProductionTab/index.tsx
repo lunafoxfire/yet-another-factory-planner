@@ -69,7 +69,7 @@ const ProductionTab = () => {
               }}
               action
             >
-              <input disabled={data.mode === 'maximize'} />
+              <input />
               <Dropdown
                 style={{ width: '250px', minWidth: '0px' }}
                 selection
@@ -101,7 +101,7 @@ const ProductionTab = () => {
   return (
     <>
       <p>
-        Select the items you want to produce.
+        Select the items you want to produce. When maximizing multiple outputs, the value represents the priority of that item.
       </p>
       <Grid>
         {renderItemInputs()}

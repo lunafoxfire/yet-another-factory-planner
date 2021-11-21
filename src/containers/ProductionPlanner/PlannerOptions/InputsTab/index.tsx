@@ -234,7 +234,7 @@ const InputsTab = () => {
       <Divider />
       <Header>Weighting Options</Header>
       <p>
-        Adjust various weights affecting the importance of different properties of the factory. A value of 0 means that property is not considered during factory layout.
+        Adjust the weights affecting the importance of various properties of the factory. A value of 0 indicates that that property is not considered during factory layout.
       </p>
       <Grid>
         <Grid.Row>
@@ -252,7 +252,7 @@ const InputsTab = () => {
       <Divider />
       <Header>Raw Resources</Header>
       <p>
-        Select the raw resources that are available to your factory. The default values are set to the map limits. The weight value is a number representing how valuable that resource is when comparing recipes. The defaults are calculated according to node rarity.
+        Select the raw resources that are available to your factory. The default values are set to the map limits. The weight value is a number representing how valuable that resource is when comparing recipes. The defaults are calculated automatically according to node rarity.
       </p>
       <Grid>
         <Grid.Row columns={1}>

@@ -84,7 +84,7 @@ const RecipesTab = () => {
   return (
     <>
       <p>
-        Select the recipes that are available to your factory
+        Select the recipes that you want to be considered in this factory.
       </p>
       <Grid columns={2} divided={true}>
         <Grid.Row>

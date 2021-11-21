@@ -4,7 +4,7 @@ import { Container } from 'semantic-ui-react';
 const ReportTab = () => {
   return (
     <Container>
-      <p>does works!</p>
+      Coming soon...
     </Container>
   );
 };

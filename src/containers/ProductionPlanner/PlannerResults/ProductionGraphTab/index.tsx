@@ -59,6 +59,7 @@ const stylesheet: Stylesheet[] = [
       'label': 'data(label)',
       'width': 1,
       'curve-style': 'bezier',
+      'control-point-step-size': 100,
       'target-arrow-shape': 'triangle-backcurve',
       'arrow-scale': 1.2,
       'overlay-padding': 0,

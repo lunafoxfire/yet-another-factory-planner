@@ -78,7 +78,6 @@ export class ProductionSolver {
   private allowedRecipes: RecipeMap;
 
   public constructor(options: FactoryOptions) {
-
     this.globalWeights = {
       resources: Number(options.weightingOptions.resources),
       power: Number(options.weightingOptions.power),
@@ -92,7 +91,7 @@ export class ProductionSolver {
     const maxGlobalWeight = Math.max(this.globalWeights.resources, this.globalWeights.power, this.globalWeights.buildArea);
     this.globalWeights.resources /= maxGlobalWeight;
     this.globalWeights.power /= maxGlobalWeight;
-    this.globalWeights.buildArea /= maxGlobalWeight;
+    this.globalWeights.buildArea /= (10 * maxGlobalWeight); // Extra factor of 10 to be closer to power numbers
 
     this.inputs = {};
 
@@ -130,13 +129,15 @@ export class ProductionSolver {
       }
     });
 
-    Object.keys(handGatheredItems).forEach((item) => {
-      this.inputs[item] = {
-        amount: Infinity,
-        weight: 1000,
-        type: NODE_TYPE.HAND_GATHERED_RESOURCE,
-      };
-    });
+    if (options.allowHandGatheredItems) {
+      Object.keys(handGatheredItems).forEach((item) => {
+        this.inputs[item] = {
+          amount: Infinity,
+          weight: 1000,
+          type: NODE_TYPE.HAND_GATHERED_RESOURCE,
+        };
+      });
+    }
 
     this.outputs = {};
     const rateTargets: Outputs = {};

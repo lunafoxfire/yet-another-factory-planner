@@ -1,11 +1,11 @@
 import React from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Header, Divider } from 'semantic-ui-react';
 
 const ReportTab = () => {
   return (
-    <Container>
+    <div>
       Coming soon...
-    </Container>
+    </div>
   );
 };
 

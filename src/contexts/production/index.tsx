@@ -38,6 +38,7 @@ export type FactoryOptions = {
   productionItems: ProductionItemOptions[],
   inputItems: InputItemOptions[],
   inputResources: InputItemOptions[],
+  allowHandGatheredItems: boolean,
   weightingOptions: WeightingOptions,
   allowedRecipes: RecipeMap,
 };
@@ -126,9 +127,9 @@ function getInitialInputResources(): InputItemOptions[] {
 
 function getInitialWeightingOptions(): WeightingOptions {
   return {
-    resources: '10',
-    power: '1',
-    buildArea: '0',
+    resources: '1000',
+    power: '10',
+    buildArea: '1',
   };
 }
 
@@ -147,6 +148,7 @@ function getInitialState(): FactoryOptions {
     productionItems: [],
     inputItems: [],
     inputResources: getInitialInputResources(),
+    allowHandGatheredItems: false,
     weightingOptions: getInitialWeightingOptions(),
     allowedRecipes: getInitialAllowedRecipes(),
   };
@@ -164,6 +166,7 @@ export type FactoryAction =
   | { type: 'UPDATE_INPUT_RESOURCE', data: InputItemOptions }
   | { type: 'SET_RESOURCES_TO_MAP_LIMITS' }
   | { type: 'SET_RESOURCES_TO_0' }
+  | { type: 'SET_ALLOW_HAND_GATHERED_ITEMS', active: boolean }
   | { type: 'UPDATE_WEIGHTING_OPTIONS', data: WeightingOptions }
   | { type: 'SET_ALL_WEIGHTS_DEFAULT' }
   | { type: 'SET_RECIPE_ACTIVE', key: string, active: boolean }
@@ -219,6 +222,9 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
       const newInputResources = state.inputResources
         .map((data) => ({ ...data, value: '0', unlimited: false }));
       return { ...state, inputResources: newInputResources };
+    }
+    case 'SET_ALLOW_HAND_GATHERED_ITEMS': {
+      return { ...state, allowHandGatheredItems: action.active };
     }
     case 'UPDATE_WEIGHTING_OPTIONS': {
       const newWeightingOptions = { ...action.data };

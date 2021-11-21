@@ -31,7 +31,7 @@ const ProductionTab = () => {
           const target = recipeInfo?.products.find((p) => p.itemClass === data.itemKey);
           if (target) {
             const name = recipeInfo.isAlternate ? recipeInfo.name.replace('Alternate: ', '') : 'Base Recipe';
-            modeOptions.push({ value: recipeKey, text: `${name} [${target.perMinute} / min]` });
+            modeOptions.push({ value: recipeKey, text: `${name} [${target.perMinute}/min]` });
           }
         });
       }
@@ -55,7 +55,7 @@ const ProductionTab = () => {
               }}
             />
           </Grid.Column>
-          <Grid.Column style={{ flex: '0 0 350px' }}>
+          <Grid.Column style={{ flex: '0 0 380px' }}>
             <Input
               className='no-spinner'
               type='number'
@@ -73,7 +73,7 @@ const ProductionTab = () => {
             >
               <input />
               <Dropdown
-                style={{ width: '250px', minWidth: '0px' }}
+                style={{ width: '230px', minWidth: '0px' }}
                 selection
                 options={modeOptions}
                 value={data.mode}

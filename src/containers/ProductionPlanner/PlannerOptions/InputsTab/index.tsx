@@ -272,6 +272,15 @@ const InputsTab = () => {
             </Button>
           </Grid.Column>
         </Grid.Row>
+        <Grid.Row columns={1}>
+          <Grid.Column>
+            <Checkbox
+              label='Allow hand-gathered resources'
+              checked={ctx.state.allowHandGatheredItems}
+              onChange={(e, { checked }) => { ctx.dispatch({ type: 'SET_ALLOW_HAND_GATHERED_ITEMS', active: !!checked }) }}
+              />
+          </Grid.Column>
+        </Grid.Row>
         {renderResourceInputs()}
       </Grid>
     </>

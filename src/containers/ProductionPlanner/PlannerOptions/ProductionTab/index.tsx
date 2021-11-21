@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button, Dropdown, Input, Grid, Icon } from 'semantic-ui-react';
-import { items, itemRecipeMap, recipes } from '../../../../data';
+import { items, recipes } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
 
-const itemOptions = Object.keys(itemRecipeMap)
+const itemOptions = Object.keys(items)
+  .filter((key) => items[key].producedFromRecipes.length !== 0)
   .map((key) => ({
     value: key,
     text: items[key].name,
@@ -24,7 +25,7 @@ const ProductionTab = () => {
     return ctx.state.productionItems.map((data) => {
       const modeOptions = [...baseModeOptions];
       if (data.itemKey) {
-        const recipeList = itemRecipeMap[data.itemKey];
+        const recipeList = items[data.itemKey].producedFromRecipes;
         recipeList.forEach((recipeKey) => {
           const recipeInfo = recipes[recipeKey];
           const target = recipeInfo?.products.find((p) => p.itemClass === data.itemKey);

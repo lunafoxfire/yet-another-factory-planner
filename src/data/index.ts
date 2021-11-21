@@ -1,19 +1,19 @@
-import itemsRaw from './json/items.json';
-import itemRecipeMapRaw from './json/itemRecipeMap.json';
-import uncraftableItemsRaw from './json/uncraftableItems.json';
+import buildingsRaw from './json/buildings.json';
 import recipesRaw from './json/recipes.json';
 import resourcesRaw from './json/resources.json';
-import buildingsRaw from './json/buildings.json';
+import itemsRaw from './json/items.json';
+import handGatheredItemsRaw from './json/handGatheredItems.json';
+
+export type BuildingsInfo = {
+  slug: string,
+  name: string,
+  power: number,
+  area: number,
+};
 
 export type ItemRate = {
   itemClass: string,
   perMinute: number,
-}
-
-export type ItemInfo = {
-  slug: string,
-  name: string,
-  sinkPoints: number,
 };
 
 export type RecipeInfo = {
@@ -31,23 +31,22 @@ export type ResourceInfo = {
   relativeValue: number,
 };
 
-export type BuildingsInfo = {
+export type ItemInfo = {
   slug: string,
   name: string,
-  power: number,
-  area: number,
+  sinkPoints: number,
+  usedInRecipes: string[],
+  producedFromRecipes: string[],
 };
 
-export type ItemMap = { [key in keyof typeof itemsRaw]: ItemInfo } & { [key: string]: ItemInfo };
-export type ItemRecipeMap = { [key in keyof typeof itemRecipeMapRaw]: string[] } & { [key: string]: string[] };
-export type UncraftableItemsMap = { [key in keyof typeof uncraftableItemsRaw]: string } & { [key: string]: string };
+export type BuildingMap = { [key in keyof typeof buildingsRaw]: BuildingsInfo } & { [key: string]: BuildingsInfo };
 export type RecipeMap = { [key in keyof typeof recipesRaw]: RecipeInfo } & { [key: string]: RecipeInfo };
 export type ResourceMap = { [key in keyof typeof resourcesRaw]: ResourceInfo } & { [key: string]: ResourceInfo };
-export type BuildingMap = { [key in keyof typeof buildingsRaw]: BuildingsInfo } & { [key: string]: BuildingsInfo };
+export type ItemMap = { [key in keyof typeof itemsRaw]: ItemInfo } & { [key: string]: ItemInfo };
+export type HandGatheredItemMap = { [key in keyof typeof handGatheredItemsRaw]: string } & { [key: string]: string };
 
-export const items = (itemsRaw as ItemMap);
-export const itemRecipeMap = (itemRecipeMapRaw as ItemRecipeMap);
-export const uncraftableItems = (uncraftableItemsRaw as UncraftableItemsMap);
+export const buildings = (buildingsRaw as BuildingMap);
 export const recipes = (recipesRaw as RecipeMap);
 export const resources = (resourcesRaw as ResourceMap);
-export const buildings = (buildingsRaw as BuildingMap);
+export const items = (itemsRaw as ItemMap);
+export const handGatheredItems = (handGatheredItemsRaw as HandGatheredItemMap);

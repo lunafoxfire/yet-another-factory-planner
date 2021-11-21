@@ -129,48 +129,46 @@ Object.entries(resources).forEach(([resourceKey, resourceData]) => {
 });
 
 const items = {};
-const itemRecipeMap = {};
-const uncraftableItems = {};
+const handGatheredItems = {};
 Object.entries(data.items).forEach(([itemKey, itemData]) => {
-  let usedInProduction = false;
-  const itemRecipes = [];
+  const usedInRecipes = [];
+  const producedFromRecipes = [];
   Object.entries(recipes).forEach(([recipeKey, recipeData]) => {
     if (recipeData.ingredients.find((i) => i.itemClass === itemKey)) {
-      usedInProduction = true;
+      usedInRecipes.push(recipeKey);
     }
     if (recipeData.products.find((p) => p.itemClass === itemKey)) {
-      usedInProduction = true;
-      itemRecipes.push(recipeKey);
+      producedFromRecipes.push(recipeKey);
     }
   });
-  if (usedInProduction) {
-    if (itemRecipes.length > 0) {
-      itemRecipeMap[itemKey] = itemRecipes;
-    } else if (!resources[itemKey]) {
-      uncraftableItems[itemKey] = itemKey;
-    }
-    items[itemKey] = {
-      slug: itemData.slug,
-      name: itemData.name,
-      sinkPoints: itemData.sinkPoints,
-    };
+
+  if (usedInRecipes.length === 0 && producedFromRecipes.length === 0) return;
+  if (producedFromRecipes.length === 0 && !resources[itemKey]) {
+    handGatheredItems[itemKey] = itemKey;
   }
+  items[itemKey] = {
+    slug: itemData.slug,
+    name: itemData.name,
+    sinkPoints: itemData.sinkPoints,
+    usedInRecipes,
+    producedFromRecipes,
+  };
 });
 
 // TODO: Missing from docs
 items['Desc_CUSTOM_PlutoniumWaste_C'] = {
   slug: 'plutonium-waste',
   name: 'Plutonium Waste',
-  sinkPoints: 0
+  sinkPoints: 0,
+  usedInRecipes: [],
+  producedFromRecipes: ['Recipe_CUSTOM_PlutoniumPower_C'],
 };
-itemRecipeMap['Desc_CUSTOM_PlutoniumWaste_C'] = ['Recipe_CUSTOM_PlutoniumPower_C'];
 
 writeFileSafe(path.join(OUTPUT_DIR, 'buildings.json'), buildings);
 writeFileSafe(path.join(OUTPUT_DIR, 'recipes.json'), recipes);
 writeFileSafe(path.join(OUTPUT_DIR, 'resources.json'), resources);
 writeFileSafe(path.join(OUTPUT_DIR, 'items.json'), items);
-writeFileSafe(path.join(OUTPUT_DIR, 'itemRecipeMap.json'), itemRecipeMap);
-writeFileSafe(path.join(OUTPUT_DIR, 'uncraftableItems.json'), uncraftableItems);
+writeFileSafe(path.join(OUTPUT_DIR, 'handGatheredItems.json'), handGatheredItems);
 
 function writeFileSafe(filePath, data) {
   const json = JSON.stringify(data, null, 2);

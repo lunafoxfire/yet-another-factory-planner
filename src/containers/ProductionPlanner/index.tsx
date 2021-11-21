@@ -10,7 +10,7 @@ const seed = Math.floor(new Date().getTime() / ONE_HOUR);
 const rng = seedrandom(String(seed));
 
 const TIPS = [
-  'Pet the doggo!',
+  'Pet the lizard doggo!',
   'Get back to work!',
   'Update 5 now available!',
   'Arachnophobia mode enabled.',

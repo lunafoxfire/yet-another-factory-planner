@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import Cytoscape, { Stylesheet } from 'cytoscape';
 import klay from 'cytoscape-klay';
 import GraphVisualizer from 'react-cytoscapejs';
-import { ProductionGraph, ProductionNode, ProductionEdge, NODE_TYPE } from '../../../../utilities/production-solver';
+import { ProductionGraph, GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes, buildings } from '../../../../data';
 
 Cytoscape.use(klay);
@@ -109,6 +109,12 @@ const stylesheet: Stylesheet[] = [
     },
   },
   {
+    selector: 'node.hand-gathered',
+    style: {
+      'background-color': '#9061e8',
+    },
+  },
+  {
     selector: 'node.resource',
     style: {
       'background-color': '#e8a761',
@@ -120,19 +126,13 @@ const stylesheet: Stylesheet[] = [
       'background-color': '#61c2e8',
     },
   },
-  {
-    selector: 'node.item',
-    style: {
-      'background-color': '#61c2e8',
-    },
-  },
 ];
 
 const NODE_COLOR_CLASS = {
   [NODE_TYPE.FINAL_PRODUCT]: 'final-product',
   [NODE_TYPE.SIDE_PRODUCT]: 'side-product',
-  [NODE_TYPE.INTERMEDIATE_ITEM]: 'item',
   [NODE_TYPE.INPUT_ITEM]: 'input',
+  [NODE_TYPE.HAND_GATHERED_RESOURCE]: 'hand-gathered',
   [NODE_TYPE.RESOURCE]: 'resource',
   [NODE_TYPE.RECIPE]: 'recipe',
 };
@@ -142,7 +142,7 @@ function truncateFloat(n: number) {
   return n.toFixed(4).replace(/\.?0+$/, '');
 }
 
-function getNodeLabel(node: ProductionNode) {
+function getNodeLabel(node: GraphNode) {
   let label = '';
   let amountText = '';
   if (node.type === NODE_TYPE.RECIPE) {
@@ -157,7 +157,7 @@ function getNodeLabel(node: ProductionNode) {
   return `${label}\n${amountText}`;
 }
 
-function getEdgeLabel(edge: ProductionEdge) {
+function getEdgeLabel(edge: GraphEdge) {
   const item = items[edge.key];
   const label = item.name;
   const amountText = `${truncateFloat(edge.productionRate)} / min`;

@@ -1,11 +1,20 @@
 import loadGLPK, { LP, Var } from 'glpk.js';
 import { nanoid } from 'nanoid';
 import { FactoryOptions } from '../../contexts/production';
-import { buildings, itemRecipeMap, recipes, resources, uncraftableItems } from '../../data';
+import { buildings, items, recipes, resources, handGatheredItems } from '../../data';
 import { RecipeMap } from '../../contexts/production';
 
 const EPSILON = 1e-8;
 const MAXIMIZE_OBJECTIVE_WEIGHT = 1e6;
+
+export const NODE_TYPE = {
+  FINAL_PRODUCT: 'FINAL_PRODUCT',
+  SIDE_PRODUCT: 'SIDE_PRODUCT',
+  INPUT_ITEM: 'INPUT_ITEM',
+  HAND_GATHERED_RESOURCE: 'HAND_GATHERED_RESOURCE',
+  RESOURCE: 'RESOURCE',
+  RECIPE: 'RECIPE',
+};
 
 type Inputs = {
   [key: string]: {
@@ -28,17 +37,6 @@ type GlobalWeights = {
   buildArea: number,
 };
 
-export const NODE_TYPE = {
-  NONE: 'NONE',
-  ROOT: 'ROOT',
-  FINAL_PRODUCT: 'FINAL_PRODUCT',
-  SIDE_PRODUCT: 'SIDE_PRODUCT',
-  INTERMEDIATE_ITEM: 'INTERMEDIATE_ITEM',
-  INPUT_ITEM: 'INPUT_ITEM',
-  RESOURCE: 'RESOURCE',
-  RECIPE: 'RECIPE',
-};
-
 type ProductionSolution = { [key: string]: number };
 type ProductionAmount = { recipeKey: string, amount: number };
 type ItemProductionTotals = {
@@ -54,48 +52,19 @@ export type SolverResults = {
   error: string,
 };
 
-export type RecipeGraph = {
-  itemNodes: { [key: string]: ItemNode },
-  recipeNodes: { [key: string]: RecipeNode },
+export type ProductionGraph = {
+  nodes: { [key: string]: GraphNode },
   edges: GraphEdge[],
 };
 
-export type ItemNode = {
-  id: string,
-  itemKey: string,
-  type: string,
-  outputFrom: string[],
-  inputTo: string[],
-  depth: number,
-};
-
-export type RecipeNode = {
-  id: string,
-  recipeKey: string,
-  type: string,
-  ingredients: string[],
-  products: string[],
-  depth: number,
-};
-
-export type GraphEdge = {
-  from: string,
-  to: string,
-};
-
-export type ProductionGraph = {
-  nodes: { [key: string]: ProductionNode },
-  edges: ProductionEdge[],
-};
-
-export type ProductionNode = {
+export type GraphNode = {
   id: string,
   key: string,
   type: string,
   multiplier: number,
 };
 
-export type ProductionEdge = {
+export type GraphEdge = {
   key: string,
   from: string,
   to: string,
@@ -161,15 +130,13 @@ export class ProductionSolver {
       }
     });
 
-    Object.keys(uncraftableItems).forEach((item) => {
+    Object.keys(handGatheredItems).forEach((item) => {
       this.inputs[item] = {
         amount: Infinity,
         weight: 1000,
-        type: NODE_TYPE.RESOURCE,
+        type: NODE_TYPE.HAND_GATHERED_RESOURCE,
       };
     });
-
-    console.log(this.inputs);
 
     this.outputs = {};
     const rateTargets: Outputs = {};
@@ -244,11 +211,18 @@ export class ProductionSolver {
     this.allowedRecipes = options.allowedRecipes;
   }
 
+  private validateNumber(num: Number) {
+    if (Number.isNaN(num)) {
+      throw new Error('INVALID VALUE: NOT A NUMBER');
+    } else if (num < 0) {
+      throw new Error('INVALID VALUE: NEGATIVE NUMBER');
+    }
+  }
+
   public async exec(): Promise<SolverResults> {
     const timestamp = performance.now();
     try {
-      const recipeGraph = this.generateRecipeGraph();
-      const productionSolution = await this.solveProduction(recipeGraph);
+      const productionSolution = await this.solveProduction();
       if (Object.keys(productionSolution).length === 0) {
         throw new Error('NO POSSIBLE SOLUTION. INSUFFICIENT CONSTRAINTS.');
       }
@@ -268,139 +242,10 @@ export class ProductionSolver {
     }
   }
 
-  private validateNumber(num: Number) {
-    if (Number.isNaN(num)) {
-      throw new Error('INVALID VALUE: NOT A NUMBER');
-    } else if (num < 0) {
-      throw new Error('INVALID VALUE: NEGATIVE NUMBER');
-    }
-  }
-
-  private generateRecipeGraph(): RecipeGraph {
-    const graph: RecipeGraph = {
-      itemNodes: {},
-      recipeNodes: {},
-      edges: [],
-    };
-
-    const initialNode: RecipeNode = {
-      id: nanoid(),
-      recipeKey: NODE_TYPE.ROOT,
-      type: NODE_TYPE.ROOT,
-      ingredients: Object.keys(this.outputs),
-      products: [],
-      depth: -1,
-    }
-
-    this.buildRecipeTree(initialNode, graph, 0);
-    this.classifyNodes(graph);
-
-    return graph;
-  }
-
-  private buildRecipeTree(parentNode: RecipeNode, graph: RecipeGraph, depth: number) {
-    if (depth > 50) {
-      throw new Error('INFINITE LOOP DETECTED');
-    }
-
-
-    // ==== PRODUCT NODES ==== //
-    for (const product of parentNode.products) {
-      let productNode = graph.itemNodes[product];
-      if (!productNode) {
-        productNode = {
-          id: nanoid(),
-          itemKey: product,
-          type: NODE_TYPE.NONE,
-          outputFrom: [],
-          inputTo: [],
-          depth,
-        };
-        graph.itemNodes[product] = productNode;
-      }
-      productNode.outputFrom.push(parentNode.recipeKey);
-      graph.edges.push({
-        from: parentNode.id,
-        to: productNode.id,
-      });
-    }
-
-
-    // ==== INGREDIENT NODES ==== //
-    for (const ingredient of parentNode.ingredients) {
-      let ingredientNode = graph.itemNodes[ingredient];
-      if (!ingredientNode) {
-        ingredientNode = {
-          id: nanoid(),
-          itemKey: ingredient,
-          type: NODE_TYPE.NONE,
-          outputFrom: [],
-          inputTo: [],
-          depth,
-        };
-        graph.itemNodes[ingredient] = ingredientNode;
-      }
-      if (parentNode.type !== NODE_TYPE.ROOT) {
-        ingredientNode.inputTo.push(parentNode.recipeKey);
-        graph.edges.push({
-          from: ingredientNode.id,
-          to: parentNode.id,
-        });
-      }
-
-
-      // ==== NEXT RECIPE NODES ==== //
-      let recipeList: string[];
-      if (this.inputs[ingredient]) {
-        recipeList = [];
-        if (this.inputs[ingredient].type === NODE_TYPE.INPUT_ITEM) {
-          recipeList = itemRecipeMap[ingredient].filter((r) => this.allowedRecipes[r]);
-        }
-      } else {
-        recipeList = itemRecipeMap[ingredient].filter((r) => this.allowedRecipes[r]);
-        if (recipeList.length === 0) {
-          throw new Error(`ITEM ${ingredient} HAS NO VALID RECIPES`);
-        }
-      }
-
-      for (const recipe of recipeList) {
-        let recipeNode = graph.recipeNodes[recipe];
-        if (!recipeNode) {
-          const recipeInfo = recipes[recipe];
-          recipeNode = {
-            id: nanoid(),
-            recipeKey: recipe,
-            type: NODE_TYPE.RECIPE,
-            ingredients: recipeInfo.ingredients.map((i) => i.itemClass),
-            products: recipeInfo.products.map((p) => p.itemClass),
-            depth,
-          };
-          graph.recipeNodes[recipe] = recipeNode;
-          this.buildRecipeTree(recipeNode, graph, depth + 1);
-        }
-      }
-    }
-  }
-  
-  private classifyNodes(graph: RecipeGraph) {
-    for (const [key, node] of Object.entries(graph.itemNodes)) {
-      if (this.outputs[key]) {
-        node.type = NODE_TYPE.FINAL_PRODUCT;
-      } else if (this.inputs[key]) {
-        const inputInfo = this.inputs[key];
-        node.type = inputInfo.type;
-      } else if (node.inputTo.length === 0) {
-        node.type = NODE_TYPE.SIDE_PRODUCT;
-      } else {
-        node.type = NODE_TYPE.INTERMEDIATE_ITEM;
-      }
-    }
-  }
-
-  private async solveProduction(graph: RecipeGraph): Promise<ProductionSolution> {
+  private async solveProduction(): Promise<ProductionSolution> {
     const glpk = await loadGLPK();
     const model: LP = {
-      name: 'target-rate-pass',
+      name: 'production',
       objective: {
         name: 'score',
         direction: glpk.GLP_MIN,
@@ -409,8 +254,8 @@ export class ProductionSolver {
       subjectTo: [],
     };
 
-    for (const recipeKey of Object.keys(graph.recipeNodes)) {
-      const recipeInfo = recipes[recipeKey];
+    for (const [recipeKey, recipeInfo] of Object.entries(recipes)) {
+      if (!this.allowedRecipes[recipeKey]) continue;
       const buildingInfo = buildings[recipeInfo.producedIn];
       model.objective.vars.push({
         name: recipeKey,
@@ -418,20 +263,18 @@ export class ProductionSolver {
       });
     }
 
-    for (const [key, itemNode] of Object.entries(graph.itemNodes)) {
-      if (itemNode.type === NODE_TYPE.SIDE_PRODUCT) continue;
-
+    for (const [itemKey, itemInfo] of Object.entries(items)) {
       const vars: Var[] = [];
 
-      for (const recipe of itemNode.inputTo) {
+      for (const recipe of itemInfo.usedInRecipes) {
         const recipeInfo = recipes[recipe];
-        const target = recipeInfo.ingredients.find((i) => i.itemClass === key)!;
+        const target = recipeInfo.ingredients.find((i) => i.itemClass === itemKey)!;
         vars.push({ name: recipe, coef: target.perMinute });
       }
 
-      for (const recipe of itemNode.outputFrom) {
+      for (const recipe of itemInfo.producedFromRecipes) {
         const recipeInfo = recipes[recipe];
-        const target = recipeInfo.products.find((p) => p.itemClass === key)!;
+        const target = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
         const existingVar = vars.find((v) => v.name === recipe);
         if (existingVar) {
           existingVar.coef -= target.perMinute;
@@ -440,64 +283,55 @@ export class ProductionSolver {
         }
       }
 
-      if (itemNode.type === NODE_TYPE.RESOURCE) {
-        const inputInfo = this.inputs[key];
+      if (this.inputs[itemKey]) {
+        const inputInfo = this.inputs[itemKey];
         if (inputInfo.amount !== Infinity) {
           model.subjectTo.push({
-            name: `${key} resource constraint`,
+            name: `${itemKey} resource constraint`,
             vars,
             bnds: { type: glpk.GLP_UP, ub: inputInfo.amount, lb: NaN },
           });
         }
 
-        const objectiveVars = vars.map<Var>((v) => ({
-          name: v.name,
-          coef: v.coef * inputInfo.weight * this.globalWeights.resources,
-        }));
-        model.objective.vars.push(...objectiveVars);
-      }
-
-      else if (itemNode.type === NODE_TYPE.INPUT_ITEM) {
-        const inputInfo = this.inputs[key];
-        if (inputInfo.amount !== Infinity) {
-          model.subjectTo.push({
-            name: `${key} input constraint`,
-            vars,
-            bnds: { type: glpk.GLP_UP, ub: inputInfo.amount, lb: NaN },
-          });
+        if (inputInfo.type === NODE_TYPE.RESOURCE || inputInfo.type === NODE_TYPE.HAND_GATHERED_RESOURCE) {
+          const objectiveVars = vars.map<Var>((v) => ({
+            name: v.name,
+            coef: v.coef * inputInfo.weight * this.globalWeights.resources,
+          }));
+          model.objective.vars.push(...objectiveVars);
         }
       }
 
-      else if (itemNode.type === NODE_TYPE.INTERMEDIATE_ITEM) {
-        model.subjectTo.push({
-          name: `${key} intermediates constraint`,
-          vars,
-          bnds: { type: glpk.GLP_UP, ub: 0, lb: NaN },
-        });
-      }
-
-      else if (itemNode.type === NODE_TYPE.FINAL_PRODUCT) {
-        const targetInfo = this.outputs[key];
-        if (targetInfo.maximize) {
+      else if (this.outputs[itemKey]) {
+        const outputInfo = this.outputs[itemKey];
+        if (outputInfo.maximize) {
           model.subjectTo.push({
-            name: `${key} final product constraint`,
+            name: `${itemKey} final product constraint`,
             vars,
             bnds: { type: glpk.GLP_UP, ub: 0, lb: NaN },
           });
 
           const objectiveVars = vars.map<Var>((v) => ({
             name: v.name,
-            coef: v.coef * Math.pow(MAXIMIZE_OBJECTIVE_WEIGHT, targetInfo.value),
+            coef: v.coef * Math.pow(MAXIMIZE_OBJECTIVE_WEIGHT, outputInfo.value),
           }));
           model.objective.vars.push(...objectiveVars);
 
         } else {
           model.subjectTo.push({
-            name: `${key} final product constraint`,
+            name: `${itemKey} final product constraint`,
             vars,
-            bnds: { type: glpk.GLP_UP, ub: -targetInfo.value, lb: NaN },
+            bnds: { type: glpk.GLP_UP, ub: -outputInfo.value, lb: NaN },
           });
         }
+      }
+
+      else {
+        model.subjectTo.push({
+          name: `${itemKey} intermediates constraint`,
+          vars,
+          bnds: { type: glpk.GLP_UP, ub: 0, lb: NaN },
+        });
       }
     }
 

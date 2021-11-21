@@ -99,7 +99,7 @@ const stylesheet: Stylesheet[] = [
   {
     selector: 'node.side-product',
     style: {
-      'background-color': '#e1e861',
+      'background-color': '#f371e2',
     },
   },
   {
@@ -126,6 +126,12 @@ const stylesheet: Stylesheet[] = [
       'background-color': '#61c2e8',
     },
   },
+  {
+    selector: 'node.nuclear',
+    style: {
+      'background-color': '#f0ed4c',
+    },
+  },
 ];
 
 const NODE_COLOR_CLASS = {
@@ -136,7 +142,6 @@ const NODE_COLOR_CLASS = {
   [NODE_TYPE.RESOURCE]: 'resource',
   [NODE_TYPE.RECIPE]: 'recipe',
 };
-
 
 function truncateFloat(n: number) {
   return n.toFixed(4).replace(/\.?0+$/, '');
@@ -155,6 +160,23 @@ function getNodeLabel(node: GraphNode) {
     amountText = `${truncateFloat(node.multiplier)} / min`;
   }
   return `${label}\n${amountText}`;
+}
+
+function getNodeClasses(node: GraphNode) {
+  const classes = [];
+  if (node.type === NODE_TYPE.RECIPE) {
+    classes.push('recipe-shape');
+    const recipe = recipes[node.key];
+    if (recipe.producedIn === 'Build_GeneratorNuclear_C') {
+      classes.push('nuclear');
+    } else {
+      classes.push(NODE_COLOR_CLASS[node.type]);
+    }
+  } else {
+    classes.push('item-shape');
+    classes.push(NODE_COLOR_CLASS[node.type]);
+  }
+  return classes;
 }
 
 function getEdgeLabel(edge: GraphEdge) {
@@ -187,7 +209,7 @@ const ProductionGraphTab = (props: Props) => {
           id: node.id,
           label: getNodeLabel(node),
         },
-        classes: [node.type === NODE_TYPE.RECIPE ? 'recipe-shape' : 'item-shape', NODE_COLOR_CLASS[node.type]],
+        classes: getNodeClasses(node),
       });
     });
     activeGraph.edges.forEach((edge) => {

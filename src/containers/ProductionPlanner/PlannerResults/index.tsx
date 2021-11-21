@@ -27,6 +27,7 @@ const PlannerResults = () => {
     } catch (e: any) {
       setSolverResults({
         productionGraph: null,
+        report: null,
         timestamp: performance.now(),
         error: e.message,
       });
@@ -42,7 +43,7 @@ const PlannerResults = () => {
       case 'production-graph':
         return <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={solverResults?.error || ''} />
       case 'report':
-        return <ReportTab />
+        return <ReportTab report={solverResults?.report || null} />
       default:
         return null;
     }

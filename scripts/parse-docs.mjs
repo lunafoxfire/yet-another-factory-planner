@@ -32,20 +32,31 @@ Object.entries(data.buildings).forEach(([buildingKey, buildingData]) => {
     return;
   }
   let power = 0;
-  if (buildingData.meta.powerConsumption) {
+  if (buildingData.meta.powerProduction) {
+    power = -buildingData.meta.powerProduction;
+  } else if (buildingData.meta.powerConsumption) {
     power = buildingData.meta.powerConsumption;
   } else if (buildingData.meta.powerConsumptionCycle) {
     power = (buildingData.meta.powerConsumptionCycle.minimumConsumption + buildingData.meta.powerConsumptionCycle.maximumConsumption) / 2;
   }
-
   // TODO: Fix in parse-docs lib
   const fixedKey = buildingKey.replace('Desc_', 'Build_');
   const area = BUILDING_AREAS[fixedKey] || 0;
+
+  let buildCost = [];
+  const recipeData = Object.values(data.buildRecipes).find((br) => br.product === buildingKey);
+  if (recipeData) {
+    buildCost = recipeData.ingredients;
+  } else {
+    console.warn(`BUILDING ${fixedKey} HAS NO BUILD COST`);
+  }
+
   buildings[fixedKey] = {
     slug: buildingData.slug,
     name: buildingData.name,
     power,
     area,
+    buildCost,
   }
 });
 
@@ -94,7 +105,7 @@ recipes['Recipe_CUSTOM_NuclearPower_C'] = {
   slug: 'uranium-power-recipe',
   name: 'Uranium Power',
   isAlternate: false,
-  ingredients: [{ itemClass: 'Desc_NuclearFuelRod_C', perMinute: 0.2 }],
+  ingredients: [{ itemClass: 'Desc_NuclearFuelRod_C', perMinute: 0.2 }, { itemClass: 'Desc_Water_C', perMinute: 300 }],
   products: [{ itemClass: 'Desc_NuclearWaste_C', perMinute: 10 }],
   producedIn: 'Build_GeneratorNuclear_C',
 };
@@ -102,7 +113,7 @@ recipes['Recipe_CUSTOM_PlutoniumPower_C'] = {
   slug: 'plutonium-power-recipe',
   name: 'Plutonium Power',
   isAlternate: false,
-  ingredients: [{ itemClass: 'Desc_PlutoniumFuelRod_C', perMinute: 0.1 }],
+  ingredients: [{ itemClass: 'Desc_PlutoniumFuelRod_C', perMinute: 0.1 }, { itemClass: 'Desc_Water_C', perMinute: 300 }],
   products: [{ itemClass: 'Desc_CUSTOM_PlutoniumWaste_C', perMinute: 1 }],
   producedIn: 'Build_GeneratorNuclear_C',
 };

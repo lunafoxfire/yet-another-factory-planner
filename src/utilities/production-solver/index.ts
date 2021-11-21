@@ -48,9 +48,29 @@ type ItemProductionTotals = {
 
 export type SolverResults = {
   productionGraph: ProductionGraph | null,
+  report: Report | null,
   timestamp: number,
   error: string,
 };
+
+export type Report = {
+  pointsProduced: number,
+  powerUsageEstimate: number,
+  resourceEfficiencyScore: number,
+  totalBuildArea: number,
+  estimatedFoundations: number,
+  buildingsUsed: {
+    [key: string]: {
+      count: number,
+      materialCost: {
+        [key: string]: number,
+      }
+    },
+  },
+  totalMaterialCost: {
+    [key: string]: number,
+  },
+}
 
 export type ProductionGraph = {
   nodes: { [key: string]: GraphNode },
@@ -228,15 +248,18 @@ export class ProductionSolver {
         throw new Error('SOLUTION IS EMPTY.');
       }
       const productionGraph = this.generateProductionGraph(productionSolution);
+      const report = this.generateProductionReport(productionGraph);
 
       return {
         productionGraph,
+        report,
         timestamp: timestamp,
         error: '',
       };
     } catch (e: any) {
       return {
         productionGraph: null,
+        report: null,
         timestamp: timestamp,
         error: e.message,
       };
@@ -258,9 +281,11 @@ export class ProductionSolver {
     for (const [recipeKey, recipeInfo] of Object.entries(recipes)) {
       if (!this.allowedRecipes[recipeKey]) continue;
       const buildingInfo = buildings[recipeInfo.producedIn];
+      const powerScore = buildingInfo.power > 0 ? buildingInfo.power * this.globalWeights.power : 0;
+      const areaScore = buildingInfo.area * this.globalWeights.buildArea
       model.objective.vars.push({
         name: recipeKey,
-        coef: buildingInfo.power * this.globalWeights.power + buildingInfo.area * this.globalWeights.buildArea,
+        coef: powerScore + areaScore,
       });
     }
 
@@ -505,5 +530,62 @@ export class ProductionSolver {
     }
 
     return graph;
+  }
+
+  private generateProductionReport(productionGraph: ProductionGraph): Report {
+    const report: Report = {
+      pointsProduced: 0,
+      powerUsageEstimate: 0,
+      resourceEfficiencyScore: 0,
+      totalBuildArea: 0,
+      estimatedFoundations: 0,
+      buildingsUsed: {},
+      totalMaterialCost: {},
+    };
+
+    for (const [key, node] of Object.entries(productionGraph.nodes)) {
+      if (node.type === NODE_TYPE.RECIPE) {
+        const recipeInfo = recipes[key];
+        const buildingKey = recipeInfo.producedIn;
+        const buildingInfo = buildings[buildingKey];
+
+        report.powerUsageEstimate += node.multiplier * buildingInfo.power;
+        report.totalBuildArea += Math.ceil(node.multiplier) * buildingInfo.area;
+        if (!report.buildingsUsed[buildingKey]) {
+          report.buildingsUsed[buildingKey] = {
+            count: Math.ceil(node.multiplier),
+            materialCost: {},
+          };
+        } else {
+          report.buildingsUsed[buildingKey].count += Math.ceil(node.multiplier);
+        }
+
+        for (const ingredient of buildingInfo.buildCost) {
+          const amount = Math.ceil(node.multiplier) * ingredient.quantity;
+          if (!report.buildingsUsed[buildingKey].materialCost[ingredient.itemClass]) {
+            report.buildingsUsed[buildingKey].materialCost[ingredient.itemClass] = amount;
+          } else {
+            report.buildingsUsed[buildingKey].materialCost[ingredient.itemClass] += amount;
+          }
+          if (!report.totalMaterialCost[ingredient.itemClass]) {
+            report.totalMaterialCost[ingredient.itemClass] = amount;
+          } else {
+            report.totalMaterialCost[ingredient.itemClass] += amount;
+          }
+        }
+        continue;
+      }
+
+      const itemInfo = items[key];
+      if (node.type === NODE_TYPE.FINAL_PRODUCT) {
+        report.pointsProduced += node.multiplier * itemInfo.sinkPoints;
+      } else if (node.type === NODE_TYPE.RESOURCE) {
+        report.resourceEfficiencyScore += node.multiplier * this.inputs[key].weight;
+      }
+    }
+
+    report.estimatedFoundations = Math.ceil(2 * (report.totalBuildArea / 64));
+
+    return report;
   }
 }

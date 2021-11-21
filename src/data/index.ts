@@ -4,16 +4,23 @@ import resourcesRaw from './json/resources.json';
 import itemsRaw from './json/items.json';
 import handGatheredItemsRaw from './json/handGatheredItems.json';
 
+
+export type ItemRate = {
+  itemClass: string,
+  perMinute: number,
+};
+
+export type ItemQuantity = {
+  itemClass: string,
+  quantity: number,
+};
+
 export type BuildingsInfo = {
   slug: string,
   name: string,
   power: number,
   area: number,
-};
-
-export type ItemRate = {
-  itemClass: string,
-  perMinute: number,
+  buildCost: ItemQuantity[],
 };
 
 export type RecipeInfo = {

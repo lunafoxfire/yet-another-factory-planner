@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from 'semantic-ui-react';
 
-const BuildingsTab = () => {
+const ReportTab = () => {
   return (
     <Container>
       <p>does works!</p>
@@ -9,4 +9,4 @@ const BuildingsTab = () => {
   );
 };
 
-export default BuildingsTab;
+export default ReportTab;

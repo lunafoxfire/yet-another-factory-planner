@@ -8,31 +8,44 @@ const ROOT_DIR = path.join(__dirname, '..');
 const DOCS_PATH = path.join(ROOT_DIR, 'data/Docs.json');
 const OUTPUT_DIR = path.join(ROOT_DIR, 'src/data/json');
 
-const EXCLUDED_RECIPES = [
-  
-];
+const EXCLUDED_RECIPES = [];
+// TODO: do this in parse-docs
+const BUILDING_AREAS = {
+  'Build_ConstructorMk1_C': 80,
+  'Build_SmelterMk1_C': 54,
+  'Build_FoundryMk1_C': 90,
+  'Build_OilRefinery_C': 200,
+  'Build_AssemblerMk1_C': 150,
+  'Build_Packager_C': 64,
+  'Build_Blender_C': 288,
+  'Build_ManufacturerMk1_C': 342,
+  'Build_HadronCollider_C': 912,
+  'Build_GeneratorNuclear_C': 1634,
+};
 
 const data = parseDocs(fs.readFileSync(DOCS_PATH));
 
 const buildings = {};
 Object.entries(data.buildings).forEach(([buildingKey, buildingData]) => {
-  if (!buildingData.isProduction) {
+  // TODO: Add nuclear generator to production buildings?
+  if (!buildingData.isProduction && buildingKey !== 'Desc_GeneratorNuclear_C') {
     return;
   }
-  let power = null;
+  let power = 0;
   if (buildingData.meta.powerConsumption) {
     power = buildingData.meta.powerConsumption;
   } else if (buildingData.meta.powerConsumptionCycle) {
-    // for now be lazy
     power = (buildingData.meta.powerConsumptionCycle.minimumConsumption + buildingData.meta.powerConsumptionCycle.maximumConsumption) / 2;
   }
 
   // TODO: Fix in parse-docs lib
-  const FIXED_KEY = buildingKey.replace('Desc_', 'Build_');
-  buildings[FIXED_KEY] = {
+  const fixedKey = buildingKey.replace('Desc_', 'Build_');
+  const area = BUILDING_AREAS[fixedKey] || 0;
+  buildings[fixedKey] = {
     slug: buildingData.slug,
     name: buildingData.name,
     power,
+    area,
   }
 });
 
@@ -75,6 +88,24 @@ Object.entries((data.itemRecipes)).forEach(([recipeKey, recipeData]) => {
     producedIn: producedIn,
   };
 });
+
+// TODO: Add to parse docs
+recipes['Recipe_CUSTOM_NuclearPower_C'] = {
+  slug: 'uranium-power-recipe',
+  name: 'Uranium Power',
+  isAlternate: false,
+  ingredients: [{ itemClass: 'Desc_NuclearFuelRod_C', perMinute: 0.2 }],
+  products: [{ itemClass: 'Desc_NuclearWaste_C', perMinute: 10 }],
+  producedIn: 'Build_GeneratorNuclear_C',
+};
+recipes['Recipe_CUSTOM_PlutoniumPower_C'] = {
+  slug: 'plutonium-power-recipe',
+  name: 'Plutonium Power',
+  isAlternate: false,
+  ingredients: [{ itemClass: 'Desc_PlutoniumFuelRod_C', perMinute: 0.1 }],
+  products: [{ itemClass: 'Desc_CUSTOM_PlutoniumWaste_C', perMinute: 1 }],
+  producedIn: 'Build_GeneratorNuclear_C',
+};
 
 const resources = {};
 let maxExtraction = 0;
@@ -125,6 +156,14 @@ Object.entries(data.items).forEach(([itemKey, itemData]) => {
     };
   }
 });
+
+// TODO: Missing from docs
+items['Desc_CUSTOM_PlutoniumWaste_C'] = {
+  slug: 'plutonium-waste',
+  name: 'Plutonium Waste',
+  sinkPoints: 0
+};
+itemRecipeMap['Desc_CUSTOM_PlutoniumWaste_C'] = ['Recipe_CUSTOM_PlutoniumPower_C'];
 
 writeFileSafe(path.join(OUTPUT_DIR, 'buildings.json'), buildings);
 writeFileSafe(path.join(OUTPUT_DIR, 'recipes.json'), recipes);

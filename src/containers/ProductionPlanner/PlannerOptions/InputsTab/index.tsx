@@ -80,10 +80,84 @@ const InputsTab = () => {
     ));
   }
 
+  function renderWeightInputs() {
+    const weightingOptions = ctx.state.weightingOptions;
+    return (
+      <>
+        <Grid.Row>
+          <Grid.Column style={{ flex: '0 0 180px', display: 'flex', alignItems: 'center' }}>
+            Resource Efficiency
+          </Grid.Column>
+          <Grid.Column style={{ flex: '1 1 auto' }}>
+            <Input
+              className='no-spinner'
+              type='number'
+              min='0'
+              step='1'
+              fluid
+              value={weightingOptions.resources}
+              onChange={(e, { value }) => {
+                ctx.dispatch({
+                  type: 'UPDATE_WEIGHTING_OPTIONS',
+                  data: { ...weightingOptions, resources: value },
+                });
+              }}
+            >
+            </Input>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column style={{ flex: '0 0 180px', display: 'flex', alignItems: 'center' }}>
+            Power Efficiency
+          </Grid.Column>
+          <Grid.Column style={{ flex: '1 1 auto' }}>
+            <Input
+              className='no-spinner'
+              type='number'
+              min='0'
+              step='1'
+              fluid
+              value={weightingOptions.power}
+              onChange={(e, { value }) => {
+                ctx.dispatch({
+                  type: 'UPDATE_WEIGHTING_OPTIONS',
+                  data: { ...weightingOptions, power: value },
+                });
+              }}
+            >
+            </Input>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column style={{ flex: '0 0 180px', display: 'flex', alignItems: 'center' }}>
+            Build Area Efficiency
+          </Grid.Column>
+          <Grid.Column style={{ flex: '1 1 auto' }}>
+            <Input
+              className='no-spinner'
+              type='number'
+              min='0'
+              step='1'
+              fluid
+              value={weightingOptions.buildArea}
+              onChange={(e, { value }) => {
+                ctx.dispatch({
+                  type: 'UPDATE_WEIGHTING_OPTIONS',
+                  data: { ...weightingOptions, buildArea: value },
+                });
+              }}
+            >
+            </Input>
+          </Grid.Column>
+        </Grid.Row>
+      </>
+    )
+  }
+
   function renderResourceInputs() {
     return ctx.state.inputResources.map((data) => (
       <Grid.Row key={data.key}>
-        <Grid.Column style={{ flex: '0 0 200px', display: 'flex', alignItems: 'center' }}>
+        <Grid.Column style={{ flex: '0 0 180px', display: 'flex', alignItems: 'center' }}>
           {items[data.itemKey].name}
         </Grid.Column>
         <Grid.Column style={{ flex: '1 1 auto' }}>
@@ -117,6 +191,23 @@ const InputsTab = () => {
             />
           </Input>
         </Grid.Column>
+        <Grid.Column style={{ flex: '0 0 220px' }}>
+          <Input
+            className='no-spinner'
+            type='number'
+            min='0'
+            step='1'
+            fluid
+            value={data.weight}
+            onChange={(e, { value }) => {
+              ctx.dispatch({
+                type: 'UPDATE_INPUT_RESOURCE',
+                data: { ...data, weight: value },
+              });
+            }}
+            label='Weight'
+          />
+        </Grid.Column>
       </Grid.Row>
     ));
   }
@@ -135,15 +226,33 @@ const InputsTab = () => {
               primary
               onClick={() => { ctx.dispatch({ type: 'ADD_INPUT_ITEM' }) }}
             >
-              Add Input
+              + Add Input
             </Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>
       <Divider />
+      <Header>Weighting Options</Header>
+      <p>
+        Adjust various weights affecting the importance of different properties of the factory. A value of 0 means that property is not considered during factory layout.
+      </p>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column>
+            <Button
+              primary
+              onClick={() => { ctx.dispatch({ type: 'SET_ALL_WEIGHTS_DEFAULT' }) }}
+            >
+              Reset all weights
+            </Button>
+          </Grid.Column>
+        </Grid.Row>
+        {renderWeightInputs()}
+      </Grid>
+      <Divider />
       <Header>Raw Resources</Header>
       <p>
-        Select the raw resources that are available to your factory. The default values are set to the map limits.
+        Select the raw resources that are available to your factory. The default values are set to the map limits. The weight value is a number representing how valuable that resource is when comparing recipes. The defaults are calculated according to node rarity.
       </p>
       <Grid>
         <Grid.Row columns={1}>

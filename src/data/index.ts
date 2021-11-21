@@ -35,6 +35,7 @@ export type BuildingsInfo = {
   slug: string,
   name: string,
   power: number,
+  area: number,
 };
 
 export type ItemMap = { [key in keyof typeof itemsRaw]: ItemInfo } & { [key: string]: ItemInfo };

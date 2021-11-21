@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Menu, Button, Checkbox } from 'semantic-ui-react';
 import ProductionGraphTab from './ProductionGraphTab';
-import BuildingsTab from './BuildingsTab';
+import ReportTab from './ReportTab';
 import { ProductionSolver, SolverResults } from '../../../utilities/production-solver';
 import { useProductionContext } from '../../../contexts/production';
 import { usePrevious } from '../../../hooks/usePrevious';
@@ -15,14 +15,22 @@ const PlannerResults = () => {
   const prevState = usePrevious(ctx.state);
 
   const handleCalculateFactory = useCallback(async () => {
-    const solver = new ProductionSolver(ctx.state);
-    const results = await solver.exec();
-    setSolverResults((prevState) => {
-      if (!prevState || prevState.timestamp < results.timestamp) {
-        return results;
-      }
-      return prevState;
-    });
+    try {
+      const solver = new ProductionSolver(ctx.state);
+      const results = await solver.exec();
+      setSolverResults((prevState) => {
+        if (!prevState || prevState.timestamp < results.timestamp) {
+          return results;
+        }
+        return prevState;
+      });
+    } catch (e: any) {
+      setSolverResults({
+        productionGraph: null,
+        timestamp: performance.now(),
+        error: e.message,
+      });
+    }
   }, [ctx.state]);
 
   function handleSetTab(e: any, data: any) {
@@ -33,8 +41,8 @@ const PlannerResults = () => {
     switch (activeTab) {
       case 'production-graph':
         return <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={solverResults?.error || ''} />
-      case 'buildings':
-        return <BuildingsTab />
+      case 'report':
+        return <ReportTab />
       default:
         return null;
     }
@@ -60,11 +68,11 @@ const PlannerResults = () => {
           Production Graph
         </Menu.Item>
         <Menu.Item
-          name='buildings'
-          active={activeTab === 'buildings'}
+          name='report'
+          active={activeTab === 'report'}
           onClick={handleSetTab}
         >
-          Buildings
+          Report
         </Menu.Item>
       </Menu>
       <div style={{ padding: '20px 0px' }}>

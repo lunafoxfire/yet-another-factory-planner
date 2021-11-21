@@ -3,20 +3,28 @@ import { nanoid } from 'nanoid';
 import { usePrevious } from '../../hooks/usePrevious';
 import { resources, recipes } from '../../data'
 
+const FACTORY_SETTINGS_VERSION = 'v1';
 const LOCAL_STORAGE_KEY = 'factory-data';
 
 // TYPES
 export type ProductionItemOptions = {
   key: string,
   itemKey: string,
-  mode: 'rate-target'|'building-target'|'maximize',
+  mode: 'per-minute'|'maximize'|string,
   value: string,
+};
+
+export type WeightingOptions = {
+  resources: string,
+  power: string,
+  buildArea: string,
 };
 
 export type InputItemOptions = {
   key: string,
   itemKey: string,
   value: string,
+  weight: string,
   unlimited: boolean,
 };
 
@@ -25,11 +33,12 @@ export type RecipeMap = {
 };
 
 export type FactoryOptions = {
+  version: string,
   key: string,
-  name: string,
   productionItems: ProductionItemOptions[],
   inputItems: InputItemOptions[],
   inputResources: InputItemOptions[],
+  weightingOptions: WeightingOptions,
   allowedRecipes: RecipeMap,
 };
 
@@ -59,7 +68,7 @@ function getDefaultProductionItem(): ProductionItemOptions {
   return ({
     key: nanoid(),
     itemKey: '',
-    mode: 'rate-target',
+    mode: 'per-minute',
     value: '10',
   });
 }
@@ -69,6 +78,7 @@ function getDefaultInputItem(): InputItemOptions {
     key: nanoid(),
     itemKey: '',
     value: '0',
+    weight: '0',
     unlimited: false,
   });
 }
@@ -101,6 +111,7 @@ function getInitialInputResources(): InputItemOptions[] {
         key: key,
         itemKey: key,
         value,
+        weight: String(data.relativeValue),
         unlimited,
       };
     })
@@ -113,6 +124,14 @@ function getInitialInputResources(): InputItemOptions[] {
     });
 }
 
+function getInitialWeightingOptions(): WeightingOptions {
+  return {
+    resources: '10',
+    power: '1',
+    buildArea: '0',
+  };
+}
+
 function getInitialAllowedRecipes(): RecipeMap {
   const recipeMap: RecipeMap = {};
   Object.entries(recipes).forEach(([key, data]) => {
@@ -123,11 +142,12 @@ function getInitialAllowedRecipes(): RecipeMap {
 
 function getInitialState(): FactoryOptions {
   return {
+    version: FACTORY_SETTINGS_VERSION,
     key: nanoid(),
-    name: 'New Factory',
     productionItems: [],
     inputItems: [],
     inputResources: getInitialInputResources(),
+    weightingOptions: getInitialWeightingOptions(),
     allowedRecipes: getInitialAllowedRecipes(),
   };
 }
@@ -135,7 +155,6 @@ function getInitialState(): FactoryOptions {
 
 // REDUCER
 export type FactoryAction = 
-  | { type: 'SET_NAME', name: string }
   | { type: 'ADD_PRODUCTION_ITEM' }
   | { type: 'DELETE_PRODUCTION_ITEM', key: string }
   | { type: 'UPDATE_PRODUCTION_ITEM', data: ProductionItemOptions }
@@ -145,15 +164,14 @@ export type FactoryAction =
   | { type: 'UPDATE_INPUT_RESOURCE', data: InputItemOptions }
   | { type: 'SET_RESOURCES_TO_MAP_LIMITS' }
   | { type: 'SET_RESOURCES_TO_0' }
+  | { type: 'UPDATE_WEIGHTING_OPTIONS', data: WeightingOptions }
+  | { type: 'SET_ALL_WEIGHTS_DEFAULT' }
   | { type: 'SET_RECIPE_ACTIVE', key: string, active: boolean }
   | { type: 'MASS_SET_RECIPES_ACTIVE', alternates: boolean, active: boolean }
   | { type: 'LOAD_LOCAL_STORAGE' };
 
 function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
   switch (action.type) {
-    case 'SET_NAME': {
-      return { ...state, name: action.name };
-    }
     case 'ADD_PRODUCTION_ITEM': {
       const newProductionItems = [
         ...state.productionItems,
@@ -202,6 +220,16 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
         .map((data) => ({ ...data, value: '0', unlimited: false }));
       return { ...state, inputResources: newInputResources };
     }
+    case 'UPDATE_WEIGHTING_OPTIONS': {
+      const newWeightingOptions = { ...action.data };
+      return { ...state, weightingOptions: newWeightingOptions };
+    }
+    case 'SET_ALL_WEIGHTS_DEFAULT': {
+      const newWeightingOptions = getInitialWeightingOptions();
+      const newInputResources = state.inputResources
+        .map((i) => ({ ...i, weight: String(resources[i.itemKey].relativeValue) }));
+      return { ...state, weightingOptions: newWeightingOptions, inputResources: newInputResources };
+    }
     case 'SET_RECIPE_ACTIVE': {
       const newAllowedRecipes = { ...state.allowedRecipes };
       newAllowedRecipes[action.key] = action.active;
@@ -223,7 +251,9 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
       if (data) {
         try {
           const loadedState = JSON.parse(data);
-          return loadedState;
+          if (loadedState.version === FACTORY_SETTINGS_VERSION) {
+            return loadedState;
+          }
         } catch (e) {
           console.error('LOAD FROM LOCAL STORAGE FAILED');
         }

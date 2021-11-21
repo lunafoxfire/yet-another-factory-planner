@@ -46,9 +46,10 @@ const ProductionTab = () => {
               options={itemOptions}
               value={data.itemKey ? data.itemKey : ''}
               onChange={(e, { value }) => {
+                const newMode = data.mode === 'maximize' ? 'maximize' : 'per-minute';
                 ctx.dispatch({
                   type: 'UPDATE_PRODUCTION_ITEM',
-                  data: { ...data, itemKey: (value as string), mode: 'per-minute' },
+                  data: { ...data, itemKey: (value as string), mode: newMode },
                 });
               }}
             />

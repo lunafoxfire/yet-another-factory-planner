@@ -421,7 +421,7 @@ export class ProductionSolver {
             continue;
           }
 
-          if (usageInfo.amount <= productionInfo.amount || j === producedBy.length - 1) {
+          if (usageInfo.amount <= productionInfo.amount) {
             graph.edges.push({
               key: itemKey,
               from: productionNode.id,

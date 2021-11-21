@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Dropdown, Input, Grid, Icon } from 'semantic-ui-react';
 import { items, recipes, resources } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
+import { POINTS_ITEM_KEY } from '../../../../utilities/production-solver';
 
 const itemOptions = Object.keys(items)
   .filter((key) => items[key].producedFromRecipes.length !== 0 && !resources[key])
@@ -12,6 +13,11 @@ const itemOptions = Object.keys(items)
   .sort((a, b) => {
     return a.text > b.text ? 1 : -1;
   });
+
+itemOptions.unshift({
+  value: POINTS_ITEM_KEY,
+  text: 'AWESOME Sink Points (x1000)'
+})
 
 const baseModeOptions = [
   { value: 'per-minute', text: 'Items Per Min' },
@@ -25,7 +31,7 @@ const ProductionTab = () => {
     return ctx.state.productionItems.map((data) => {
       const modeOptions = [...baseModeOptions];
       if (data.itemKey) {
-        const recipeList = items[data.itemKey].producedFromRecipes;
+        const recipeList = items[data.itemKey]?.producedFromRecipes || [];
         recipeList.forEach((recipeKey) => {
           const recipeInfo = recipes[recipeKey];
           const target = recipeInfo?.products.find((p) => p.itemClass === data.itemKey);

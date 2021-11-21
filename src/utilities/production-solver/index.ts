@@ -16,6 +16,8 @@ export const NODE_TYPE = {
   RECIPE: 'RECIPE',
 };
 
+export const POINTS_ITEM_KEY = 'POINTS_ITEM_KEY';
+
 type Inputs = {
   [key: string]: {
     amount: number,
@@ -28,6 +30,7 @@ type Outputs = {
   [key: string]: {
     value: number,
     maximize: boolean,
+    isPoints: boolean,
   }
 };
 
@@ -176,6 +179,7 @@ export class ProductionSolver {
             rateTargets[item.itemKey] = {
               value: amount,
               maximize: false,
+              isPoints: item.itemKey === POINTS_ITEM_KEY,
             };
           }
           break;
@@ -188,6 +192,7 @@ export class ProductionSolver {
             maximizeTargets[item.itemKey] = {
               value: amount,
               maximize: true,
+              isPoints: item.itemKey === POINTS_ITEM_KEY,
             };
           }
           break;
@@ -200,6 +205,7 @@ export class ProductionSolver {
               rateTargets[item.itemKey] = {
                 value: amount * targetProduct.perMinute,
                 maximize: false,
+                isPoints: item.itemKey === POINTS_ITEM_KEY,
               };
             }
           } else {
@@ -278,15 +284,56 @@ export class ProductionSolver {
       subjectTo: [],
     };
 
+    const pointsVars: Var[] = [];
+
     for (const [recipeKey, recipeInfo] of Object.entries(recipes)) {
       if (!this.allowedRecipes[recipeKey]) continue;
       const buildingInfo = buildings[recipeInfo.producedIn];
       const powerScore = buildingInfo.power > 0 ? buildingInfo.power * this.globalWeights.power : 0;
-      const areaScore = buildingInfo.area * this.globalWeights.buildArea
+      const areaScore = buildingInfo.area * this.globalWeights.buildArea;
       model.objective.vars.push({
         name: recipeKey,
         coef: powerScore + areaScore,
       });
+
+      if (this.outputs[POINTS_ITEM_KEY]) {
+        let pointCoef = 0;
+        for (const product of recipeInfo.products) {
+          if (!this.inputs[product.itemClass]) {
+            pointCoef -= product.perMinute * items[product.itemClass].sinkPoints / 1000;
+          }
+        }
+        for (const ingredient of recipeInfo.ingredients) {
+          if (!this.inputs[ingredient.itemClass]) {
+            pointCoef += ingredient.perMinute * items[ingredient.itemClass].sinkPoints / 1000;
+          } 
+        }
+        pointsVars.push({ name: recipeKey, coef: pointCoef });
+      }
+    }
+
+    if (this.outputs[POINTS_ITEM_KEY]) {
+      if (this.outputs[POINTS_ITEM_KEY].maximize) {
+        pointsVars
+          .map<Var>((v) => ({
+            name: v.name,
+            coef: v.coef * Math.pow(MAXIMIZE_OBJECTIVE_WEIGHT, this.outputs[POINTS_ITEM_KEY].value),
+          }))
+          .forEach((v) => {
+            const existingVar = model.objective.vars.find((ov) => ov.name === v.name);
+            if (existingVar) {
+              existingVar.coef += v.coef;
+            } else {
+              model.objective.vars.push(v);
+            }
+          });
+      } else {
+        model.subjectTo.push({
+          name: 'AWESOME Sink Points constraint',
+          vars: pointsVars,
+          bnds: { type: glpk.GLP_UP, ub: -this.outputs[POINTS_ITEM_KEY].value, lb: NaN },
+        });
+      }
     }
 
     for (const [itemKey, itemInfo] of Object.entries(items)) {
@@ -510,7 +557,7 @@ export class ProductionSolver {
             itemNode = {
               id: nanoid(),
               key: itemKey,
-              type: this.outputs[itemKey] ? NODE_TYPE.FINAL_PRODUCT : NODE_TYPE.SIDE_PRODUCT,
+              type: this.outputs[itemKey] || this.outputs[POINTS_ITEM_KEY] ? NODE_TYPE.FINAL_PRODUCT : NODE_TYPE.SIDE_PRODUCT,
               multiplier: productionInfo.amount
             };
             graph.nodes[itemKey] = itemNode;

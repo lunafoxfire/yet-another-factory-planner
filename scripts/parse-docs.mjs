@@ -160,7 +160,7 @@ Object.entries(data.items).forEach(([itemKey, itemData]) => {
   items[itemKey] = {
     slug: itemData.slug,
     name: itemData.name,
-    sinkPoints: itemData.sinkPoints,
+    sinkPoints: itemData.isFluid ? 0 : itemData.sinkPoints,
     usedInRecipes,
     producedFromRecipes,
   };

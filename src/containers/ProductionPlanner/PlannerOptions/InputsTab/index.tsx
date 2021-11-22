@@ -158,10 +158,10 @@ const InputsTab = () => {
   function renderResourceInputs() {
     return ctx.state.inputResources.map((data) => (
       <Grid.Row key={data.key}>
-        <Grid.Column style={{ flex: '0 0 180px', display: 'flex', alignItems: 'center' }}>
+        <Grid.Column style={{ flex: '1 1 auto', display: 'flex', alignItems: 'center', minWidth: '120px' }}>
           {items[data.itemKey].name}
         </Grid.Column>
-        <Grid.Column style={{ flex: '1 1 auto' }}>
+        <Grid.Column style={{ flex: '2 1 auto', minWidth: '210px' }}>
           <Input
             className='no-spinner'
             type='number'
@@ -192,7 +192,7 @@ const InputsTab = () => {
             />
           </Input>
         </Grid.Column>
-        <Grid.Column style={{ flex: '0 0 220px' }}>
+        <Grid.Column style={{ flex: '1.5 1 auto', minWidth: '160px' }}>
           <Input
             className='no-spinner'
             type='number'

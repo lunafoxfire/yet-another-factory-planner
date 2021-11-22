@@ -43,7 +43,7 @@ const ProductionTab = () => {
       }
       return (
         <Grid.Row key={data.key}>
-          <Grid.Column style={{ flex: '1 1 auto' }}>
+          <Grid.Column style={{ flex: '1 1 auto', minWidth: '210px' }}>
             <Dropdown
               fluid
               placeholder="Select an item"
@@ -61,7 +61,7 @@ const ProductionTab = () => {
               }}
             />
           </Grid.Column>
-          <Grid.Column style={{ flex: '0 0 380px' }}>
+          <Grid.Column style={{ flex: '1 1 auto', minWidth: '230px' }}>
             <Input
               className='no-spinner'
               type='number'
@@ -79,7 +79,7 @@ const ProductionTab = () => {
             >
               <input />
               <Dropdown
-                style={{ width: '230px', minWidth: '0px' }}
+                style={{ minWidth: '140px' }}
                 selection
                 options={modeOptions}
                 value={data.mode}

@@ -60,14 +60,20 @@ const ReportTab = (props: Props) => {
               <Header size='medium'>Total</Header>
               <List.List>
                 {
-                  Object.entries(report!.totalMaterialCost).map(([itemKey, count]) => (
-                    <List.Item key={itemKey}>
-                      <Icon name='triangle right' />
-                      <List.Content>
-                        <b style={{ marginRight: '3px' }}>{items[itemKey].name}</b> x{formatFloat(count)}
-                      </List.Content>
-                    </List.Item>
-                  ))
+                  Object.entries(report!.totalMaterialCost)
+                    .sort((a, b) => {
+                      if (a[1] > b[1]) return -1;
+                      if (a[1] < b[1]) return 1;
+                      return 0;
+                    })
+                    .map(([itemKey, count]) => (
+                      <List.Item key={itemKey}>
+                        <Icon name='triangle right' />
+                        <List.Content>
+                          <b style={{ marginRight: '3px' }}>{items[itemKey].name}</b> x{formatFloat(count)}
+                        </List.Content>
+                      </List.Item>
+                    ))
                 }
               </List.List>
             </List.Content>

@@ -4,7 +4,6 @@ import { usePrevious } from '../../hooks/usePrevious';
 import { resources, recipes } from '../../data'
 
 const FACTORY_SETTINGS_VERSION = 'v1';
-const LOCAL_STORAGE_KEY = 'factory-data';
 
 // TYPES
 export type ProductionItemOptions = {

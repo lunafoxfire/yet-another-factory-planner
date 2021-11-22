@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'semantic-ui-less/semantic.less';
+import 'semantic-ui-css/semantic.css';
 import './index.css';
 import App from './App';
-// import reportWebVitals from './utilities/debug/reportWebVitals';
 
 ReactDOM.render(
   <App />,
   document.getElementById('root')
 );
-
-// reportWebVitals(console.log);

@@ -29,6 +29,7 @@ type Inputs = {
 type Outputs = {
   [key: string]: {
     value: number,
+    recipe: string | null,
     maximize: boolean,
     isPoints: boolean,
   }
@@ -101,6 +102,8 @@ export class ProductionSolver {
   private allowedRecipes: RecipeMap;
 
   public constructor(options: FactoryOptions) {
+    this.allowedRecipes = options.allowedRecipes;
+    
     this.globalWeights = {
       resources: Number(options.weightingOptions.resources),
       power: Number(options.weightingOptions.power),
@@ -164,6 +167,7 @@ export class ProductionSolver {
 
     this.outputs = {};
     const rateTargets: Outputs = {};
+    const recipeTargets: Outputs = {};
     const maximizeTargets: Outputs = {};
     const sortedMaximizeTargets: Outputs = {};
     options.productionItems.forEach((item) => {
@@ -178,6 +182,7 @@ export class ProductionSolver {
           } else {
             rateTargets[item.itemKey] = {
               value: amount,
+              recipe: null,
               maximize: false,
               isPoints: item.itemKey === POINTS_ITEM_KEY,
             };
@@ -191,21 +196,38 @@ export class ProductionSolver {
           } else {
             maximizeTargets[item.itemKey] = {
               value: amount,
+              recipe: null,
               maximize: true,
               isPoints: item.itemKey === POINTS_ITEM_KEY,
             };
           }
           break;
         default:
-          if (recipes[item.mode]) {
-            const targetProduct = recipes[item.mode].products.find((p) => p.itemClass === item.itemKey)!;
+          const recipeKey = item.mode;
+          const recipeInfo = recipes[recipeKey];
+          if (recipeInfo) {
+            if (!this.allowedRecipes[recipeKey]) {
+              throw new Error('CANNOT TARGET A DISABLED RECIPE');
+            }
+            const target = recipeInfo.products.find((p) => p.itemClass === item.itemKey)!;
             if (rateTargets[item.itemKey]) {
-              rateTargets[item.itemKey].value += amount * targetProduct.perMinute;
+              rateTargets[item.itemKey].value += target.perMinute * amount;
             } else {
               rateTargets[item.itemKey] = {
-                value: amount * targetProduct.perMinute,
+                value: target.perMinute * amount,
+                recipe: null,
                 maximize: false,
-                isPoints: item.itemKey === POINTS_ITEM_KEY,
+                isPoints: false,
+              };
+            }
+            if (recipeTargets[recipeKey]) {
+              recipeTargets[recipeKey].value += amount;
+            } else {
+              recipeTargets[recipeKey] = {
+                value: amount,
+                recipe: recipeKey,
+                maximize: false,
+                isPoints: false,
               };
             }
           } else {
@@ -229,13 +251,12 @@ export class ProductionSolver {
 
     this.outputs = {
       ...rateTargets,
+      ...recipeTargets,
       ...sortedMaximizeTargets,
     };
     if (Object.keys(this.outputs).length === 0) {
       throw new Error('NO OUTPUTS SET');
     }
-
-    this.allowedRecipes = options.allowedRecipes;
   }
 
   private validateNumber(num: Number) {
@@ -295,6 +316,14 @@ export class ProductionSolver {
         name: recipeKey,
         coef: powerScore + areaScore,
       });
+
+      if (this.outputs[recipeKey]) {
+        model.subjectTo.push({
+          name: `${recipeKey} recipe constraint`,
+          vars: [{ name: recipeKey, coef: 1 }],
+          bnds: { type: glpk.GLP_LO, ub: 0, lb: this.outputs[recipeKey].value },
+        });
+      }
 
       if (this.outputs[POINTS_ITEM_KEY]) {
         let pointCoef = 0;
@@ -488,6 +517,34 @@ export class ProductionSolver {
         while (j < producedBy.length) {
           const productionInfo = producedBy[j];
           const productionNode = graph.nodes[productionInfo.recipeKey];
+
+          const outputRecipe = this.outputs[itemKey]?.recipe;
+          if (outputRecipe && outputRecipe === productionInfo.recipeKey) {
+            const outputInfo = this.outputs[itemKey];
+            const recipeInfo = recipes[outputRecipe];
+            const target = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
+            const recipeAmount = outputInfo.value * target.perMinute;
+            productionInfo.amount -= recipeAmount;
+
+            let itemNode = graph.nodes[itemKey];
+            if (!itemNode) {
+              itemNode = {
+                id: nanoid(),
+                key: itemKey,
+                type: NODE_TYPE.FINAL_PRODUCT,
+                multiplier: recipeAmount,
+              }
+              graph.nodes[itemKey] = itemNode;
+            } else {
+              graph.nodes[itemKey].multiplier += recipeAmount;
+            }
+            graph.edges.push({
+              key: itemKey,
+              from: productionNode.id,
+              to: itemNode.id,
+              productionRate: recipeAmount,
+            });
+          } 
 
           if (productionInfo.amount < EPSILON) {
             j++

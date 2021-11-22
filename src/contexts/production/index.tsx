@@ -171,7 +171,7 @@ export type FactoryAction =
   | { type: 'SET_ALL_WEIGHTS_DEFAULT' }
   | { type: 'SET_RECIPE_ACTIVE', key: string, active: boolean }
   | { type: 'MASS_SET_RECIPES_ACTIVE', alternates: boolean, active: boolean }
-  | { type: 'LOAD_LOCAL_STORAGE' };
+  | { type: 'LOAD_FROM_QUERY_PARAM' };
 
 function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
   switch (action.type) {
@@ -252,16 +252,14 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
       })
       return { ...state, allowedRecipes: newAllowedRecipes };
     }
-    case 'LOAD_LOCAL_STORAGE': {
-      const data = window.localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (data) {
+    case 'LOAD_FROM_QUERY_PARAM': {
+      const params = new URLSearchParams(window.location.search);
+      const encodedState = params.get('f');
+      if (encodedState) {
         try {
-          const loadedState = JSON.parse(data);
-          if (loadedState.version === FACTORY_SETTINGS_VERSION) {
-            return loadedState;
-          }
+          return decodeState(encodedState);
         } catch (e) {
-          console.error('LOAD FROM LOCAL STORAGE FAILED');
+          console.error(e);
         }
       }
       return state;
@@ -269,6 +267,115 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
     default:
       return state;
   }
+}
+
+const SEP0 = ',';
+const SEP1 = '|';
+const SEP2 = ':';
+
+// ENCODE/DECODE
+function encodeState(state: FactoryOptions): string {
+  const fields: string[] = [];
+  // 0
+  fields.push(state.version);
+
+  const productionItemsField: string[] = [];
+  state.productionItems.forEach((item) => {
+    productionItemsField.push(`${item.itemKey}${SEP2}${item.mode}${SEP2}${item.value}`);
+  });
+  // 1
+  fields.push(productionItemsField.join(SEP1));
+
+  const inputItemsField: string[] = [];
+  state.inputItems.forEach((item) => {
+    inputItemsField.push(`${item.itemKey}${SEP2}${item.value}${SEP2}${item.weight}${SEP2}${item.unlimited ? '1' : '0'}`);
+  });
+  // 2
+  fields.push(inputItemsField.join(SEP1));
+
+  const inputResourcesField: string[] = [];
+  state.inputResources.forEach((item) => {
+    inputResourcesField.push(`${item.value}${SEP2}${item.weight}${SEP2}${item.unlimited ? '1' : '0'}`);
+  });
+  // 3
+  fields.push(inputResourcesField.join(SEP1));
+
+  // 4
+  fields.push(`${state.allowHandGatheredItems ? '1' : '0'}`);
+
+  // 5
+  fields.push(`${state.weightingOptions.resources}${SEP2}${state.weightingOptions.power}${SEP2}${state.weightingOptions.buildArea}`);
+
+  const allowedRecipesBits = Object.values((state.allowedRecipes)).map((r) => r ? '1' : '0').join('');
+  // 6
+  fields.push(BigInt(`0b${allowedRecipesBits}`).toString(16));
+
+  return fields.join(SEP0);
+}
+
+function decodeState(stateStr: string): FactoryOptions {
+  const newState: FactoryOptions = getInitialState();
+
+  const fields = stateStr.split(SEP0);
+  if (fields[0] !== FACTORY_SETTINGS_VERSION) throw new Error('VERSION MISMATCH');
+  if (fields.length !== 7) throw new Error('INVALID DATA [BAD FIELDS]');
+
+  const productionItemsStrings = fields[1].split(SEP1);
+  if (productionItemsStrings[0]) {
+    productionItemsStrings.forEach((str) => {
+      const values = str.split(SEP2);
+      if (values.length !== 3) throw new Error('INVALID DATA [productionItems]');
+      newState.productionItems.push({
+        key: nanoid(),
+        itemKey: values[0],
+        mode: values[1],
+        value: values[2],
+      });
+    });
+  }
+
+  const inputItemsStrings = fields[2].split(SEP1);
+  if (inputItemsStrings[0]) {
+    inputItemsStrings.forEach((str) => {
+      const values = str.split(SEP2);
+      if (values.length !== 4) throw new Error('INVALID DATA [inputItems]');
+      newState.inputItems.push({
+        key: nanoid(),
+        itemKey: values[0],
+        value: values[1],
+        weight: values[2],
+        unlimited: !!parseInt(values[3]),
+      });
+    });
+  }
+
+  const inputResourcesStrings = fields[3].split(SEP1);
+  newState.inputResources.forEach((resourceOptions, i) => {
+    const values = inputResourcesStrings[i].split(SEP2);
+    if (values.length !== 3) throw new Error('INVALID DATA [inputResources]');
+    resourceOptions.value = values[0];
+    resourceOptions.weight = values[1];
+    resourceOptions.unlimited = !!parseInt(values[2]);
+  });
+
+  newState.allowHandGatheredItems = !!parseInt(fields[4]);
+
+  const weightingOptionsStrings = fields[5].split(SEP2);
+  if (weightingOptionsStrings.length !== 3) throw new Error('INVALID DATA [weightingOptions]');
+  newState.weightingOptions.resources = weightingOptionsStrings[0];
+  newState.weightingOptions.power = weightingOptionsStrings[1];
+  newState.weightingOptions.buildArea = weightingOptionsStrings[2];
+
+  const allowedRecipesBits = BigInt(`0x${fields[6]}`)
+    .toString(2)
+    .padStart(Object.keys(newState.allowedRecipes).length, '0')
+    .split('')
+    .map((b) => !!parseInt(b));
+  Object.keys(newState.allowedRecipes).forEach((key, i) => {
+    newState.allowedRecipes[key] = !!allowedRecipesBits[i];
+  });
+
+  return newState;
 }
 
 
@@ -282,14 +389,15 @@ export const ProductionProvider = ({ children }: PropTypes) => {
 
   useEffect(() => {
     if (!loaded) {
-      dispatch({ type: 'LOAD_LOCAL_STORAGE' });
+      dispatch({ type: 'LOAD_FROM_QUERY_PARAM' });
       setLoaded(true);
     }
   }, [loaded]);
 
   useEffect(() => {
     if (prevState !== state) {
-      window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+      const encodedState = encodeState(state);
+      window.history.pushState(null, '', window.location.pathname + '?f=' + encodedState);
     }
   }, [prevState, state]);
 

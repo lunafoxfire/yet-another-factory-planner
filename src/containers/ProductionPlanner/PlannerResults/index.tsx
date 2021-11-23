@@ -1,10 +1,31 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import _ from 'lodash';
 import { Container, Menu, Button, Checkbox } from 'semantic-ui-react';
 import ProductionGraphTab from './ProductionGraphTab';
 import ReportTab from './ReportTab';
 import { ProductionSolver, SolverResults } from '../../../utilities/production-solver';
-import { useProductionContext } from '../../../contexts/production';
+import { FactoryOptions, useProductionContext } from '../../../contexts/production';
 import { usePrevious } from '../../../hooks/usePrevious';
+
+const _handleCalculateFactory = _.debounce(async (state: FactoryOptions, setSolverResults: React.Dispatch<React.SetStateAction<SolverResults | null>>) => {
+  try {
+    const solver = new ProductionSolver(state);
+    const results = await solver.exec();
+    setSolverResults((prevState) => {
+      if (!prevState || prevState.timestamp < results.timestamp) {
+        return results;
+      }
+      return prevState;
+    });
+  } catch (e: any) {
+    setSolverResults({
+      productionGraph: null,
+      report: null,
+      timestamp: performance.now(),
+      error: e.message,
+    });
+  }
+}, 500, { leading: true, trailing: true });
 
 const PlannerResults = () => {
   const [activeTab, setActiveTab] = useState('production-graph');
@@ -14,29 +35,20 @@ const PlannerResults = () => {
   const ctx = useProductionContext();
   const prevState = usePrevious(ctx.state);
 
-  const handleCalculateFactory = useCallback(async () => {
-    try {
-      const solver = new ProductionSolver(ctx.state);
-      const results = await solver.exec();
-      setSolverResults((prevState) => {
-        if (!prevState || prevState.timestamp < results.timestamp) {
-          return results;
-        }
-        return prevState;
-      });
-    } catch (e: any) {
-      setSolverResults({
-        productionGraph: null,
-        report: null,
-        timestamp: performance.now(),
-        error: e.message,
-      });
-    }
+  const handleCalculateFactory = useCallback(() => {
+    _handleCalculateFactory(ctx.state, setSolverResults)
   }, [ctx.state]);
 
   function handleSetTab(e: any, data: any) {
     setActiveTab(data.name);
   }
+
+  const handleSetAutoCalc = (checked: boolean) => {
+    setAutoCalc(checked);
+    if (checked) {
+      handleCalculateFactory();
+    }
+  };
 
   function renderTab() {
     switch (activeTab) {
@@ -84,7 +96,7 @@ const PlannerResults = () => {
           label='Auto-calculate (turn this off if changing options is too slow)'
           toggle
           checked={autoCalc}
-          onChange={(e, { checked }) => { setAutoCalc(!!checked); }}
+          onChange={(e, { checked }) => { handleSetAutoCalc(!!checked); }}
         />
         {renderTab()}
       </div>

@@ -81,7 +81,7 @@ const PlannerResults = () => {
           Calculate
         </Button>
         <Checkbox
-          label='Auto-calculate (turn this off if changing options is slow)'
+          label='Auto-calculate (turn this off if changing options is too slow)'
           toggle
           checked={autoCalc}
           onChange={(e, { checked }) => { setAutoCalc(!!checked); }}

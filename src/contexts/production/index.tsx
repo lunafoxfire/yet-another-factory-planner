@@ -447,7 +447,7 @@ export const ProductionProvider = ({ children }: PropTypes) => {
   useEffect(() => {
     if (prevState !== state) {
       const encodedState = encodeState(state);
-      window.history.pushState(null, '', window.location.pathname + '?f=' + encodedState);
+      window.history.replaceState(null, '', window.location.pathname + '?f=' + encodedState);
     }
   }, [prevState, state]);
 

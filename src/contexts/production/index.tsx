@@ -288,6 +288,28 @@ function getItemBySlug(slug: string) {
   throw new Error('INVALID ITEM SLUG');
 }
 
+function getModeSlug(mode: string) {
+  if (mode === 'per-minute') return 'per_minute';
+  if (mode === 'maximize') return 'maximize';
+  const recipeKey = mode;
+  const recipeInfo = recipes[recipeKey];
+  if (recipeInfo) {
+    return recipeInfo.slug;
+  } else {
+    return 'null';
+  }
+}
+
+function getModeBySlug(slug: string) {
+  if (slug === 'per_minute') return 'per-minute';
+  if (slug === 'maximize') return 'maximize';
+  const recipeEntry = Object.entries(recipes).find(([key, recipe]) => recipe.slug === slug);
+  if (recipeEntry) {
+    return recipeEntry[0];
+  }
+  throw new Error('INVALID RECIPE SLUG');
+}
+
 const SEP0 = ',';
 const SEP1 = '|';
 const SEP2 = ':';
@@ -298,10 +320,20 @@ function encodeState(state: FactoryOptions): string {
 
   fields.push(state.version);
 
+  const allowedRecipesBits = Object.keys((state.allowedRecipes))
+    .sort((a, b) => {
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    })
+    .map((key) => state.allowedRecipes[key] ? '1' : '0')
+    .join('');
+  fields.push(BigInt(`0b${allowedRecipesBits}`).toString(16));
+
   const productionItemsField: string[] = [];
   state.productionItems.forEach((item) => {
     if (!item.itemKey) return;
-    productionItemsField.push(`${getItemSlug(item.itemKey)}${SEP2}${item.mode}${SEP2}${item.value}`);
+    productionItemsField.push(`${getItemSlug(item.itemKey)}${SEP2}${getModeSlug(item.mode)}${SEP2}${item.value}`);
   });
   fields.push(productionItemsField.join(SEP1));
 
@@ -322,16 +354,6 @@ function encodeState(state: FactoryOptions): string {
 
   fields.push(`${state.weightingOptions.resources}${SEP2}${state.weightingOptions.power}${SEP2}${state.weightingOptions.buildArea}`);
 
-  const allowedRecipesBits = Object.keys((state.allowedRecipes))
-    .sort((a, b) => {
-      if (a < b) return -1;
-      if(a > b) return 1;
-      return 0;
-    })
-    .map((key) => state.allowedRecipes[key] ? '1' : '0')
-    .join('');
-  fields.push(BigInt(`0b${allowedRecipesBits}`).toString(16));
-
   return fields.join(SEP0);
 }
 
@@ -342,7 +364,22 @@ function decodeState(stateStr: string): FactoryOptions {
   if (fields[0] !== FACTORY_SETTINGS_VERSION) throw new Error('VERSION MISMATCH');
   if (fields.length !== 7) throw new Error('INVALID DATA [BAD FIELDS]');
 
-  const productionItemsStrings = fields[1].split(SEP1);
+  const allowedRecipesBits = BigInt(`0x${fields[1]}`)
+    .toString(2)
+    .padStart(Object.keys(newState.allowedRecipes).length, '0')
+    .split('')
+    .map((b) => !!parseInt(b));
+  Object.keys(newState.allowedRecipes)
+    .sort((a, b) => {
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    })
+    .forEach((key, i) => {
+      newState.allowedRecipes[key] = !!allowedRecipesBits[i];
+    });
+
+  const productionItemsStrings = fields[2].split(SEP1);
   if (productionItemsStrings[0]) {
     productionItemsStrings.forEach((str) => {
       const values = str.split(SEP2);
@@ -350,13 +387,13 @@ function decodeState(stateStr: string): FactoryOptions {
       newState.productionItems.push({
         key: nanoid(),
         itemKey: getItemBySlug(values[0]),
-        mode: values[1],
+        mode: getModeBySlug(values[1]),
         value: values[2],
       });
     });
   }
 
-  const inputItemsStrings = fields[2].split(SEP1);
+  const inputItemsStrings = fields[3].split(SEP1);
   if (inputItemsStrings[0]) {
     inputItemsStrings.forEach((str) => {
       const values = str.split(SEP2);
@@ -371,7 +408,7 @@ function decodeState(stateStr: string): FactoryOptions {
     });
   }
 
-  const inputResourcesStrings = fields[3].split(SEP1);
+  const inputResourcesStrings = fields[4].split(SEP1);
   newState.inputResources.forEach((resourceOptions, i) => {
     const values = inputResourcesStrings[i].split(SEP2);
     if (values.length !== 3) throw new Error('INVALID DATA [inputResources]');
@@ -380,28 +417,13 @@ function decodeState(stateStr: string): FactoryOptions {
     resourceOptions.unlimited = !!parseInt(values[2]);
   });
 
-  newState.allowHandGatheredItems = !!parseInt(fields[4]);
+  newState.allowHandGatheredItems = !!parseInt(fields[5]);
 
-  const weightingOptionsStrings = fields[5].split(SEP2);
+  const weightingOptionsStrings = fields[6].split(SEP2);
   if (weightingOptionsStrings.length !== 3) throw new Error('INVALID DATA [weightingOptions]');
   newState.weightingOptions.resources = weightingOptionsStrings[0];
   newState.weightingOptions.power = weightingOptionsStrings[1];
   newState.weightingOptions.buildArea = weightingOptionsStrings[2];
-
-  const allowedRecipesBits = BigInt(`0x${fields[6]}`)
-    .toString(2)
-    .padStart(Object.keys(newState.allowedRecipes).length, '0')
-    .split('')
-    .map((b) => !!parseInt(b));
-  Object.keys(newState.allowedRecipes)
-    .sort((a, b) => {
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    })
-    .forEach((key, i) => {
-      newState.allowedRecipes[key] = !!allowedRecipesBits[i];
-    });
 
   return newState;
 }

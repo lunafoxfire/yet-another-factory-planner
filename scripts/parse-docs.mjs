@@ -52,7 +52,7 @@ Object.entries(data.buildings).forEach(([buildingKey, buildingData]) => {
   }
 
   buildings[fixedKey] = {
-    slug: buildingData.slug,
+    slug: buildingData.slug.replaceAll('-', '_'),
     name: buildingData.name,
     power,
     area,
@@ -91,7 +91,7 @@ Object.entries((data.itemRecipes)).forEach(([recipeKey, recipeData]) => {
   }
 
   recipes[recipeKey] = {
-    slug: recipeData.slug,
+    slug: recipeData.slug.replaceAll('-', '_'),
     name: recipeData.name,
     isAlternate: recipeData.isAlternate,
     ingredients,
@@ -102,7 +102,7 @@ Object.entries((data.itemRecipes)).forEach(([recipeKey, recipeData]) => {
 
 // TODO: Add to parse docs
 recipes['Recipe_CUSTOM_NuclearPower_C'] = {
-  slug: 'uranium-power-recipe',
+  slug: 'uranium_power_recipe',
   name: 'Uranium Power',
   isAlternate: false,
   ingredients: [{ itemClass: 'Desc_NuclearFuelRod_C', perMinute: 0.2 }, { itemClass: 'Desc_Water_C', perMinute: 300 }],
@@ -110,7 +110,7 @@ recipes['Recipe_CUSTOM_NuclearPower_C'] = {
   producedIn: 'Build_GeneratorNuclear_C',
 };
 recipes['Recipe_CUSTOM_PlutoniumPower_C'] = {
-  slug: 'plutonium-power-recipe',
+  slug: 'plutonium_power_recipe',
   name: 'Plutonium Power',
   isAlternate: false,
   ingredients: [{ itemClass: 'Desc_PlutoniumFuelRod_C', perMinute: 0.1 }, { itemClass: 'Desc_Water_C', perMinute: 300 }],
@@ -158,7 +158,7 @@ Object.entries(data.items).forEach(([itemKey, itemData]) => {
     handGatheredItems[itemKey] = itemKey;
   }
   items[itemKey] = {
-    slug: itemData.slug,
+    slug: itemData.slug.replaceAll('-', '_'),
     name: itemData.name,
     sinkPoints: itemData.isFluid ? 0 : itemData.sinkPoints,
     usedInRecipes,
@@ -168,7 +168,7 @@ Object.entries(data.items).forEach(([itemKey, itemData]) => {
 
 // TODO: Missing from docs
 items['Desc_CUSTOM_PlutoniumWaste_C'] = {
-  slug: 'plutonium-waste',
+  slug: 'plutonium_waste',
   name: 'Plutonium Waste',
   sinkPoints: 0,
   usedInRecipes: [],

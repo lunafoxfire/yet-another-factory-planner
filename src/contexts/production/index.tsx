@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useReducer, useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { usePrevious } from '../../hooks/usePrevious';
-import { resources, recipes } from '../../data'
+import { resources, recipes, items } from '../../data'
+import { POINTS_ITEM_KEY } from '../../utilities/production-solver';
 
-const FACTORY_SETTINGS_VERSION = 'v1';
+const FACTORY_SETTINGS_VERSION = 'v1_U5';
 
 // TYPES
 export type ProductionItemOptions = {
@@ -44,6 +45,7 @@ export type FactoryOptions = {
 
 export type ProductionContextType = {
   state: FactoryOptions,
+  loaded: boolean,
   dispatch: React.Dispatch<FactoryAction>,
 }
 
@@ -268,6 +270,24 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
   }
 }
 
+function getItemSlug(itemKey: string) {
+  if (itemKey === POINTS_ITEM_KEY) {
+    return 'points';
+  }
+  return items[itemKey].slug;
+}
+
+function getItemBySlug(slug: string) {
+  if (slug === 'points') {
+    return POINTS_ITEM_KEY;
+  }
+  const itemEntry = Object.entries(items).find(([key, item]) => item.slug === slug);
+  if (itemEntry) {
+    return itemEntry[0];
+  }
+  throw new Error('INVALID ITEM SLUG');
+}
+
 const SEP0 = ',';
 const SEP1 = '|';
 const SEP2 = ':';
@@ -275,38 +295,41 @@ const SEP2 = ':';
 // ENCODE/DECODE
 function encodeState(state: FactoryOptions): string {
   const fields: string[] = [];
-  // 0
+
   fields.push(state.version);
 
   const productionItemsField: string[] = [];
   state.productionItems.forEach((item) => {
-    productionItemsField.push(`${item.itemKey}${SEP2}${item.mode}${SEP2}${item.value}`);
+    if (!item.itemKey) return;
+    productionItemsField.push(`${getItemSlug(item.itemKey)}${SEP2}${item.mode}${SEP2}${item.value}`);
   });
-  // 1
   fields.push(productionItemsField.join(SEP1));
 
   const inputItemsField: string[] = [];
   state.inputItems.forEach((item) => {
-    inputItemsField.push(`${item.itemKey}${SEP2}${item.value}${SEP2}${item.weight}${SEP2}${item.unlimited ? '1' : '0'}`);
+    if (!item.itemKey) return;
+    inputItemsField.push(`${getItemSlug(item.itemKey)}${SEP2}${item.value}${SEP2}${item.weight}${SEP2}${item.unlimited ? '1' : '0'}`);
   });
-  // 2
   fields.push(inputItemsField.join(SEP1));
 
   const inputResourcesField: string[] = [];
   state.inputResources.forEach((item) => {
     inputResourcesField.push(`${item.value}${SEP2}${item.weight}${SEP2}${item.unlimited ? '1' : '0'}`);
   });
-  // 3
   fields.push(inputResourcesField.join(SEP1));
 
-  // 4
   fields.push(`${state.allowHandGatheredItems ? '1' : '0'}`);
 
-  // 5
   fields.push(`${state.weightingOptions.resources}${SEP2}${state.weightingOptions.power}${SEP2}${state.weightingOptions.buildArea}`);
 
-  const allowedRecipesBits = Object.values((state.allowedRecipes)).map((r) => r ? '1' : '0').join('');
-  // 6
+  const allowedRecipesBits = Object.keys((state.allowedRecipes))
+    .sort((a, b) => {
+      if (a < b) return -1;
+      if(a > b) return 1;
+      return 0;
+    })
+    .map((key) => state.allowedRecipes[key] ? '1' : '0')
+    .join('');
   fields.push(BigInt(`0b${allowedRecipesBits}`).toString(16));
 
   return fields.join(SEP0);
@@ -326,7 +349,7 @@ function decodeState(stateStr: string): FactoryOptions {
       if (values.length !== 3) throw new Error('INVALID DATA [productionItems]');
       newState.productionItems.push({
         key: nanoid(),
-        itemKey: values[0],
+        itemKey: getItemBySlug(values[0]),
         mode: values[1],
         value: values[2],
       });
@@ -340,7 +363,7 @@ function decodeState(stateStr: string): FactoryOptions {
       if (values.length !== 4) throw new Error('INVALID DATA [inputItems]');
       newState.inputItems.push({
         key: nanoid(),
-        itemKey: values[0],
+        itemKey: getItemBySlug(values[0]),
         value: values[1],
         weight: values[2],
         unlimited: !!parseInt(values[3]),
@@ -370,9 +393,15 @@ function decodeState(stateStr: string): FactoryOptions {
     .padStart(Object.keys(newState.allowedRecipes).length, '0')
     .split('')
     .map((b) => !!parseInt(b));
-  Object.keys(newState.allowedRecipes).forEach((key, i) => {
-    newState.allowedRecipes[key] = !!allowedRecipesBits[i];
-  });
+  Object.keys(newState.allowedRecipes)
+    .sort((a, b) => {
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    })
+    .forEach((key, i) => {
+      newState.allowedRecipes[key] = !!allowedRecipesBits[i];
+    });
 
   return newState;
 }
@@ -401,7 +430,7 @@ export const ProductionProvider = ({ children }: PropTypes) => {
   }, [prevState, state]);
 
   return (
-    <ProductionContext.Provider value={{ state, dispatch }}>
+    <ProductionContext.Provider value={{ state, loaded, dispatch }}>
       {children}
     </ProductionContext.Provider>
   );

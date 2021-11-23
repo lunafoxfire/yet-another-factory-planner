@@ -513,7 +513,7 @@ export class ProductionSolver {
       while (i < usedBy.length) {
         const usageInfo = usedBy[i];
         const usageNode = graph.nodes[usageInfo.recipeKey];
-
+        
         while (j < producedBy.length) {
           const productionInfo = producedBy[j];
           const productionNode = graph.nodes[productionInfo.recipeKey];
@@ -560,8 +560,6 @@ export class ProductionSolver {
             });
             productionInfo.amount -= usageInfo.amount;
             usageInfo.amount = 0;
-            i++;
-            continue nextDemand;
           } else {
             graph.edges.push({
               key: itemKey,
@@ -571,6 +569,11 @@ export class ProductionSolver {
             });
             usageInfo.amount -= productionInfo.amount;
             productionInfo.amount = 0;
+          }
+          
+          if (usageInfo.amount < EPSILON) {
+            i++;
+            continue nextDemand;
           }
           j++;
         }

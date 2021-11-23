@@ -399,11 +399,6 @@ export class ProductionSolver {
         const recipeInfo = recipes[recipeKey];
         const target = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
 
-        objectiveVars.push({
-          name: recipeKey,
-          coef: this.globalWeights.complexity,
-        });
-
         const existingVar = vars.find((v) => v.name === recipeKey);
         if (existingVar) {
           existingVar.coef -= target.perMinute;
@@ -529,11 +524,18 @@ export class ProductionSolver {
 
     for (const [itemKey, itemInfo] of Object.entries(items)) {
       const vars: Var[] = [];
+      let objectiveVars: Var[] = [];
 
       for (const recipeKey of itemInfo.usedInRecipes) {
         if (!this.allowedRecipes[recipeKey]) continue;
         const recipeInfo = recipes[recipeKey];
         const target = recipeInfo.ingredients.find((i) => i.itemClass === itemKey)!;
+
+        objectiveVars.push({
+          name: recipeKey,
+          coef: this.globalWeights.complexity,
+        });
+
         vars.push({ name: recipeKey, coef: target.perMinute });
       }
 
@@ -541,6 +543,7 @@ export class ProductionSolver {
         if (!this.allowedRecipes[recipeKey]) continue;
         const recipeInfo = recipes[recipeKey];
         const target = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
+
         const existingVar = vars.find((v) => v.name === recipeKey);
         if (existingVar) {
           existingVar.coef -= target.perMinute;
@@ -550,8 +553,6 @@ export class ProductionSolver {
       }
 
       if (vars.length === 0) continue;
-
-      let objectiveVars: Var[] = [];
 
       if (remainingInputs[itemKey]) {
         const inputInfo = remainingInputs[itemKey];

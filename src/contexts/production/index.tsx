@@ -131,7 +131,7 @@ function getInitialWeightingOptions(): WeightingOptions {
   return {
     resources: '1000',
     power: '5',
-    complexity: '1',
+    complexity: '3',
   };
 }
 

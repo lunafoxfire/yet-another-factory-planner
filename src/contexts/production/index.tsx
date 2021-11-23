@@ -158,7 +158,8 @@ function getInitialState(): FactoryOptions {
 
 
 // REDUCER
-export type FactoryAction = 
+export type FactoryAction =
+  | { type: 'RESET_FACTORY' }
   | { type: 'ADD_PRODUCTION_ITEM' }
   | { type: 'DELETE_PRODUCTION_ITEM', key: string }
   | { type: 'SET_PRODUCTION_ITEM', data: { key: string, itemKey: string } }
@@ -179,6 +180,9 @@ export type FactoryAction =
 
 function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
   switch (action.type) {
+    case 'RESET_FACTORY': {
+      return getInitialState();
+    }
     case 'ADD_PRODUCTION_ITEM': {
       const newProductionItems = [
         ...state.productionItems,

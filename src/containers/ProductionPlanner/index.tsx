@@ -1,9 +1,9 @@
 import React from 'react';
 import seedrandom from 'seedrandom';
-import { Container, Header, Grid } from 'semantic-ui-react';
+import { Container, Header, Grid, Button } from 'semantic-ui-react';
 import PlannerOptions from './PlannerOptions';
 import PlannerResults from './PlannerResults';
-import { ProductionProvider } from '../../contexts/production';
+import { ProductionProvider, useProductionContext } from '../../contexts/production';
 
 const ONE_HOUR = 1000 * 60 * 60;
 const seed = Math.floor(new Date().getTime() / ONE_HOUR);
@@ -44,8 +44,16 @@ const ProductionPlanner = () => {
 export default ProductionPlanner;
 
 const Factory = () => {
+  const ctx = useProductionContext();
   return (
     <>
+      <Button
+        negative
+        onClick={() => { ctx.dispatch({ type: 'RESET_FACTORY' }) }}
+        style={{ marginBottom: '10px' }}
+      >
+        Reset Factory
+      </Button>
       <Grid columns={2}>
         <Grid.Column width={5}>
           <PlannerOptions />

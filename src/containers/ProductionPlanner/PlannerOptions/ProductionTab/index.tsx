@@ -24,6 +24,11 @@ const baseModeOptions = [
   { value: 'maximize', text: 'Maximize Output' },
 ];
 
+const priorityOptions = Array(10)
+  .fill('')
+  .map((_, i) => ({ value: `${i + 1}`, text: `Priority: ${i + 1}` }))
+  .reverse();
+
 const ProductionTab = () => {
   const ctx = useProductionContext();
 
@@ -53,44 +58,61 @@ const ProductionTab = () => {
               options={itemOptions}
               value={data.itemKey ? data.itemKey : ''}
               onChange={(e, { value }) => {
-                const newMode = data.mode === 'maximize' ? 'maximize' : 'per-minute';
                 ctx.dispatch({
-                  type: 'UPDATE_PRODUCTION_ITEM',
-                  data: { ...data, itemKey: (value as string), mode: newMode },
+                  type: 'SET_PRODUCTION_ITEM',
+                  data: { key: data.key, itemKey: (value as any) },
                 });
               }}
             />
           </Grid.Column>
-          <Grid.Column style={{ flex: '1 1 auto', minWidth: '230px' }}>
-            <Input
-              className='no-spinner'
-              type='number'
-              min='0'
-              step='1'
-              fluid
-              value={data.value}
+          <Grid.Column style={{ flex: '1 1 auto', minWidth: '280px', display: 'flex' }}>
+            {
+              data.mode === 'maximize'
+                ? (
+                  <Dropdown
+                    style={{ flex: '0 0 130px', minWidth: '0px' }}
+                    selection
+                    options={priorityOptions}
+                    value={data.value}
+                    onChange={(e, { value }) => {
+                      ctx.dispatch({
+                        type: 'SET_PRODUCTION_ITEM_AMOUNT',
+                        data: { key: data.key, amount: (value as any) },
+                      });
+                    }}
+                  />
+                )
+                : (
+                  <Input
+                    style={{ flex: '0 0 130px' }}
+                    className='no-spinner'
+                    type='number'
+                    min='0'
+                    step='1'
+                    fluid
+                    value={data.value}
+                    onChange={(e, { value }) => {
+                      ctx.dispatch({
+                        type: 'SET_PRODUCTION_ITEM_AMOUNT',
+                        data: { key: data.key, amount: value },
+                      });
+                    }}
+                    action
+                  />
+                )
+            }
+            <Dropdown
+              style={{ flex: '1 1 auto', minWidth: '0px' }}
+              selection
+              options={modeOptions}
+              value={data.mode}
               onChange={(e, { value }) => {
                 ctx.dispatch({
-                  type: 'UPDATE_PRODUCTION_ITEM',
-                  data: { ...data, value: value },
+                  type: 'SET_PRODUCTION_ITEM_MODE',
+                  data: { key: data.key, mode: (value as any) },
                 });
               }}
-              action
-            >
-              <input />
-              <Dropdown
-                style={{ minWidth: '140px' }}
-                selection
-                options={modeOptions}
-                value={data.mode}
-                onChange={(e, { value }) => {
-                  ctx.dispatch({
-                    type: 'UPDATE_PRODUCTION_ITEM',
-                    data: { ...data, mode: (value as any) },
-                  });
-                }}
-              />
-            </Input>
+            />
           </Grid.Column>
           <Grid.Column style={{ flex: '0 0 70px' }}>
             <Button
@@ -109,7 +131,7 @@ const ProductionTab = () => {
   return (
     <>
       <p>
-        Select the items you want to produce. When maximizing multiple outputs, the value represents the priority of that item.
+        Select the items you want to produce. When maximizing multiple outputs, higher priority items will be maximized first. When selecting a recipe, the factory will be forced to use that recipe for the final output.
       </p>
       <Grid>
         {renderItemInputs()}

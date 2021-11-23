@@ -5,7 +5,7 @@ import { buildings, items, recipes, resources, handGatheredItems } from '../../d
 import { RecipeMap } from '../../contexts/production';
 
 const EPSILON = 1e-8;
-const MAXIMIZE_OBJECTIVE_WEIGHT = 1e6;
+const MAXIMIZE_OBJECTIVE_WEIGHT = 1e2;
 
 export const NODE_TYPE = {
   FINAL_PRODUCT: 'FINAL_PRODUCT',
@@ -240,7 +240,7 @@ export class ProductionSolver {
       .sort((a, b) => {
         if (a[1].value > b[1].value) return 1;
         if (a[1].value < b[1].value) return -1;
-        return 0;
+        throw new Error('TWO TARGET ITEMS HAVE THE SAME MAXIMIZATION PRIORITY');
       })
       .forEach(([key, val], index) => {
         sortedMaximizeTargets[key] = {

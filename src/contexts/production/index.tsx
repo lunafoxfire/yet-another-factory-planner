@@ -79,7 +79,7 @@ function getDefaultInputItem(): InputItemOptions {
   return ({
     key: nanoid(),
     itemKey: '',
-    value: '0',
+    value: '10',
     weight: '0',
     unlimited: false,
   });
@@ -160,7 +160,9 @@ function getInitialState(): FactoryOptions {
 export type FactoryAction = 
   | { type: 'ADD_PRODUCTION_ITEM' }
   | { type: 'DELETE_PRODUCTION_ITEM', key: string }
-  | { type: 'UPDATE_PRODUCTION_ITEM', data: ProductionItemOptions }
+  | { type: 'SET_PRODUCTION_ITEM', data: { key: string, itemKey: string } }
+  | { type: 'SET_PRODUCTION_ITEM_AMOUNT', data: { key: string, amount: string } }
+  | { type: 'SET_PRODUCTION_ITEM_MODE', data: { key: string, mode: string } }
   | { type: 'ADD_INPUT_ITEM' }
   | { type: 'DELETE_INPUT_ITEM', key: string }
   | { type: 'UPDATE_INPUT_ITEM', data: InputItemOptions }
@@ -188,9 +190,62 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
         .filter((i) => i.key !== action.key);
       return { ...state, productionItems: newProductionItems };
     }
-    case 'UPDATE_PRODUCTION_ITEM': {
+    case 'SET_PRODUCTION_ITEM': {
       const newProductionItems = state.productionItems
-        .map((i) => i.key === action.data.key ? action.data : i);
+        .map((item) => {
+          if (item.key === action.data.key) {
+            const newItem = { ...item };
+            newItem.itemKey = action.data.itemKey;
+            return newItem;
+          }
+          return item;
+        });
+      return { ...state, productionItems: newProductionItems };
+    }
+    case 'SET_PRODUCTION_ITEM_AMOUNT': {
+      const newProductionItems = state.productionItems
+        .map((item) => {
+          if (item.key === action.data.key) {
+            const newItem = { ...item };
+            newItem.value = action.data.amount;
+            return newItem;
+          }
+          return item;
+        });
+      return { ...state, productionItems: newProductionItems };
+    }
+    case 'SET_PRODUCTION_ITEM_MODE': {
+      const newProductionItems = state.productionItems
+        .map((item) => {
+          if (item.key === action.data.key) {
+            const newItem = { ...item };
+            newItem.mode = action.data.mode;
+            if (newItem.mode !== item.mode) {
+              if (newItem.mode === 'per-minute') {
+                newItem.value = '10';
+              } else if (newItem.mode === 'maximize') {
+                let nextPriority = 10;
+                while (nextPriority && nextPriority > 0) {
+                  // eslint-disable-next-line no-loop-func
+                  const priorityTaken = !!state.productionItems.find((i) => i.mode === 'maximize' && i.value === String(nextPriority));
+                  if (!priorityTaken) {
+                    break;
+                  }
+                  nextPriority--;
+                }
+                if (nextPriority > 0) {
+                  newItem.value = String(nextPriority);
+                } else {
+                  newItem.value = '10';
+                }
+              } else if (item.mode === 'per-minute' || item.mode === 'maximize') {
+                newItem.value = '1';
+              }
+            }
+            return newItem;
+          }
+          return item;
+        });
       return { ...state, productionItems: newProductionItems };
     }
     case 'ADD_INPUT_ITEM': {

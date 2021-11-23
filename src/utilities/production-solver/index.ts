@@ -39,7 +39,7 @@ type MaximizeTargets = { key: string, priority: number };
 type GlobalWeights = {
   resources: number,
   power: number,
-  buildArea: number,
+  complexity: number,
 };
 
 type ProductionSolution = { [key: string]: number };
@@ -111,17 +111,17 @@ export class ProductionSolver {
     this.globalWeights = {
       resources: Number(options.weightingOptions.resources),
       power: Number(options.weightingOptions.power),
-      buildArea: Number(options.weightingOptions.buildArea),
+      complexity: Number(options.weightingOptions.complexity),
     };
 
     this.validateNumber(this.globalWeights.resources);
     this.validateNumber(this.globalWeights.power);
-    this.validateNumber(this.globalWeights.buildArea);
+    this.validateNumber(this.globalWeights.complexity);
 
-    const maxGlobalWeight = Math.max(this.globalWeights.resources, this.globalWeights.power, this.globalWeights.buildArea);
+    const maxGlobalWeight = Math.max(this.globalWeights.resources, this.globalWeights.power, this.globalWeights.complexity);
     this.globalWeights.resources /= maxGlobalWeight;
     this.globalWeights.power /= maxGlobalWeight;
-    this.globalWeights.buildArea /= (10 * maxGlobalWeight); // Extra factor of 10 to be closer to power numbers
+    this.globalWeights.complexity /= (maxGlobalWeight / 10);
 
     this.inputs = {};
 
@@ -340,10 +340,9 @@ export class ProductionSolver {
       if (!this.allowedRecipes[recipeKey]) continue;
       const buildingInfo = buildings[recipeInfo.producedIn];
       const powerScore = buildingInfo.power > 0 ? buildingInfo.power * this.globalWeights.power : 0;
-      const areaScore = buildingInfo.area * this.globalWeights.buildArea;
       model.objective.vars.push({
         name: recipeKey,
-        coef: powerScore + areaScore,
+        coef: powerScore,
       });
 
       if (this.rateTargets[recipeKey]) {
@@ -380,11 +379,18 @@ export class ProductionSolver {
 
     for (const [itemKey, itemInfo] of Object.entries(items)) {
       const vars: Var[] = [];
+      let objectiveVars: Var[] = [];
 
       for (const recipeKey of itemInfo.usedInRecipes) {
         if (!this.allowedRecipes[recipeKey]) continue;
         const recipeInfo = recipes[recipeKey];
         const target = recipeInfo.ingredients.find((i) => i.itemClass === itemKey)!;
+
+        objectiveVars.push({
+          name: recipeKey,
+          coef: this.globalWeights.complexity,
+        });
+
         vars.push({ name: recipeKey, coef: target.perMinute });
       }
 
@@ -392,6 +398,12 @@ export class ProductionSolver {
         if (!this.allowedRecipes[recipeKey]) continue;
         const recipeInfo = recipes[recipeKey];
         const target = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
+
+        objectiveVars.push({
+          name: recipeKey,
+          coef: this.globalWeights.complexity,
+        });
+
         const existingVar = vars.find((v) => v.name === recipeKey);
         if (existingVar) {
           existingVar.coef -= target.perMinute;
@@ -401,8 +413,6 @@ export class ProductionSolver {
       }
 
       if (vars.length === 0) continue;
-
-      let objectiveVars: Var[] = [];
 
       if (this.inputs[itemKey]) {
         const inputInfo = this.inputs[itemKey];
@@ -458,7 +468,7 @@ export class ProductionSolver {
 
     const result: ProductionSolution = {};
     Object.entries(solution.result.vars).forEach(([key, val]) => {
-      if (Math.abs(val) > EPSILON) {
+      if (val > EPSILON) {
         result[key] = val;
       }
     });
@@ -483,7 +493,7 @@ export class ProductionSolver {
       if (!this.allowedRecipes[recipeKey]) continue;
       const buildingInfo = buildings[recipeInfo.producedIn];
       const powerScore = buildingInfo.power > 0 ? buildingInfo.power * this.globalWeights.power : 0;
-      const areaScore = buildingInfo.area * this.globalWeights.buildArea;
+      const areaScore = buildingInfo.area * this.globalWeights.complexity;
       model.objective.vars.push({
         name: recipeKey,
         coef: powerScore + areaScore,

@@ -131,7 +131,7 @@ const InputsTab = () => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column style={{ flex: '0 0 180px', display: 'flex', alignItems: 'center' }}>
-            Build Area Efficiency
+            Complexity
           </Grid.Column>
           <Grid.Column style={{ flex: '1 1 auto' }}>
             <Input
@@ -140,11 +140,11 @@ const InputsTab = () => {
               min='0'
               step='1'
               fluid
-              value={weightingOptions.buildArea}
+              value={weightingOptions.complexity}
               onChange={(e, { value }) => {
                 ctx.dispatch({
                   type: 'UPDATE_WEIGHTING_OPTIONS',
-                  data: { ...weightingOptions, buildArea: value },
+                  data: { ...weightingOptions, complexity: value },
                 });
               }}
             >

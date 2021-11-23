@@ -18,7 +18,7 @@ export type ProductionItemOptions = {
 export type WeightingOptions = {
   resources: string,
   power: string,
-  buildArea: string,
+  complexity: string,
 };
 
 export type InputItemOptions = {
@@ -130,8 +130,8 @@ function getInitialInputResources(): InputItemOptions[] {
 function getInitialWeightingOptions(): WeightingOptions {
   return {
     resources: '1000',
-    power: '10',
-    buildArea: '1',
+    power: '5',
+    complexity: '1',
   };
 }
 
@@ -412,7 +412,7 @@ function encodeState(state: FactoryOptions): string {
 
   fields.push(`${state.allowHandGatheredItems ? '1' : '0'}`);
 
-  fields.push(`${state.weightingOptions.resources}${SEP2}${state.weightingOptions.power}${SEP2}${state.weightingOptions.buildArea}`);
+  fields.push(`${state.weightingOptions.resources}${SEP2}${state.weightingOptions.power}${SEP2}${state.weightingOptions.complexity}`);
 
   return fields.join(SEP0);
 }
@@ -483,7 +483,7 @@ function decodeState(stateStr: string): FactoryOptions {
   if (weightingOptionsStrings.length !== 3) throw new Error('INVALID DATA [weightingOptions]');
   newState.weightingOptions.resources = weightingOptionsStrings[0];
   newState.weightingOptions.power = weightingOptionsStrings[1];
-  newState.weightingOptions.buildArea = weightingOptionsStrings[2];
+  newState.weightingOptions.complexity = weightingOptionsStrings[2];
 
   return newState;
 }

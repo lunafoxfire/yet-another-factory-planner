@@ -5,6 +5,7 @@ import { buildings, items, recipes, resources, handGatheredItems } from '../../d
 import { RecipeMap } from '../../contexts/production';
 
 const EPSILON = 1e-8;
+const MAXIMIZE_TARGET_WEIGHTING = 1e6;
 
 export const NODE_TYPE = {
   FINAL_PRODUCT: 'FINAL_PRODUCT',
@@ -54,6 +55,7 @@ export type SolverResults = {
   productionGraph: ProductionGraph | null,
   report: Report | null,
   timestamp: number,
+  computeTime: number,
   error: string,
 };
 
@@ -178,6 +180,7 @@ export class ProductionSolver {
       const amount = Number(item.value);
       this.validateNumber(amount);
       if (!amount) return;
+      if (this.inputs[item.itemKey]) throw new Error('CANNOT HAVE ITEM AS BOTH INPUT AND OUTPUT');
       const isPoints = item.itemKey === POINTS_ITEM_KEY;
       if (isPoints) {
         this.hasPointsTarget = true;
@@ -305,14 +308,16 @@ export class ProductionSolver {
       return {
         productionGraph,
         report,
-        timestamp: timestamp,
+        timestamp,
+        computeTime: performance.now() - timestamp,
         error: '',
       };
     } catch (e: any) {
       return {
         productionGraph: null,
         report: null,
-        timestamp: timestamp,
+        timestamp,
+        computeTime: performance.now() - timestamp,
         error: e.message,
       };
     }
@@ -505,7 +510,7 @@ export class ProductionSolver {
         .forEach((v) => {
           const existingVar = model.objective.vars.find((ov) => ov.name === v.name);
           if (existingVar) {
-            existingVar.coef += v.coef;
+            existingVar.coef += v.coef * MAXIMIZE_TARGET_WEIGHTING;
           } else {
             model.objective.vars.push(v);
           }
@@ -565,7 +570,10 @@ export class ProductionSolver {
           bnds: { type: glpk.GLP_UP, ub: 0, lb: NaN },
         });
 
-        objectiveVars = vars;
+        objectiveVars = vars.map<Var>((v) => ({
+          name: v.name,
+          coef: v.coef * MAXIMIZE_TARGET_WEIGHTING,
+        }));
       }
 
       else {

@@ -7,6 +7,9 @@ import { ProductionGraph, GraphNode, GraphEdge, NODE_TYPE } from '../../../../ut
 import { items, recipes, buildings } from '../../../../data';
 
 Cytoscape.use(klay);
+if (process.env.NODE_ENV !== 'development') {
+  Cytoscape.warnings(false);
+}
 
 const layout = {
   name: 'klay',

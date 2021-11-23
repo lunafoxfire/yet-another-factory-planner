@@ -13,6 +13,7 @@ const _handleCalculateFactory = _.debounce(async (state: FactoryOptions, setSolv
     const results = await solver.exec();
     setSolverResults((prevState) => {
       if (!prevState || prevState.timestamp < results.timestamp) {
+        console.log(`Computed in: ${results.computeTime}ms`);
         return results;
       }
       return prevState;
@@ -22,10 +23,11 @@ const _handleCalculateFactory = _.debounce(async (state: FactoryOptions, setSolv
       productionGraph: null,
       report: null,
       timestamp: performance.now(),
+      computeTime: 0,
       error: e.message,
     });
   }
-}, 500, { leading: true, trailing: true });
+}, 300, { leading: true, trailing: true });
 
 const PlannerResults = () => {
   const [activeTab, setActiveTab] = useState('production-graph');

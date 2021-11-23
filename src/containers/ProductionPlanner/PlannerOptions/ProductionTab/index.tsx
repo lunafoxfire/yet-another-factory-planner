@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Dropdown, Input, Grid, Icon } from 'semantic-ui-react';
 import { items, recipes, resources } from '../../../../data';
-import { useProductionContext } from '../../../../contexts/production';
+import { MAX_PRIORITY, useProductionContext } from '../../../../contexts/production';
 import { POINTS_ITEM_KEY } from '../../../../utilities/production-solver';
 
 const itemOptions = Object.keys(items)
@@ -24,7 +24,7 @@ const baseModeOptions = [
   { value: 'maximize', text: 'Maximize Output' },
 ];
 
-const priorityOptions = Array(10)
+const priorityOptions = Array(MAX_PRIORITY)
   .fill('')
   .map((_, i) => ({ value: `${i + 1}`, text: `Priority: ${i + 1}` }))
   .reverse();

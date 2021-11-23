@@ -1,11 +1,10 @@
-import loadGLPK, { LP, Var } from 'glpk.js';
+import loadGLPK, { GLPK, LP, Var } from 'glpk.js';
 import { nanoid } from 'nanoid';
 import { FactoryOptions } from '../../contexts/production';
 import { buildings, items, recipes, resources, handGatheredItems } from '../../data';
 import { RecipeMap } from '../../contexts/production';
 
 const EPSILON = 1e-8;
-const MAXIMIZE_OBJECTIVE_WEIGHT = 1e2;
 
 export const NODE_TYPE = {
   FINAL_PRODUCT: 'FINAL_PRODUCT',
@@ -26,14 +25,15 @@ type Inputs = {
   }
 };
 
-type Outputs = {
+type RateTargets = {
   [key: string]: {
     value: number,
     recipe: string | null,
-    maximize: boolean,
     isPoints: boolean,
   }
 };
+
+type MaximizeTargets = { key: string, priority: number };
 
 type GlobalWeights = {
   resources: number,
@@ -98,7 +98,9 @@ export type GraphEdge = {
 export class ProductionSolver {
   private globalWeights: GlobalWeights;
   private inputs: Inputs;
-  private outputs: Outputs;
+  private rateTargets: RateTargets;
+  private maximizeTargets: MaximizeTargets[];
+  private hasPointsTarget: boolean;
   private allowedRecipes: RecipeMap;
 
   public constructor(options: FactoryOptions) {
@@ -165,41 +167,44 @@ export class ProductionSolver {
       });
     }
 
-    this.outputs = {};
-    const rateTargets: Outputs = {};
-    const recipeTargets: Outputs = {};
-    const maximizeTargets: Outputs = {};
-    const sortedMaximizeTargets: Outputs = {};
+    this.rateTargets = {};
+    this.maximizeTargets = [];
+    this.hasPointsTarget = false;
+
+    const perMinTargets: RateTargets = {};
+    const recipeTargets: RateTargets = {};
     options.productionItems.forEach((item) => {
       if (!item.itemKey) return;
       const amount = Number(item.value);
       this.validateNumber(amount);
       if (!amount) return;
+      const isPoints = item.itemKey === POINTS_ITEM_KEY;
+      if (isPoints) {
+        this.hasPointsTarget = true;
+      }
       switch (item.mode) {
         case 'per-minute':
-          if (rateTargets[item.itemKey]) {
-            rateTargets[item.itemKey].value += amount;
+          if (perMinTargets[item.itemKey]) {
+            perMinTargets[item.itemKey].value += amount;
           } else {
-            rateTargets[item.itemKey] = {
+            perMinTargets[item.itemKey] = {
               value: amount,
               recipe: null,
-              maximize: false,
-              isPoints: item.itemKey === POINTS_ITEM_KEY,
+              isPoints,
             };
           }
           break;
         case 'maximize':
-          if (maximizeTargets[item.itemKey]) {
-            if (maximizeTargets[item.itemKey].value < amount) {
-              maximizeTargets[item.itemKey].value = amount;
+          const existingTarget = this.maximizeTargets.find((t) => t.key === item.itemKey);
+          if (existingTarget) {
+            if (existingTarget.priority < amount) {
+              existingTarget.priority = amount;
             }
           } else {
-            maximizeTargets[item.itemKey] = {
-              value: amount,
-              recipe: null,
-              maximize: true,
-              isPoints: item.itemKey === POINTS_ITEM_KEY,
-            };
+            this.maximizeTargets.push({
+              key: item.itemKey,
+              priority: amount,
+            });
           }
           break;
         default:
@@ -210,13 +215,12 @@ export class ProductionSolver {
               throw new Error('CANNOT TARGET A DISABLED RECIPE');
             }
             const target = recipeInfo.products.find((p) => p.itemClass === item.itemKey)!;
-            if (rateTargets[item.itemKey]) {
-              rateTargets[item.itemKey].value += target.perMinute * amount;
+            if (perMinTargets[item.itemKey]) {
+              perMinTargets[item.itemKey].value += target.perMinute * amount;
             } else {
-              rateTargets[item.itemKey] = {
+              perMinTargets[item.itemKey] = {
                 value: target.perMinute * amount,
                 recipe: null,
-                maximize: false,
                 isPoints: false,
               };
             }
@@ -226,7 +230,6 @@ export class ProductionSolver {
               recipeTargets[recipeKey] = {
                 value: amount,
                 recipe: recipeKey,
-                maximize: false,
                 isPoints: false,
               };
             }
@@ -236,25 +239,18 @@ export class ProductionSolver {
       }
     });
 
-    Object.entries(maximizeTargets)
+    this.maximizeTargets
       .sort((a, b) => {
-        if (a[1].value > b[1].value) return 1;
-        if (a[1].value < b[1].value) return -1;
+        if (a.priority > b.priority) return -1;
+        if (a.priority < b.priority) return 1;
         throw new Error('TWO TARGET ITEMS HAVE THE SAME MAXIMIZATION PRIORITY');
-      })
-      .forEach(([key, val], index) => {
-        sortedMaximizeTargets[key] = {
-          ...val,
-          value: index + 1,
-        }
       });
 
-    this.outputs = {
-      ...rateTargets,
+    this.rateTargets = {
+      ...perMinTargets,
       ...recipeTargets,
-      ...sortedMaximizeTargets,
     };
-    if (Object.keys(this.outputs).length === 0) {
+    if (Object.keys(this.rateTargets).length === 0 && this.maximizeTargets.length === 0) {
       throw new Error('NO OUTPUTS SET');
     }
   }
@@ -270,11 +266,40 @@ export class ProductionSolver {
   public async exec(): Promise<SolverResults> {
     const timestamp = performance.now();
     try {
-      const productionSolution = await this.solveProduction();
-      if (Object.keys(productionSolution).length === 0) {
-        throw new Error('SOLUTION IS EMPTY.');
+      const glpk = await loadGLPK();
+      const productionSolution = await this.solveProduction_rateTargetsPass(glpk);
+      let productionGraph = this.generateProductionGraph(productionSolution);
+
+      for (const target of this.maximizeTargets) {
+        const remainingInputs: Inputs = {};
+        for (const [inputKey, input] of Object.entries(this.inputs)) {
+          const inputNode = Object.values(productionGraph.nodes).find((n) => n.key === inputKey);
+          let usedAmount = 0;
+          if (inputNode) {
+            usedAmount = inputNode.multiplier;
+          }
+          const diff = input.amount - usedAmount;
+          if (diff > EPSILON) {
+            remainingInputs[inputKey] = {
+              ...input,
+              amount: diff,
+            };
+          }
+        }
+        const solution = await this.solveProduction_maximizePass(target.key, remainingInputs, glpk);
+        for (const [key, multiplier] of Object.entries(solution)) {
+          if (productionSolution[key]) {
+            productionSolution[key] += multiplier;
+          } else {
+            productionSolution[key] = multiplier;
+          }
+        }
+        productionGraph = this.generateProductionGraph(productionSolution);
       }
-      const productionGraph = this.generateProductionGraph(productionSolution);
+
+      if (Object.keys(productionGraph.nodes).length === 0) {
+        throw new Error('SOLUTION IS EMPTY');
+      }
       const report = this.generateProductionReport(productionGraph);
 
       return {
@@ -293,8 +318,7 @@ export class ProductionSolver {
     }
   }
 
-  private async solveProduction(): Promise<ProductionSolution> {
-    const glpk = await loadGLPK();
+  private async solveProduction_rateTargetsPass(glpk: GLPK): Promise<ProductionSolution> {
     const model: LP = {
       name: 'production',
       objective: {
@@ -317,15 +341,15 @@ export class ProductionSolver {
         coef: powerScore + areaScore,
       });
 
-      if (this.outputs[recipeKey]) {
+      if (this.rateTargets[recipeKey]) {
         model.subjectTo.push({
           name: `${recipeKey} recipe constraint`,
           vars: [{ name: recipeKey, coef: 1 }],
-          bnds: { type: glpk.GLP_LO, ub: 0, lb: this.outputs[recipeKey].value },
+          bnds: { type: glpk.GLP_LO, ub: 0, lb: this.rateTargets[recipeKey].value },
         });
       }
 
-      if (this.outputs[POINTS_ITEM_KEY]) {
+      if (this.rateTargets[POINTS_ITEM_KEY]) {
         let pointCoef = 0;
         for (const product of recipeInfo.products) {
           if (!this.inputs[product.itemClass]) {
@@ -341,28 +365,12 @@ export class ProductionSolver {
       }
     }
 
-    if (this.outputs[POINTS_ITEM_KEY]) {
-      if (this.outputs[POINTS_ITEM_KEY].maximize) {
-        pointsVars
-          .map<Var>((v) => ({
-            name: v.name,
-            coef: v.coef * Math.pow(MAXIMIZE_OBJECTIVE_WEIGHT, this.outputs[POINTS_ITEM_KEY].value),
-          }))
-          .forEach((v) => {
-            const existingVar = model.objective.vars.find((ov) => ov.name === v.name);
-            if (existingVar) {
-              existingVar.coef += v.coef;
-            } else {
-              model.objective.vars.push(v);
-            }
-          });
-      } else {
-        model.subjectTo.push({
-          name: 'AWESOME Sink Points constraint',
-          vars: pointsVars,
-          bnds: { type: glpk.GLP_UP, ub: -this.outputs[POINTS_ITEM_KEY].value, lb: NaN },
-        });
-      }
+    if (this.rateTargets[POINTS_ITEM_KEY]) {
+      model.subjectTo.push({
+        name: 'AWESOME Sink Points constraint',
+        vars: pointsVars,
+        bnds: { type: glpk.GLP_UP, ub: -this.rateTargets[POINTS_ITEM_KEY].value, lb: NaN },
+      });
     }
 
     for (const [itemKey, itemInfo] of Object.entries(items)) {
@@ -411,27 +419,13 @@ export class ProductionSolver {
         }
       }
 
-      else if (this.outputs[itemKey]) {
-        const outputInfo = this.outputs[itemKey];
-        if (outputInfo.maximize) {
-          model.subjectTo.push({
-            name: `${itemKey} final product constraint`,
-            vars,
-            bnds: { type: glpk.GLP_UP, ub: 0, lb: NaN },
-          });
-
-          objectiveVars = vars.map<Var>((v) => ({
-            name: v.name,
-            coef: v.coef * Math.pow(MAXIMIZE_OBJECTIVE_WEIGHT, outputInfo.value),
-          }));
-
-        } else {
-          model.subjectTo.push({
-            name: `${itemKey} final product constraint`,
-            vars,
-            bnds: { type: glpk.GLP_UP, ub: -outputInfo.value, lb: NaN },
-          });
-        }
+      else if (this.rateTargets[itemKey]) {
+        const outputInfo = this.rateTargets[itemKey];
+        model.subjectTo.push({
+          name: `${itemKey} final product constraint`,
+          vars,
+          bnds: { type: glpk.GLP_UP, ub: -outputInfo.value, lb: NaN },
+        });
       }
 
       else {
@@ -455,6 +449,146 @@ export class ProductionSolver {
     const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_OFF });
     if (solution.result.status !== glpk.GLP_OPT) {
       throw new Error("NO POSSIBLE SOLUTION");
+    }
+
+    const result: ProductionSolution = {};
+    Object.entries(solution.result.vars).forEach(([key, val]) => {
+      if (Math.abs(val) > EPSILON) {
+        result[key] = val;
+      }
+    });
+    return result;
+  }
+
+
+  async solveProduction_maximizePass(targetKey: string, remainingInputs: Inputs, glpk: GLPK): Promise<ProductionSolution> {
+    const model: LP = {
+      name: 'production',
+      objective: {
+        name: 'score',
+        direction: glpk.GLP_MIN,
+        vars: [],
+      },
+      subjectTo: [],
+    };
+
+    const pointsVars: Var[] = [];
+
+    for (const [recipeKey, recipeInfo] of Object.entries(recipes)) {
+      if (!this.allowedRecipes[recipeKey]) continue;
+      const buildingInfo = buildings[recipeInfo.producedIn];
+      const powerScore = buildingInfo.power > 0 ? buildingInfo.power * this.globalWeights.power : 0;
+      const areaScore = buildingInfo.area * this.globalWeights.buildArea;
+      model.objective.vars.push({
+        name: recipeKey,
+        coef: powerScore + areaScore,
+      });
+
+      if (targetKey === POINTS_ITEM_KEY) {
+        let pointCoef = 0;
+        for (const product of recipeInfo.products) {
+          if (!this.inputs[product.itemClass]) {
+            pointCoef -= product.perMinute * items[product.itemClass].sinkPoints / 1000;
+          }
+        }
+        for (const ingredient of recipeInfo.ingredients) {
+          if (!this.inputs[ingredient.itemClass]) {
+            pointCoef += ingredient.perMinute * items[ingredient.itemClass].sinkPoints / 1000;
+          }
+        }
+        pointsVars.push({ name: recipeKey, coef: pointCoef });
+      }
+    }
+
+    if (targetKey === POINTS_ITEM_KEY) {
+      pointsVars
+        .forEach((v) => {
+          const existingVar = model.objective.vars.find((ov) => ov.name === v.name);
+          if (existingVar) {
+            existingVar.coef += v.coef;
+          } else {
+            model.objective.vars.push(v);
+          }
+        });
+    }
+
+    for (const [itemKey, itemInfo] of Object.entries(items)) {
+      const vars: Var[] = [];
+
+      for (const recipeKey of itemInfo.usedInRecipes) {
+        if (!this.allowedRecipes[recipeKey]) continue;
+        const recipeInfo = recipes[recipeKey];
+        const target = recipeInfo.ingredients.find((i) => i.itemClass === itemKey)!;
+        vars.push({ name: recipeKey, coef: target.perMinute });
+      }
+
+      for (const recipeKey of itemInfo.producedFromRecipes) {
+        if (!this.allowedRecipes[recipeKey]) continue;
+        const recipeInfo = recipes[recipeKey];
+        const target = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
+        const existingVar = vars.find((v) => v.name === recipeKey);
+        if (existingVar) {
+          existingVar.coef -= target.perMinute;
+        } else {
+          vars.push({ name: recipeKey, coef: -target.perMinute });
+        }
+      }
+
+      if (vars.length === 0) continue;
+
+      let objectiveVars: Var[] = [];
+
+      if (remainingInputs[itemKey]) {
+        const inputInfo = remainingInputs[itemKey];
+        if (inputInfo.amount !== Infinity) {
+          model.subjectTo.push({
+            name: `${itemKey} resource constraint`,
+            vars,
+            bnds: { type: glpk.GLP_UP, ub: inputInfo.amount, lb: NaN },
+          });
+        }
+
+        if (inputInfo.type === NODE_TYPE.RESOURCE || inputInfo.type === NODE_TYPE.HAND_GATHERED_RESOURCE) {
+          objectiveVars = vars
+            .filter((v) => v.coef > 0)
+            .map<Var>((v) => ({
+              name: v.name,
+              coef: v.coef * inputInfo.weight * this.globalWeights.resources,
+            }));
+        }
+      }
+
+      else if (targetKey === itemKey) {
+        model.subjectTo.push({
+          name: `${itemKey} final product constraint`,
+          vars,
+          bnds: { type: glpk.GLP_UP, ub: 0, lb: NaN },
+        });
+
+        objectiveVars = vars;
+      }
+
+      else {
+        model.subjectTo.push({
+          name: `${itemKey} intermediates constraint`,
+          vars,
+          bnds: { type: glpk.GLP_UP, ub: 0, lb: NaN },
+        });
+      }
+
+      objectiveVars.forEach((v) => {
+        const existingVar = model.objective.vars.find((ov) => ov.name === v.name);
+        if (existingVar) {
+          existingVar.coef += v.coef;
+        } else {
+          model.objective.vars.push(v);
+        }
+      });
+    }
+
+    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_OFF });
+    if (solution.result.status !== glpk.GLP_OPT) {
+      throw new Error("SOLUTION IS UNBOUNDED");
     }
 
     const result: ProductionSolution = {};
@@ -518,9 +652,9 @@ export class ProductionSolver {
           const productionInfo = producedBy[j];
           const productionNode = graph.nodes[productionInfo.recipeKey];
 
-          const outputRecipe = this.outputs[itemKey]?.recipe;
+          const outputRecipe = this.rateTargets[itemKey]?.recipe;
           if (outputRecipe && outputRecipe === productionInfo.recipeKey) {
-            const outputInfo = this.outputs[itemKey];
+            const outputInfo = this.rateTargets[itemKey];
             const recipeInfo = recipes[outputRecipe];
             const target = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
             const recipeAmount = outputInfo.value * target.perMinute;
@@ -614,10 +748,16 @@ export class ProductionSolver {
         if (productionInfo.amount > EPSILON) {
           let itemNode = graph.nodes[itemKey];
           if (!itemNode) {
+            let nodeType = NODE_TYPE.SIDE_PRODUCT;
+            if (this.rateTargets[itemKey] || this.maximizeTargets.find((t) => t.key === itemKey)) {
+              nodeType = NODE_TYPE.FINAL_PRODUCT;
+            } else if (this.hasPointsTarget && items[itemKey].sinkPoints > 0) {
+              nodeType = NODE_TYPE.FINAL_PRODUCT;
+            }
             itemNode = {
               id: nanoid(),
               key: itemKey,
-              type: this.outputs[itemKey] || this.outputs[POINTS_ITEM_KEY] ? NODE_TYPE.FINAL_PRODUCT : NODE_TYPE.SIDE_PRODUCT,
+              type: nodeType,
               multiplier: productionInfo.amount
             };
             graph.nodes[itemKey] = itemNode;

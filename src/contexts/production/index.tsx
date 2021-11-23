@@ -4,7 +4,8 @@ import { usePrevious } from '../../hooks/usePrevious';
 import { resources, recipes, items } from '../../data'
 import { POINTS_ITEM_KEY } from '../../utilities/production-solver';
 
-const FACTORY_SETTINGS_VERSION = 'v1_U5';
+export const FACTORY_SETTINGS_VERSION = 'v1_U5';
+export const MAX_PRIORITY = 20;
 
 // TYPES
 export type ProductionItemOptions = {
@@ -224,7 +225,7 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
               if (newItem.mode === 'per-minute') {
                 newItem.value = '10';
               } else if (newItem.mode === 'maximize') {
-                let nextPriority = 10;
+                let nextPriority = MAX_PRIORITY;
                 while (nextPriority && nextPriority > 0) {
                   // eslint-disable-next-line no-loop-func
                   const priorityTaken = !!state.productionItems.find((i) => i.mode === 'maximize' && i.value === String(nextPriority));
@@ -236,7 +237,7 @@ function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
                 if (nextPriority > 0) {
                   newItem.value = String(nextPriority);
                 } else {
-                  newItem.value = '10';
+                  newItem.value = `${MAX_PRIORITY}`;
                 }
               } else if (item.mode === 'per-minute' || item.mode === 'maximize') {
                 newItem.value = '1';

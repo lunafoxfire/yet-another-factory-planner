@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import seedrandom from 'seedrandom';
 import { Container, Header, Grid, Button } from 'semantic-ui-react';
 import PlannerOptions from './PlannerOptions';
 import PlannerResults from './PlannerResults';
 import { ProductionProvider, useProductionContext } from '../../contexts/production';
+import Drawer from '../../components/Drawer';
 
 const ONE_HOUR = 1000 * 60 * 60;
 const seed = Math.floor(new Date().getTime() / ONE_HOUR);
@@ -45,6 +46,18 @@ export default ProductionPlanner;
 
 const Factory = () => {
   const ctx = useProductionContext();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!loaded) {
+      setLoaded(true);
+      setTimeout(() => {
+        setDrawerOpen(true);
+      }, 100);
+    }
+  }, [loaded]);
+  
   return (
     <>
       <Button
@@ -54,14 +67,10 @@ const Factory = () => {
       >
         Reset Factory
       </Button>
-      <Grid columns={2}>
-        <Grid.Column width={5}>
-          <PlannerOptions />
-        </Grid.Column>
-        <Grid.Column width={11}>
-          <PlannerResults />
-        </Grid.Column>
-      </Grid>
+      <Drawer open={drawerOpen} onToggle={(value) => { setDrawerOpen(value); }}>
+        <PlannerOptions />
+      </Drawer>
+      <PlannerResults />
     </>
   );
 }

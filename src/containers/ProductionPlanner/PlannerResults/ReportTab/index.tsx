@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Header, Icon, List } from 'semantic-ui-react';
+import { Header, Icon, List } from 'semantic-ui-react';
 import { buildings, items } from '../../../../data';
 import { Report } from '../../../../utilities/production-solver';
 

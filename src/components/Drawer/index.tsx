@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Icon } from 'semantic-ui-react';
+import { ChevronsLeft, ChevronsRight } from 'react-feather';
 import { useDrawerContext } from '../../contexts/drawer';
 import Portal from '../Portal';
 
@@ -20,8 +20,8 @@ const Drawer = (props: Props) => {
         <DrawerToggle onClick={() => { onToggle?.(!open); }}>
           {
             open
-              ? <Icon name='angle double left' />
-              : <Icon name='angle double right' />
+              ? <ChevronsLeft />
+              : <ChevronsRight />
           }
         </DrawerToggle>
         <DrawerContent aria-hidden={!open}>
@@ -51,10 +51,10 @@ const DrawerDimmer = styled.div<{ open: boolean }>`
 const DrawerContainer = styled.div<{ open: boolean }>`
   position: relative;
   top: 0px;
-  left: ${({ open }) => open ? '0px' : 'calc(-1 * var(--drawer-width))' };
-  width: var(--drawer-width);
+  left: ${({ open, theme }) => (open ? '0px' : `-${theme.other.drawerOpenWidth}`)};
+  width: ${({ theme }) => theme.other.drawerOpenWidth};
   height: 100%;
-  background: var(--background-color);
+  background: #fff;
   transition: left 500ms;
   pointer-events: auto;
 `;
@@ -64,8 +64,8 @@ const DrawerToggle = styled.button`
   display: block;
   top: 0px;
   bottom: 0px;
-  right: calc(-1 * var(--drawer-button-width));
-  width: var(--drawer-button-width);
+  right: ${({ theme }) => `-${theme.other.drawerClosedWidth}` };
+  width: ${({ theme }) => theme.other.drawerClosedWidth };
 `;
 
 const DrawerContent = styled.div`

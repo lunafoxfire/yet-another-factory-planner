@@ -3,6 +3,8 @@ import { nanoid } from 'nanoid';
 import Cytoscape, { Stylesheet } from 'cytoscape';
 import klay from 'cytoscape-klay';
 import GraphVisualizer from 'react-cytoscapejs';
+import { Text, Container, Center, Group } from '@mantine/core';
+import { AlertCircle } from 'react-feather';
 import { ProductionGraph, GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes, buildings } from '../../../../data';
 
@@ -231,7 +233,7 @@ const ProductionGraphTab = (props: Props) => {
   }, [activeGraph]);
 
   return (
-    <div style={{ height: '900px', display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center', border: '1px solid black' }}>
+    <Container fluid style={{ border: '1px solid black', minHeight: '600px', minWidth: '600px', position: 'relative' }} padding={0}>
       {
         graphProps != null
         ? (
@@ -245,25 +247,30 @@ const ProductionGraphTab = (props: Props) => {
               wheelSensitivity={0.1}
               maxZoom={3.0}
               minZoom={0.1}
-              style={{ height: '100%', width: '100%', overflow: 'hidden' }}
+              style={{ position: 'absolute', height: '100%', width: '100%', overflow: 'hidden' }}
             />
         )
         : (
-          <>
-            <div>
-              No graph available
-            </div>
-            {errorMessage
-              ? (
-                <div>
-                  {`\nERROR: ${errorMessage}`}
-                </div>
-              )
-              : null}
-          </>
+          <Center style={{ position: 'absolute', height: '100%', width: '100%' }}>
+            <Group>
+              <AlertCircle size={75} />
+              <Group direction='column' style={{ gap: '0px' }}>
+                <Text size='xl'>
+                  No graph available
+                </Text>
+                {errorMessage
+                  ? (
+                    <Text size='sm'>
+                      {`ERROR: ${errorMessage}`}
+                    </Text>
+                  )
+                  : null}
+              </Group>
+            </Group>
+          </Center>
         )
       }
-    </div>
+    </Container>
   );
 };
 

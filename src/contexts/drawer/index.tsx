@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import styled from 'styled-components';
+import { useMantineTheme } from '@mantine/core';
 
 export type DrawerContextType = {
   rootNode: HTMLDivElement | null,
@@ -28,6 +29,7 @@ type Props = {
 export const DrawerProvider = (props: Props) => {
   const { children } = props;
   const [rootNode, setRootNode] = useState<HTMLDivElement | null>(null);
+  const theme = useMantineTheme();
 
   function setRef(ref: HTMLDivElement | null) {
     setRootNode((prevState) => {
@@ -38,15 +40,15 @@ export const DrawerProvider = (props: Props) => {
 
   return (
     <DrawerContext.Provider value={{ rootNode }}>
-      <DrawerRoot ref={setRef} />
+      <DrawerRoot ref={setRef} topOffset={theme.other.headerHeight} />
       {children}
     </DrawerContext.Provider>
   );
 }
 
-const DrawerRoot = styled.div`
+const DrawerRoot = styled.div<{ topOffset: string }>`
   position: fixed;
-  top: 0px;
+  top: ${({ topOffset }) => topOffset};
   left: 0px;
   bottom: 0px;
   right: 0px;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Icon, List } from 'semantic-ui-react';
+import { Title, List, Divider, Text } from '@mantine/core';
 import { buildings, items } from '../../../../data';
 import { Report } from '../../../../utilities/production-solver';
 
@@ -18,65 +18,57 @@ const ReportTab = (props: Props) => {
   function renderReport() {
     return (
       <>
-        <Header size='huge'>Statistics</Header>
-        <List celled size='large' style={{ marginBottom: '30px' }}>
-          <List.Item style={{ paddingTop: '5px', paddingBottom: '5px', marginBottom: '10px' }}>
-            <List.Content>
-              <List.Header style={{ marginBottom: '5px' }}>Points Produced</List.Header>
-              {formatFloat(report!.pointsProduced)}
-            </List.Content>
+        <Title order={2}>Statistics</Title>
+        <Divider />
+        <List listStyleType='none'>
+          <List.Item>
+            <Title order={3}>Points Produced</Title>
+            <Text>{formatFloat(report!.pointsProduced)}</Text>
+            <Divider />
           </List.Item>
-          <List.Item style={{ paddingTop: '5px', paddingBottom: '5px', marginBottom: '10px' }}>
-            <List.Content>
-              <List.Header style={{ marginBottom: '5px' }}>Estimated Power {report!.powerUsageEstimate < 0 ? 'Production' : 'Usage'}</List.Header>
-              {formatFloat(Math.abs(report!.powerUsageEstimate))} MW
-            </List.Content>
+          <List.Item>
+            <Title order={3}>Estimated Power {report!.powerUsageEstimate < 0 ? 'Production' : 'Usage'}</Title>
+            <Text>{formatFloat(Math.abs(report!.powerUsageEstimate))} MW</Text>
+            <Divider />
           </List.Item>
-          <List.Item style={{ paddingTop: '5px', paddingBottom: '5px', marginBottom: '10px' }}>
-            <List.Content>
-              <List.Header style={{ marginBottom: '5px' }}>Resource Usage Score</List.Header>
-              {formatFloat(report!.resourceEfficiencyScore)}
-            </List.Content>
+          <List.Item>
+            <Title order={3}>Resource Usage Score</Title>
+            <Text>{formatFloat(report!.resourceEfficiencyScore)}</Text>
+            <Divider />
           </List.Item>
-          <List.Item style={{ paddingTop: '5px', paddingBottom: '5px', marginBottom: '10px' }}>
-            <List.Content>
-              <List.Header style={{ marginBottom: '5px' }}>Total Build Area</List.Header>
-              {formatFloat(report!.totalBuildArea)} m²
-            </List.Content>
+          <List.Item>
+            <Title order={3}>Total Build Area</Title>
+            <Text>{formatFloat(report!.totalBuildArea)} m²</Text>
+            <Divider />
           </List.Item>
-          <List.Item style={{ paddingTop: '5px', paddingBottom: '15px' }}>
-            <List.Content>
-              <List.Header style={{ marginBottom: '5px' }}>Estimated Minimal Foundations</List.Header>
-              {formatFloat(report!.estimatedFoundations)} foundations ({formatFloat(report!.estimatedFoundations * 8)} Concrete)
-            </List.Content>
+          <List.Item>
+            <Title order={3}>Estimated Minimal Foundations</Title>
+            <Text>{formatFloat(report!.estimatedFoundations)} foundations ({formatFloat(report!.estimatedFoundations * 8)} Concrete)</Text>
+            <Divider />
           </List.Item>
         </List>
 
-        <Header size='huge'>Buildings</Header>
-        <List celled>
+        <Title order={2}>Buildings</Title>
+        <Divider />
+        <List listStyleType='none'>
           {renderBuildingsUsed()}
-          <List.Item style={{ paddingBottom: '10px' }}>
-            <List.Content>
-              <Header size='medium'>Total</Header>
-              <List.List>
-                {
-                  Object.entries(report!.totalMaterialCost)
-                    .sort((a, b) => {
-                      if (a[1] > b[1]) return -1;
-                      if (a[1] < b[1]) return 1;
-                      return 0;
-                    })
-                    .map(([itemKey, count]) => (
-                      <List.Item key={itemKey}>
-                        <Icon name='triangle right' />
-                        <List.Content>
-                          <b style={{ marginRight: '3px' }}>{items[itemKey].name}</b> x{formatFloat(count)}
-                        </List.Content>
-                      </List.Item>
-                    ))
-                }
-              </List.List>
-            </List.Content>
+          <List.Item>
+            <Title order={3}>Total</Title>
+            <List withPadding listStyleType='square'>
+              {
+                Object.entries(report!.totalMaterialCost)
+                  .sort((a, b) => {
+                    if (a[1] > b[1]) return -1;
+                    if (a[1] < b[1]) return 1;
+                    return 0;
+                  })
+                  .map(([itemKey, count]) => (
+                    <List.Item key={itemKey}>
+                        <b>{items[itemKey].name}</b> x{formatFloat(count)}
+                    </List.Item>
+                  ))
+              }
+            </List>
           </List.Item>
         </List>
       </>
@@ -86,27 +78,24 @@ const ReportTab = (props: Props) => {
   function renderBuildingsUsed() {
     return Object.entries(report!.buildingsUsed).map(([buildingKey, usageInfo]) => (
       <List.Item key={buildingKey} style={{ paddingBottom: '10px' }}>
-        <List.Content>
-          <Header size='medium'>{buildings[buildingKey].name} <span style={{ fontSize: '14px', marginLeft: '3px' }}>x{usageInfo.count}</span></Header>
-          <List.List>
-            {
-              Object.entries(usageInfo.materialCost)
-                .sort((a, b) => {
-                  if (a[1] > b[1]) return -1;
-                  if (a[1] < b[1]) return 1;
-                  return 0;
-                })
-                .map(([itemKey, count]) => (
-                  <List.Item key={itemKey}>
-                    <Icon name='triangle right' />
-                    <List.Content>
-                      <b style={{ marginRight: '3px' }}>{items[itemKey].name}</b> x{formatFloat(count)}
-                    </List.Content>
-                  </List.Item>
-                ))
-            }
-          </List.List>
-        </List.Content>
+        <Title order={3}>
+          {buildings[buildingKey].name} <span style={{ fontSize: '14px', marginLeft: '3px' }}>x{formatFloat(usageInfo.count)}</span>
+        </Title>
+        <List withPadding listStyleType='square'>
+          {
+            Object.entries(usageInfo.materialCost)
+              .sort((a, b) => {
+                if (a[1] > b[1]) return -1;
+                if (a[1] < b[1]) return 1;
+                return 0;
+              })
+              .map(([itemKey, count]) => (
+                <List.Item key={itemKey}>
+                  <b style={{ marginRight: '3px' }}>{items[itemKey].name}</b> x{formatFloat(count)}
+                </List.Item>
+              ))
+          }
+        </List>
       </List.Item>
     ))
   }
@@ -116,9 +105,9 @@ const ReportTab = (props: Props) => {
       {
       !report
         ? (
-          <Header>
+          <Title>
             No data available
-          </Header>
+          </Title>
         )
         : renderReport()
       }

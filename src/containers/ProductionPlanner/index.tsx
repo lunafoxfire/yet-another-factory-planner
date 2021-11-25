@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Title, Text, Container } from '@mantine/core';
 import seedrandom from 'seedrandom';
-import { Container, Header, Grid, Button } from 'semantic-ui-react';
 import PlannerOptions from './PlannerOptions';
 import PlannerResults from './PlannerResults';
-import { ProductionProvider, useProductionContext } from '../../contexts/production';
+import { ProductionProvider } from '../../contexts/production';
 import Drawer from '../../components/Drawer';
 
 const ONE_HOUR = 1000 * 60 * 60;
@@ -28,45 +29,25 @@ const TIP = `FICSIT Tip #${TIP_INDEX}: ${TIPS[TIP_INDEX]}`
 
 const ProductionPlanner = () => {
   return (
-    <>
-      <Header as='h1'>Production Planner</Header>
-      <p>
+    <MainContainer fluid>
+      <Title order={2}>Production Planner</Title>
+      <Text>
         {TIP}
-      </p>
-      <Container fluid>
-        <ProductionProvider>
-          <Factory />
-        </ProductionProvider>
-      </Container>
-    </>
+      </Text>
+      <ProductionProvider>
+        <Factory />
+      </ProductionProvider>
+    </MainContainer>
   );
 };
 
 export default ProductionPlanner;
 
 const Factory = () => {
-  const ctx = useProductionContext();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    if (!loaded) {
-      setLoaded(true);
-      setTimeout(() => {
-        setDrawerOpen(true);
-      }, 100);
-    }
-  }, [loaded]);
   
   return (
     <>
-      <Button
-        negative
-        onClick={() => { ctx.dispatch({ type: 'RESET_FACTORY' }) }}
-        style={{ marginBottom: '10px' }}
-      >
-        Reset Factory
-      </Button>
       <Drawer open={drawerOpen} onToggle={(value) => { setDrawerOpen(value); }}>
         <PlannerOptions />
       </Drawer>
@@ -74,3 +55,9 @@ const Factory = () => {
     </>
   );
 }
+
+
+const MainContainer = styled(Container)`
+  margin-left: ${({ theme }) => theme.other.drawerClosedWidth};
+  padding-left: 0px;
+`;

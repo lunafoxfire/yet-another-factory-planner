@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Button, Input, Checkbox, Grid, Header, List } from 'semantic-ui-react';
+import { List, Checkbox, TextInput, Button, Text, Title, Grid, Col } from '@mantine/core';
+import { Search } from 'react-feather';
 import { recipes } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
 
@@ -25,8 +26,7 @@ altRecipes.sort((a, b) => (a.label > b.label ? 1 : -1));
 
 const RecipesTab = () => {
   const ctx = useProductionContext();
-  const [altRecipeSearch, setAltRecipeSearch] = useState('');
-  const [baseRecipeSearch, setBaseRecipeSearch] = useState('');
+  const [searchValue, setSearchValue] = useState('');
 
   const renderRecipeList = useCallback((recipeList: { key: string, label: string }[]) => {
     return recipeList.map(({ key, label }) => ({
@@ -53,28 +53,16 @@ const RecipesTab = () => {
   const renderedAltRecipes = useMemo(() => renderRecipeList(altRecipes), [renderRecipeList]);
 
   function renderRecipeOptions(alternates: boolean) {
-    const [searchValue, setSearchValue] = alternates
-      ? [altRecipeSearch, setAltRecipeSearch]
-      : [baseRecipeSearch, setBaseRecipeSearch];
     const rendered = alternates ? renderedAltRecipes : renderedBaseRecipes
     return (
       <>
-        <Input
-          placeholder='Search...'
-          fluid
-          action
-          value={searchValue}
-          onChange={(e, { value }) => { setSearchValue(value); }}
-        >
-          <input />
-          <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', alternates, active: true }) }}>
-            All
-          </Button>
-          <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', alternates, active: false }) }}>
-            None
-          </Button>
-        </Input>
-        <List>
+        <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', alternates, active: true }) }}>
+          All
+        </Button>
+        <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', alternates, active: false }) }}>
+          None
+        </Button>
+        <List listStyleType='none' spacing={6}>
           {rendered.filter(({ label }) => label.toLowerCase().includes(searchValue)).map(({ component }) => component)}
         </List>
       </>
@@ -83,20 +71,25 @@ const RecipesTab = () => {
 
   return (
     <>
-      <p>
+      <Text>
         Select the recipes that you want to be considered in this factory.
-      </p>
-      <Grid columns={2} divided={true}>
-        <Grid.Row>
-          <Grid.Column>
-            <Header>Alternate Recipes</Header>
-            {renderRecipeOptions(true)}
-          </Grid.Column>
-          <Grid.Column>
-            <Header>Base Recipes</Header>
-            {renderRecipeOptions(false)}
-          </Grid.Column>
-        </Grid.Row>
+      </Text>
+      <TextInput
+        placeholder='Search...'
+        aria-label='search recipes'
+        icon={<Search />}
+        value={searchValue}
+        onChange={(e) => { setSearchValue(e.currentTarget.value); }}
+      />
+      <Grid grow>
+        <Col span={6}>
+          <Title order={3}>Alternate Recipes</Title>
+          {renderRecipeOptions(true)}
+        </Col>
+        <Col span={6}>
+          <Title order={3}>Base Recipes</Title>
+          {renderRecipeOptions(false)}
+        </Col>
       </Grid>
     </>
   );

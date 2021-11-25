@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import _ from 'lodash';
-import { Container, Menu, Button, Checkbox } from 'semantic-ui-react';
+import { Container, Tabs, Button, Switch, Group } from '@mantine/core';
+import { Share2, Edit } from 'react-feather';
 import ProductionGraphTab from './ProductionGraphTab';
 import ReportTab from './ReportTab';
 import { ProductionSolver, SolverResults } from '../../../utilities/production-solver';
@@ -30,7 +31,6 @@ const _handleCalculateFactory = _.debounce(async (state: FactoryOptions, setSolv
 }, 300, { leading: true, trailing: true });
 
 const PlannerResults = () => {
-  const [activeTab, setActiveTab] = useState('production-graph');
   const [autoCalc, setAutoCalc] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [solverResults, setSolverResults] = useState<SolverResults | null>(null);
@@ -41,27 +41,12 @@ const PlannerResults = () => {
     _handleCalculateFactory(ctx.state, setSolverResults)
   }, [ctx.state]);
 
-  function handleSetTab(e: any, data: any) {
-    setActiveTab(data.name);
-  }
-
   const handleSetAutoCalc = (checked: boolean) => {
     setAutoCalc(checked);
     if (checked) {
       handleCalculateFactory();
     }
   };
-
-  function renderTab() {
-    switch (activeTab) {
-      case 'production-graph':
-        return <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={solverResults?.error || ''} />
-      case 'report':
-        return <ReportTab report={solverResults?.report || null} />
-      default:
-        return null;
-    }
-  }
 
   useEffect(() => {
     if (!loaded) {
@@ -73,36 +58,39 @@ const PlannerResults = () => {
   }, [autoCalc, ctx.state, handleCalculateFactory, loaded, prevState]);
 
   return (
-    <Container fluid>
-      <Menu pointing secondary attached="top">
-        <Menu.Item
-          name='production-graph'
-          active={activeTab === 'production-graph'}
-          onClick={handleSetTab}
-        >
-          Production Graph
-        </Menu.Item>
-        <Menu.Item
-          name='report'
-          active={activeTab === 'report'}
-          onClick={handleSetTab}
-        >
-          Report
-        </Menu.Item>
-      </Menu>
+    <>
       <div style={{ padding: '20px 0px' }}>
-        <Button primary onClick={handleCalculateFactory} disabled={autoCalc} style={{ marginBottom: '10px', marginRight: '15px' }}>
-          Calculate
-        </Button>
-        <Checkbox
+        <Group>
+          <Button onClick={handleCalculateFactory} disabled={autoCalc} style={{ marginBottom: '10px', marginRight: '15px' }}>
+            Calculate
+          </Button>
+          <Button
+            color='danger'
+            onClick={() => { ctx.dispatch({ type: 'RESET_FACTORY' }) }}
+            style={{ marginBottom: '10px' }}
+          >
+            Reset ALL Factory Options
+          </Button>
+        </Group>
+        <Switch
           label='Auto-calculate (turn this off if changing options is too slow)'
-          toggle
           checked={autoCalc}
-          onChange={(e, { checked }) => { handleSetAutoCalc(!!checked); }}
+          onChange={(e) => { handleSetAutoCalc(e.currentTarget.checked); }}
         />
-        {renderTab()}
       </div>
-    </Container>
+      <Tabs variant='outline'>
+        <Tabs.Tab label='Production Graph' icon={<Share2 size={18} />} style={{ width: '180px' }}>
+          <Container fluid padding={0}>
+            <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={solverResults?.error || ''} />
+          </Container>
+        </Tabs.Tab>
+        <Tabs.Tab label='Report' icon={<Edit size={18} />} style={{ width: '180px' }}>
+          <Container fluid>
+            <ReportTab report={solverResults?.report || null} />
+          </Container>
+        </Tabs.Tab>
+      </Tabs>
+    </>
   );
 };
 

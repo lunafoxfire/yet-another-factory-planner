@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Dropdown, Input, Checkbox, Grid, Icon, Header, Divider } from 'semantic-ui-react';
+import { Button, Select, TextInput, Checkbox, Group, Title, Text, Divider } from '@mantine/core';
+import { Trash2 } from 'react-feather';
 import { items, resources } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
 
@@ -7,10 +8,10 @@ const itemOptions = Object.keys(items)
   .filter((key) => items[key].producedFromRecipes.length !== 0 && items[key].usedInRecipes.length !== 0 && !resources[key])
   .map((key) => ({
     value: key,
-    text: items[key].name,
+    label: items[key].name,
   }))
   .sort((a, b) => {
-    return a.text > b.text ? 1 : -1;
+    return a.label > b.label ? 1 : -1;
   });
 
 
@@ -19,65 +20,52 @@ const InputsTab = () => {
 
   function renderItemInputs() {
     return ctx.state.inputItems.map((data) => (
-      <Grid.Row key={data.key}>
-        <Grid.Column style={{ flex: '1 1 auto' }}>
-          <Dropdown
-            fluid
-            placeholder="Select an item"
-            selection
-            search
-            clearable
-            options={itemOptions}
-            value={data.itemKey ? data.itemKey : ''}
-            onChange={(e, { value }) => {
-              ctx.dispatch({
-                type: 'UPDATE_INPUT_ITEM',
-                data: { ...data, itemKey: (value as string) },
-              });
-            }}
-          />
-        </Grid.Column>
-        <Grid.Column style={{ flex: '0 0 250px' }}>
-          <Input
-            className='no-spinner'
-            type='number'
-            min='0'
-            step='1'
-            fluid
-            value={data.value}
-            onChange={(e, { value }) => {
-              ctx.dispatch({
-                type: 'UPDATE_INPUT_ITEM',
-                data: { ...data, value: value },
-              });
-            }}
-            labelPosition='right'
-          >
-            <input disabled={data.unlimited} />
-            <Checkbox
-              className='label'
-              style={{ fontWeight: 'normal' }}
-              label='Unlimited'
-              checked={data.unlimited}
-              onChange={() => {
-                ctx.dispatch({
-                  type: 'UPDATE_INPUT_ITEM',
-                  data: { ...data, unlimited: !data.unlimited },
-                });
-              }}
-            />
-          </Input>
-        </Grid.Column>
-        <Grid.Column style={{ flex: '0 0 70px' }}>
-          <Button
-            icon
-            negative
-            onClick={() => { ctx.dispatch({ type: 'DELETE_INPUT_ITEM', key: data.key }); }}
-          >
-            <Icon name='trash alternate outline' />
-          </Button>
-        </Grid.Column>
-      </Grid.Row>
+      <Group key={data.key}>
+        <Select
+          placeholder="Select an item"
+          clearable
+          searchable
+          data={itemOptions}
+          value={data.itemKey ? data.itemKey : ''}
+          onChange={(value) => {
+            ctx.dispatch({
+              type: 'UPDATE_INPUT_ITEM',
+              data: { ...data, itemKey: (value as string) },
+            });
+          }}
+        />
+        <TextInput
+          className='no-spinner'
+          type='number'
+          min='0'
+          step='1'
+          value={data.value}
+          onChange={(e) => {
+            ctx.dispatch({
+              type: 'UPDATE_INPUT_ITEM',
+              data: { ...data, value: e.currentTarget.value },
+            });
+          }}
+        />
+        <Checkbox
+          className='label'
+          style={{ fontWeight: 'normal' }}
+          label='Unlimited'
+          checked={data.unlimited}
+          onChange={() => {
+            ctx.dispatch({
+              type: 'UPDATE_INPUT_ITEM',
+              data: { ...data, unlimited: !data.unlimited },
+            });
+          }}
+        />
+        <Button
+          color='danger'
+          onClick={() => { ctx.dispatch({ type: 'DELETE_INPUT_ITEM', key: data.key }); }}
+        >
+          <Trash2 />
+        </Button>
+      </Group>
     ));
   }
 
@@ -85,204 +73,148 @@ const InputsTab = () => {
     const weightingOptions = ctx.state.weightingOptions;
     return (
       <>
-        <Grid.Row>
-          <Grid.Column style={{ flex: '0 0 180px', display: 'flex', alignItems: 'center' }}>
+        <Group>
+          <label>
             Resource Efficiency
-          </Grid.Column>
-          <Grid.Column style={{ flex: '1 1 auto' }}>
-            <Input
-              className='no-spinner'
-              type='number'
-              min='0'
-              step='1'
-              fluid
-              value={weightingOptions.resources}
-              onChange={(e, { value }) => {
-                ctx.dispatch({
-                  type: 'UPDATE_WEIGHTING_OPTIONS',
-                  data: { ...weightingOptions, resources: value },
-                });
-              }}
-            >
-            </Input>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column style={{ flex: '0 0 180px', display: 'flex', alignItems: 'center' }}>
+          </label>
+          <TextInput
+            className='no-spinner'
+            type='number'
+            min='0'
+            step='1'
+            value={weightingOptions.resources}
+            onChange={(e) => {
+              ctx.dispatch({
+                type: 'UPDATE_WEIGHTING_OPTIONS',
+                data: { ...weightingOptions, resources: e.currentTarget.value },
+              });
+            }}
+          />
+        </Group>
+        <Group>
+          <label>
             Power Efficiency
-          </Grid.Column>
-          <Grid.Column style={{ flex: '1 1 auto' }}>
-            <Input
-              className='no-spinner'
-              type='number'
-              min='0'
-              step='1'
-              fluid
-              value={weightingOptions.power}
-              onChange={(e, { value }) => {
-                ctx.dispatch({
-                  type: 'UPDATE_WEIGHTING_OPTIONS',
-                  data: { ...weightingOptions, power: value },
-                });
-              }}
-            >
-            </Input>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column style={{ flex: '0 0 180px', display: 'flex', alignItems: 'center' }}>
+          </label>
+          <TextInput
+            className='no-spinner'
+            type='number'
+            min='0'
+            step='1'
+            value={weightingOptions.power}
+            onChange={(e) => {
+              ctx.dispatch({
+                type: 'UPDATE_WEIGHTING_OPTIONS',
+                data: { ...weightingOptions, power: e.currentTarget.value },
+              });
+            }}
+          />
+        </Group>
+        <Group>
+          <label>
             Complexity
-          </Grid.Column>
-          <Grid.Column style={{ flex: '1 1 auto' }}>
-            <Input
-              className='no-spinner'
-              type='number'
-              min='0'
-              step='1'
-              fluid
-              value={weightingOptions.complexity}
-              onChange={(e, { value }) => {
-                ctx.dispatch({
-                  type: 'UPDATE_WEIGHTING_OPTIONS',
-                  data: { ...weightingOptions, complexity: value },
-                });
-              }}
-            >
-            </Input>
-          </Grid.Column>
-        </Grid.Row>
+          </label>
+          <TextInput
+            className='no-spinner'
+            type='number'
+            min='0'
+            step='1'
+            value={weightingOptions.complexity}
+            onChange={(e) => {
+              ctx.dispatch({
+                type: 'UPDATE_WEIGHTING_OPTIONS',
+                data: { ...weightingOptions, complexity: e.currentTarget.value },
+              });
+            }}
+          />
+        </Group>
       </>
     )
   }
 
   function renderResourceInputs() {
     return ctx.state.inputResources.map((data) => (
-      <Grid.Row key={data.key}>
-        <Grid.Column style={{ flex: '1 1 auto', display: 'flex', alignItems: 'center', minWidth: '120px' }}>
+      <Group key={data.key}>
+        <label>
           {items[data.itemKey].name}
-        </Grid.Column>
-        <Grid.Column style={{ flex: '2 1 auto', minWidth: '210px' }}>
-          <Input
-            className='no-spinner'
-            type='number'
-            min='0'
-            step='1'
-            fluid
-            value={data.value}
-            onChange={(e, { value }) => {
-              ctx.dispatch({
-                type: 'UPDATE_INPUT_RESOURCE',
-                data: { ...data, value: value },
-              });
-            }}
-            labelPosition='right'
-          >
-            <input disabled={data.unlimited} />
-            <Checkbox
-              className='label'
-              style={{ fontWeight: 'normal' }}
-              label='Unlimited'
-              checked={data.unlimited}
-              onChange={() => {
-                ctx.dispatch({
-                  type: 'UPDATE_INPUT_RESOURCE',
-                  data: { ...data, unlimited: !data.unlimited },
-                });
-              }}
-            />
-          </Input>
-        </Grid.Column>
-        <Grid.Column style={{ flex: '1.5 1 auto', minWidth: '160px' }}>
-          <Input
-            className='no-spinner'
-            type='number'
-            min='0'
-            step='1'
-            fluid
-            value={data.weight}
-            onChange={(e, { value }) => {
-              ctx.dispatch({
-                type: 'UPDATE_INPUT_RESOURCE',
-                data: { ...data, weight: value },
-              });
-            }}
-            label='Weight'
-          />
-        </Grid.Column>
-      </Grid.Row>
+        </label>
+        <TextInput
+          className='no-spinner'
+          type='number'
+          min='0'
+          step='1'
+          value={data.value}
+          onChange={(e) => {
+            ctx.dispatch({
+              type: 'UPDATE_INPUT_RESOURCE',
+              data: { ...data, value: e.currentTarget.value },
+            });
+          }}
+          disabled={data.unlimited}
+        />
+        <Checkbox
+          label='Unlimited'
+          checked={data.unlimited}
+          onChange={(e) => {
+            ctx.dispatch({
+              type: 'UPDATE_INPUT_RESOURCE',
+              data: { ...data, unlimited: e.currentTarget.checked },
+            });
+          }}
+        />
+        <TextInput
+          className='no-spinner'
+          type='number'
+          min='0'
+          step='1'
+          value={data.weight}
+          onChange={(e) => {
+            ctx.dispatch({
+              type: 'UPDATE_INPUT_RESOURCE',
+              data: { ...data, weight: e.currentTarget.value },
+            });
+          }}
+          label='Weight'
+        />
+      </Group>
     ));
   }
 
   return (
     <>
-      <Header>Input Items</Header>
-      <p>
+      <Title order={3}>TextInput Items</Title>
+      <Text>
         Select the items that you already have available and don't need to produce in this factory.
-      </p>
-      <Grid>
+      </Text>
         {renderItemInputs()}
-        <Grid.Row>
-          <Grid.Column>
-            <Button
-              primary
-              onClick={() => { ctx.dispatch({ type: 'ADD_INPUT_ITEM' }) }}
-            >
-              + Add Input
-            </Button>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+        <Button onClick={() => { ctx.dispatch({ type: 'ADD_INPUT_ITEM' }) }}>
+          + Add TextInput
+        </Button>
       <Divider />
-      <Header>Weighting Options</Header>
-      <p>
+      <Title order={3}>Weighting Options</Title>
+      <Text>
         Adjust the weights affecting the importance of various properties of the factory. A value of 0 indicates that that property is not considered during factory layout.
-      </p>
-      <Grid>
-        <Grid.Row>
-          <Grid.Column>
-            <Button
-              primary
-              onClick={() => { ctx.dispatch({ type: 'SET_ALL_WEIGHTS_DEFAULT' }) }}
-            >
-              Reset all weights
-            </Button>
-          </Grid.Column>
-        </Grid.Row>
-        {renderWeightInputs()}
-      </Grid>
+      </Text>
+      <Button onClick={() => { ctx.dispatch({ type: 'SET_ALL_WEIGHTS_DEFAULT' }) }}>
+        Reset all weights
+      </Button>
+      {renderWeightInputs()}
       <Divider />
-      <Header>Raw Resources</Header>
-      <p>
+      <Title order={3}>Raw Resources</Title>
+      <Text>
         Select the raw resources that are available to your factory. The default values are set to the map limits. The weight value is a number representing how valuable that resource is when comparing recipes. The defaults are calculated automatically according to node rarity.
-      </p>
-      <Grid>
-        <Grid.Row columns={1}>
-          <Grid.Column>
-            <Button
-              primary
-              onClick={() => { ctx.dispatch({ type: 'SET_RESOURCES_TO_MAP_LIMITS' }) }}
-            >
-              Set to Maximum
-            </Button>
-            <Button
-              primary
-              onClick={() => { ctx.dispatch({ type: 'SET_RESOURCES_TO_0' }) }}
-            >
-              Set to 0
-            </Button>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row columns={1}>
-          <Grid.Column>
-            <Checkbox
-              label='Allow hand-gathered resources'
-              checked={ctx.state.allowHandGatheredItems}
-              onChange={(e, { checked }) => { ctx.dispatch({ type: 'SET_ALLOW_HAND_GATHERED_ITEMS', active: !!checked }) }}
-              />
-          </Grid.Column>
-        </Grid.Row>
-        {renderResourceInputs()}
-      </Grid>
+      </Text>
+      <Button onClick={() => { ctx.dispatch({ type: 'SET_RESOURCES_TO_MAP_LIMITS' }) }}>
+        Set to Maximum
+      </Button>
+      <Button onClick={() => { ctx.dispatch({ type: 'SET_RESOURCES_TO_0' }) }}>
+        Set to 0
+      </Button>
+      <Checkbox
+        label='Allow hand-gathered resources'
+        checked={ctx.state.allowHandGatheredItems}
+        onChange={(e) => { ctx.dispatch({ type: 'SET_ALLOW_HAND_GATHERED_ITEMS', active: e.currentTarget.checked }) }}
+        />
+      {renderResourceInputs()}
     </>
   );
 };

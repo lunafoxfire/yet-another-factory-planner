@@ -1,89 +1,30 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Header, Menu } from 'semantic-ui-react';
+import React from 'react';
+import { Container, Tabs } from '@mantine/core';
+import { TrendingUp, Shuffle, Box } from 'react-feather';
 import ProductionTab from './ProductionTab';
 import InputsTab from './InputsTab';
 import RecipesTab from './RecipesTab';
 
 const PlannerOptions = () => {
-  const [activeTab, setActiveTab] = useState('production');
-
-  function handleSetTab(e: any, data: any) {
-    setActiveTab(data.name);
-  }
-
-  function renderTab() {
-    switch (activeTab) {
-      case 'production':
-        return <ProductionTab />
-      case 'inputs':
-        return <InputsTab />
-      case 'recipes':
-        return <RecipesTab />
-      default:
-        return null;
-    }
-  }
-
   return (
-    <Container>
-      <HeaderContainer>
-        <Header>Factory Settings</Header>
-        <Menu pointing secondary attached="top" fluid widths={3}>
-          <Menu.Item
-            name='production'
-            active={activeTab === 'production'}
-            onClick={handleSetTab}
-          >
-            Production
-          </Menu.Item>
-          <Menu.Item
-            name='inputs'
-            active={activeTab === 'inputs'}
-            onClick={handleSetTab}
-          >
-            Inputs
-          </Menu.Item>
-          <Menu.Item
-            name='recipes'
-            active={activeTab === 'recipes'}
-            onClick={handleSetTab}
-          >
-            Recipes
-          </Menu.Item>
-        </Menu>
-      </HeaderContainer>
-      <Content>
-        <div style={{ padding: '20px 0px' }}>
-          {renderTab()}
-        </div>
-      </Content>
-    </Container>
+    <Tabs grow variant='outline'>
+      <Tabs.Tab label='Production' icon={<TrendingUp size={18} />}>
+        <Container>
+          <ProductionTab />
+        </Container>
+      </Tabs.Tab>
+      <Tabs.Tab label='Inputs' icon={<Shuffle size={18} />}>
+        <Container>
+          <InputsTab />
+        </Container>
+      </Tabs.Tab>
+      <Tabs.Tab label='Recipes' icon={<Box size={18} />}>
+        <Container>
+          <RecipesTab />
+        </Container>
+      </Tabs.Tab>
+    </Tabs>
   );
 };
 
 export default PlannerOptions;
-
-const Container = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-`;
-
-const HeaderContainer = styled.div`
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  height: var(--drawer-header-height);
-  overflow: hidden;
-`;
-
-const Content = styled.div`
-  position: absolute;
-  top: var(--drawer-header-height);
-  left: 0px;
-  bottom: 0px;
-  right: 0px;
-  padding: 20px 15px;
-  overflow: auto;
-`;

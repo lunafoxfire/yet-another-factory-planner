@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ChevronsLeft, ChevronsRight } from 'react-feather';
 import { useDrawerContext } from '../../contexts/drawer';
 import Portal from '../Portal';
+import { UnstyledButton } from '@mantine/core';
 
 interface Props {
   open?: boolean,
@@ -54,18 +55,19 @@ const DrawerContainer = styled.div<{ open: boolean }>`
   left: ${({ open, theme }) => (open ? '0px' : `-${theme.other.drawerOpenWidth}`)};
   width: ${({ theme }) => theme.other.drawerOpenWidth};
   height: 100%;
-  background: #fff;
+  background: ${({ theme }) => theme.colors.dark[7]};
   transition: left 500ms;
   pointer-events: auto;
 `;
 
-const DrawerToggle = styled.button`
+const DrawerToggle = styled(UnstyledButton)`
   position: absolute;
   display: block;
   top: 0px;
   bottom: 0px;
   right: ${({ theme }) => `-${theme.other.drawerClosedWidth}` };
   width: ${({ theme }) => theme.other.drawerClosedWidth };
+  background: ${({ theme }) => theme.primaryColor};
 `;
 
 const DrawerContent = styled.div`

@@ -1,24 +1,22 @@
 {
   "files": {
-    "main.css": "/yet-another-factory-planner/static/css/main.0431d387.chunk.css",
-    "main.js": "/yet-another-factory-planner/static/js/main.7bd8e1b0.chunk.js",
-    "main.js.map": "/yet-another-factory-planner/static/js/main.7bd8e1b0.chunk.js.map",
+    "main.css": "/yet-another-factory-planner/static/css/main.1f7f626a.chunk.css",
+    "main.js": "/yet-another-factory-planner/static/js/main.dfed1ae1.chunk.js",
+    "main.js.map": "/yet-another-factory-planner/static/js/main.dfed1ae1.chunk.js.map",
     "runtime-main.js": "/yet-another-factory-planner/static/js/runtime-main.594f66e2.js",
     "runtime-main.js.map": "/yet-another-factory-planner/static/js/runtime-main.594f66e2.js.map",
-    "static/css/2.9dc7396e.chunk.css": "/yet-another-factory-planner/static/css/2.9dc7396e.chunk.css",
-    "static/js/2.d324c456.chunk.js": "/yet-another-factory-planner/static/js/2.d324c456.chunk.js",
-    "static/js/2.d324c456.chunk.js.map": "/yet-another-factory-planner/static/js/2.d324c456.chunk.js.map",
+    "static/js/2.87ad4e71.chunk.js": "/yet-another-factory-planner/static/js/2.87ad4e71.chunk.js",
+    "static/js/2.87ad4e71.chunk.js.map": "/yet-another-factory-planner/static/js/2.87ad4e71.chunk.js.map",
     "index.html": "/yet-another-factory-planner/index.html",
-    "static/css/2.9dc7396e.chunk.css.map": "/yet-another-factory-planner/static/css/2.9dc7396e.chunk.css.map",
-    "static/css/main.0431d387.chunk.css.map": "/yet-another-factory-planner/static/css/main.0431d387.chunk.css.map",
-    "static/js/2.d324c456.chunk.js.LICENSE.txt": "/yet-another-factory-planner/static/js/2.d324c456.chunk.js.LICENSE.txt",
-    "static/media/semantic.css": "/yet-another-factory-planner/static/media/outline-icons.ddae9b1b.woff"
+    "static/css/main.1f7f626a.chunk.css.map": "/yet-another-factory-planner/static/css/main.1f7f626a.chunk.css.map",
+    "static/js/2.87ad4e71.chunk.js.LICENSE.txt": "/yet-another-factory-planner/static/js/2.87ad4e71.chunk.js.LICENSE.txt",
+    "static/media/satisfactory_logo_full_color_small.da5e9783.png": "/yet-another-factory-planner/static/media/satisfactory_logo_full_color_small.da5e9783.png",
+    "static/media/index.css": "/yet-another-factory-planner/static/media/stripe-bg.1dacddac.png"
   },
   "entrypoints": [
     "static/js/runtime-main.594f66e2.js",
-    "static/css/2.9dc7396e.chunk.css",
-    "static/js/2.d324c456.chunk.js",
-    "static/css/main.0431d387.chunk.css",
-    "static/js/main.7bd8e1b0.chunk.js"
+    "static/js/2.87ad4e71.chunk.js",
+    "static/css/main.1f7f626a.chunk.css",
+    "static/js/main.dfed1ae1.chunk.js"
   ]
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ChevronsLeft, ChevronsRight } from 'react-feather';
 import { useDrawerContext } from '../../contexts/drawer';
 import Portal from '../Portal';
 import { UnstyledButton } from '@mantine/core';
@@ -19,11 +18,9 @@ const Drawer = (props: Props) => {
       <DrawerDimmer open={!!open} onClick={() => { onToggle?.(!open); }} />
       <DrawerContainer open={!!open}>
         <DrawerToggle onClick={() => { onToggle?.(!open); }}>
-          {
-            open
-              ? <ChevronsLeft />
-              : <ChevronsRight />
-          }
+          <ToggleLabel>
+            <ToggleLabelText>Factory Options</ToggleLabelText>
+          </ToggleLabel>
         </DrawerToggle>
         <DrawerContent aria-hidden={!open}>
           {children}
@@ -45,8 +42,8 @@ const DrawerDimmer = styled.div<{ open: boolean }>`
   padding: 0;
   background: #000;
   opacity: ${({ open }) => open ? 0.7 : 0.0 };
-  transition: opacity 500ms;
-  pointer-events: ${({ open }) => open ? 'auto' : 'none' }
+  transition: opacity 550ms;
+  pointer-events: ${({ open }) => open ? 'auto' : 'none' };
 `;
 
 const DrawerContainer = styled.div<{ open: boolean }>`
@@ -55,19 +52,66 @@ const DrawerContainer = styled.div<{ open: boolean }>`
   left: ${({ open, theme }) => (open ? '0px' : `-${theme.other.drawerOpenWidth}`)};
   width: ${({ theme }) => theme.other.drawerOpenWidth};
   height: 100%;
-  background: ${({ theme }) => theme.colors.dark[7]};
-  transition: left 500ms;
+  background: ${({ theme }) => theme.colors.background[0]};
+  transition: left 550ms;
+  transition-timing-function: cubic-bezier(.68, -0.21, .38, 1.26);
   pointer-events: auto;
 `;
 
 const DrawerToggle = styled(UnstyledButton)`
   position: absolute;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   top: 0px;
   bottom: 0px;
-  right: ${({ theme }) => `-${theme.other.drawerClosedWidth}` };
-  width: ${({ theme }) => theme.other.drawerClosedWidth };
-  background: ${({ theme }) => theme.primaryColor};
+  right: -25px;
+  width: 25px;
+  background: ${({ theme }) => theme.colors.primary[7]};
+`;
+
+const ToggleLabel = styled(UnstyledButton)`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: -20px;
+  width: 40px;
+  height: 200px;
+  border-radius: 2px;
+  font-size: 18px;
+  font-weight: bold;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  background: ${({ theme }) => theme.colors.primary[7]};
+  color: ${({ theme }) => theme.white};
+
+  ::before {
+    content: '';
+    position: absolute;
+    top: -25px;
+    right: 3px;
+    width: 40px;
+    height: 28px;
+    background: ${({ theme }) => theme.colors.primary[7]};
+    transform: rotate(60deg);
+  }
+
+  ::after {
+    content: '';
+    position: absolute;
+    bottom: -25px;
+    right: 3px;
+    width: 40px;
+    height: 28px;
+    background: ${({ theme }) => theme.colors.primary[7]};
+    transform: rotate(-60deg);
+  }
+`;
+
+const ToggleLabelText = styled.span`
+  position: relative;
+  left: -8px;
 `;
 
 const DrawerContent = styled.div`

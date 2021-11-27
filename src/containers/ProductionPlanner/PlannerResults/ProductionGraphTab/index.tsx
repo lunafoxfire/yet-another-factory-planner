@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { nanoid } from 'nanoid';
 import Cytoscape, { Stylesheet } from 'cytoscape';
 import klay from 'cytoscape-klay';
@@ -22,7 +23,7 @@ const layout = {
     nodePlacement: 'LINEAR_SEGMENTS',
     edgeSpacingFactor: 0.2,
     inLayerSpacingFactor: 0.7,
-    spacing: 70,
+    spacing: 90,
     thoroughness: 10,
   },
 };
@@ -70,7 +71,8 @@ const stylesheet: Stylesheet[] = [
       'overlay-padding': 0,
       'overlay-opacity': 0,
       'text-wrap': 'wrap',
-      'font-size': '13px',
+      'font-size': '14px',
+      'color': '#eee',
     },
   },
   {
@@ -87,6 +89,8 @@ const stylesheet: Stylesheet[] = [
     selector: 'node.item-shape',
     style: {
       'shape': 'ellipse',
+      'height': '40px',
+      'width': '130px',
     },
   },
   {
@@ -191,6 +195,13 @@ function getEdgeLabel(edge: GraphEdge) {
   return `${label}\n${amountText}`;
 }
 
+function _resizeListener(graphRef: React.RefObject<HTMLDivElement | null>) {
+  if (graphRef?.current) {
+    const bounds = graphRef.current.getBoundingClientRect();
+    graphRef.current.style.height = `${window.innerHeight - bounds.top - 40}px`;
+  }
+}
+
 interface Props {
   activeGraph: ProductionGraph | null,
   errorMessage: string,
@@ -198,6 +209,26 @@ interface Props {
 
 const ProductionGraphTab = (props: Props) => {
   const { activeGraph, errorMessage } = props;
+  const graphRef = useRef<HTMLDivElement | null>(null);
+  const [doFirstRender, setDoFirstRender] = useState(false);
+
+  function setRef(instance: HTMLDivElement | null) {
+    if (instance && !graphRef.current) {
+      graphRef.current = instance;
+      _resizeListener(graphRef);
+      setDoFirstRender(true);
+    }
+  }
+
+  useEffect(() => {
+    function resizeListener() {
+      _resizeListener(graphRef);
+    }
+    window.addEventListener('resize', resizeListener);
+    return () => {
+      window.removeEventListener('resize', resizeListener);
+    }
+  }, []);
 
   const graphProps = useMemo<any>(() => {
     if (activeGraph == null) {
@@ -233,45 +264,57 @@ const ProductionGraphTab = (props: Props) => {
   }, [activeGraph]);
 
   return (
-    <Container fluid style={{ border: '1px solid black', minHeight: '600px', minWidth: '600px', position: 'relative' }} padding={0}>
+    <GraphContainer fluid ref={setRef}>
       {
-        graphProps != null
-        ? (
-            <GraphVisualizer
-              key={graphProps.key}
-              elements={graphProps.elements}
-              layout={layout}
-              stylesheet={stylesheet}
-              boxSelectionEnabled={false}
-              autounselectify={true}
-              wheelSensitivity={0.1}
-              maxZoom={3.0}
-              minZoom={0.1}
-              style={{ position: 'absolute', height: '100%', width: '100%', overflow: 'hidden' }}
-            />
-        )
-        : (
-          <Center style={{ position: 'absolute', height: '100%', width: '100%' }}>
-            <Group>
-              <AlertCircle size={75} />
-              <Group direction='column' style={{ gap: '0px' }}>
-                <Text size='xl'>
-                  No graph available
-                </Text>
-                {errorMessage
-                  ? (
-                    <Text size='sm'>
-                      {`ERROR: ${errorMessage}`}
-                    </Text>
-                  )
-                  : null}
+        doFirstRender && (
+          graphProps != null
+          ? (
+              <GraphVisualizer
+                key={graphProps.key}
+                elements={graphProps.elements}
+                layout={layout}
+                stylesheet={stylesheet}
+                boxSelectionEnabled={false}
+                autounselectify={true}
+                wheelSensitivity={0.1}
+                maxZoom={3.0}
+                minZoom={0.1}
+                style={{ position: 'absolute', height: '100%', width: '100%', overflow: 'hidden' }}
+              />
+          )
+          : (
+            <Center style={{ position: 'absolute', height: '100%', width: '100%' }}>
+              <Group>
+                <AlertCircle color="#eee" size={75} />
+                <Group direction='column' style={{ gap: '0px' }}>
+                  <Text size='xl'>
+                    No graph available
+                  </Text>
+                  {errorMessage
+                    ? (
+                      <Text size='sm'>
+                        {`ERROR: ${errorMessage}`}
+                      </Text>
+                    )
+                    : null}
+                </Group>
               </Group>
-            </Group>
-          </Center>
+            </Center>
+          )
         )
       }
-    </Container>
+    </GraphContainer>
   );
 };
 
 export default ProductionGraphTab;
+
+const GraphContainer = styled(Container)`
+  position: relative;
+  min-height: 600px;
+  min-width: 600px;
+  border: 1px solid #fff;
+  border-top-width: 0px;
+  margin: 0px;
+  padding: 0px;
+`;

@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import { AppShell, Header, useMantineTheme } from '@mantine/core';
 import SiteHeader from './SiteHeader';
 import ProductionPlanner from '../ProductionPlanner';
@@ -8,7 +9,7 @@ const Main = () => {
   return (
     <AppShell
       padding='md'
-      header={<Header height={theme.other.headerHeight} padding='sm'><SiteHeader /></Header>}
+      header={<SHeader height={theme.other.headerHeight} padding='sm'><SiteHeader /></SHeader>}
     >
       <ProductionPlanner />
     </AppShell>
@@ -16,3 +17,10 @@ const Main = () => {
 };
 
 export default Main;
+
+const SHeader = styled(Header)`
+  margin: 0px;
+  padding: 10px;
+  background: ${({ theme }) => theme.colors.primary[6]};
+  overflow: hidden;
+`;

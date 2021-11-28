@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button, Select, TextInput, Group, Text } from '@mantine/core';
-import { Trash2 } from 'react-feather';
+import styled from 'styled-components';
+import { Button, Select, TextInput, Group, Divider, Title } from '@mantine/core';
 import { items, recipes, resources } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
 import { MAX_PRIORITY } from '../../../../contexts/production/reducer';
 import { POINTS_ITEM_KEY } from '../../../../utilities/production-solver';
+import { Section, SectionDescription } from '../../../../components/Section';
+import TrashButton from '../../../../components/TrashButton';
 
 const itemOptions = Object.keys(items)
   .filter((key) => items[key].producedFromRecipes.length !== 0 && !resources[key])
@@ -44,16 +46,17 @@ const ProductionTab = () => {
           const recipeInfo = recipes[recipeKey];
           const target = recipeInfo?.products.find((p) => p.itemClass === data.itemKey);
           if (target) {
-            const name = itemInfo.name === recipeInfo.name ? recipeInfo.name.replace('Alternate: ', '') : 'Base Recipe';
+            const name = itemInfo.name === recipeInfo.name ? 'Base Recipe' : recipeInfo.name.replace('Alternate: ', '');
             modeOptions.push({ value: recipeKey, label: `${name} [${target.perMinute}/min]` });
           }
         });
       }
       return (
-        <React.Fragment key={data.key}>
-          <Group>
+        <ItemContainer key={data.key}>
+          <Row>
             <Select
-              placeholder="Select an item"
+              placeholder='Select an item'
+              label='Item'
               clearable
               searchable
               data={itemOptions}
@@ -64,19 +67,16 @@ const ProductionTab = () => {
                   data: { key: data.key, itemKey: (value as any) },
                 });
               }}
+              style={{ flex: '1 1 auto' }}
             />
-            <Button
-              color='danger'
-              onClick={() => { ctx.dispatch({ type: 'DELETE_PRODUCTION_ITEM', key: data.key }); }}
-            >
-              <Trash2 />
-            </Button>
-          </Group>
-          <Group>
+            <TrashButton onClick={() => { ctx.dispatch({ type: 'DELETE_PRODUCTION_ITEM', key: data.key }); }} style={{ position: 'relative', top: '13px' }} />
+          </Row>
+          <Row>
             {
               data.mode === 'maximize'
                 ? (
                   <Select
+                    label='Priority'
                     data={priorityOptions}
                     value={data.value}
                     onChange={(value) => {
@@ -85,10 +85,12 @@ const ProductionTab = () => {
                         data: { key: data.key, amount: (value as any) },
                       });
                     }}
+                    style={{ width: '160px' }}
                   />
                 )
                 : (
                   <TextInput
+                    label='Amount'
                     className='no-spinner'
                     type='number'
                     min='0'
@@ -100,10 +102,12 @@ const ProductionTab = () => {
                         data: { key: data.key, amount: e.currentTarget.value },
                       });
                     }}
+                    style={{ width: '160px' }}
                   />
                 )
             }
             <Select
+              label='Mode'
               data={modeOptions}
               value={data.mode}
               onChange={(value) => {
@@ -112,24 +116,37 @@ const ProductionTab = () => {
                   data: { key: data.key, mode: (value as any) },
                 });
               }}
+              style={{ width: '280px' }}
             />
-          </Group>
-        </React.Fragment>
+          </Row>
+          <Divider style={{ marginTop: '10px', marginBottom: '10px' }} />
+        </ItemContainer>
       );
     });
   }
 
   return (
     <>
-      <Text>
-        Select the items you want to produce. When maximizing multiple outputs, higher priority items will be maximized first. When selecting a recipe, the factory will be forced to use that recipe for the final output.
-      </Text>
-      {renderItemInputs()}
-      <Button onClick={() => { ctx.dispatch({ type: 'ADD_PRODUCTION_ITEM' }) }}>
-        + Add Product
-      </Button>
+      <Section>
+        <Title order={3}>Production Goals</Title>
+        <SectionDescription>
+          Select the items you want to produce. When maximizing multiple outputs, higher priority items will be maximized first. When selecting a recipe as a target, the factory will be forced to use that recipe for the final output.
+        </SectionDescription>
+        {renderItemInputs()}
+        <Button onClick={() => { ctx.dispatch({ type: 'ADD_PRODUCTION_ITEM' }) }}>
+          + Add Product
+        </Button>
+      </Section>
     </>
   );
 };
 
 export default ProductionTab;
+
+const Row = styled(Group)`
+  margin-bottom: 5px;
+`;
+
+const ItemContainer = styled.div`
+  margin-bottom: 20px;
+`;

@@ -128,7 +128,8 @@ const ReportTab = (props: Props) => {
 export default ReportTab;
 
 const ReportContainer = styled(Container)`
-  padding: 15px;
+  padding: 10px;
+  padding-bottom: 30px;
 `;
 
 const SDivider = styled(Divider)`

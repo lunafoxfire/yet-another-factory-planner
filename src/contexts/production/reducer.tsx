@@ -1,4 +1,3 @@
-import React from 'react';
 import { nanoid } from 'nanoid';
 import { resources, recipes, items } from '../../data'
 import { POINTS_ITEM_KEY } from '../../utilities/production-solver';

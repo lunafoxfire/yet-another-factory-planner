@@ -1,8 +1,10 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { List, Checkbox, TextInput, Button, Text, Title, Grid, Col } from '@mantine/core';
+import styled from 'styled-components';
+import { List, Checkbox, TextInput, Button, Group, Title, Grid, Col } from '@mantine/core';
 import { Search } from 'react-feather';
 import { recipes } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
+import { Section, SectionDescription } from '../../../../components/Section';
 
 const cleanAltNameRegex = /^Alternate: /;
 const baseRecipes: { key: string, label: string }[] = [];
@@ -47,7 +49,8 @@ const RecipesTab = () => {
         </List.Item>
       )
     }));
-  }, [ctx]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ctx.state, ctx.dispatch]);
 
   const renderedBaseRecipes = useMemo(() => renderRecipeList(baseRecipes), [renderRecipeList]);
   const renderedAltRecipes = useMemo(() => renderRecipeList(altRecipes), [renderRecipeList]);
@@ -56,12 +59,14 @@ const RecipesTab = () => {
     const rendered = alternates ? renderedAltRecipes : renderedBaseRecipes
     return (
       <>
-        <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', alternates, active: true }) }}>
-          All
-        </Button>
-        <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', alternates, active: false }) }}>
-          None
-        </Button>
+        <Group style={{ marginTop: '5px', marginBottom: '10px' }}>
+          <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', alternates, active: true }) }}>
+            Select All
+          </Button>
+          <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', alternates, active: false }) }}>
+            Select None
+          </Button>
+        </Group>
         <List listStyleType='none' spacing={6}>
           {rendered.filter(({ label }) => label.toLowerCase().includes(searchValue)).map(({ component }) => component)}
         </List>
@@ -71,28 +76,42 @@ const RecipesTab = () => {
 
   return (
     <>
-      <Text>
-        Select the recipes that you want to be considered in this factory.
-      </Text>
-      <TextInput
-        placeholder='Search...'
-        aria-label='search recipes'
-        icon={<Search />}
-        value={searchValue}
-        onChange={(e) => { setSearchValue(e.currentTarget.value); }}
-      />
-      <Grid grow>
-        <Col span={6}>
-          <Title order={3}>Alternate Recipes</Title>
-          {renderRecipeOptions(true)}
-        </Col>
-        <Col span={6}>
-          <Title order={3}>Base Recipes</Title>
-          {renderRecipeOptions(false)}
-        </Col>
-      </Grid>
+      <Section>
+        <Title order={3}>Recipes</Title>
+        <SectionDescription>
+          Select the recipes that you want to be considered in this factory.
+        </SectionDescription>
+        <TextInput
+          placeholder='Search...'
+          aria-label='search recipes'
+          icon={<Search size={16} />}
+          value={searchValue}
+          onChange={(e) => { setSearchValue(e.currentTarget.value); }}
+          style={{ marginBottom: '10px' }}
+        />
+        <Grid grow style={{ position: 'relative' }}>
+          <Col span={6}>
+            <Title order={3}>Alternate Recipes</Title>
+            {renderRecipeOptions(true)}
+          </Col>
+          <Col span={6}>
+            <Title order={3}>Base Recipes</Title>
+            {renderRecipeOptions(false)}
+          </Col>
+          <VDivider />
+        </Grid>
+      </Section>
     </>
   );
 };
 
 export default RecipesTab;
+
+const VDivider = styled.div`
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 255px;
+  width: 1px;
+  background: ${({ theme }) => theme.colors.background[3]};
+`;

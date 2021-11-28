@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { UnstyledButton, Paper, Text } from '@mantine/core';
+import { UnstyledButton, Paper, Text, Container } from '@mantine/core';
 import { useLocalStorageValue } from '@mantine/hooks';
 import { ChevronsLeft, ChevronsRight } from 'react-feather';
 import { useDrawerContext } from '../../contexts/drawer';
@@ -27,11 +27,11 @@ const Drawer = (props: Props) => {
 
   return (
     <Portal rootNode={ctx.rootNode}>
-      <DrawerDimmer open={!!open} onClick={() => { onToggle?.(!open); }} />
+      <DrawerDimmer open={!!open || showTooltip} onClick={() => { !!open && onToggle?.(!open); }} />
       <DrawerContainer open={!!open}>
         <DrawerToggle onClick={() => { onToggle?.(!open); }}>
           <ToggleLabel>
-            <ToggleLabelText>Control Panel</ToggleLabelText>
+            <ToggleLabelText>{open ? 'Close' : 'Open'} Control Panel</ToggleLabelText>
             <ToggleLabelIcon>
               {
                 open
@@ -55,7 +55,7 @@ const Drawer = (props: Props) => {
             )
           }
         </DrawerToggle>
-        <DrawerContent aria-hidden={!open}>
+        <DrawerContent aria-hidden={!open} fluid>
           {children}
         </DrawerContent>
       </DrawerContainer>
@@ -111,7 +111,7 @@ const ToggleLabel = styled(UnstyledButton)`
   flex: 0 0 auto;
   right: -25px;
   width: 30px;
-  height: 120px;
+  height: 160px;
   border-radius: 2px;
   font-size: 18px;
   font-weight: bold;
@@ -211,7 +211,13 @@ const TooltipConfirm = styled(UnstyledButton)`
   text-decoration: underline;
 `;
 
-const DrawerContent = styled.div`
-  width: 100%;
-  height: 100%;
+const DrawerContent = styled(Container)`
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  padding: 10px;
+  padding-bottom: 30px;
+  overflow: auto;
 `;

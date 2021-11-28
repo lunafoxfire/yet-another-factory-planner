@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useState, useEffect, useMemo, useCallback } from 'react';
-import _ from 'lodash';
+import _, { random } from 'lodash';
 import seedrandom from 'seedrandom';
 import { usePrevious } from '../../hooks/usePrevious';
 import { ProductionSolver, SolverResults } from '../../utilities/production-solver';
@@ -15,6 +15,7 @@ export type ProductionContextType = {
   autoCalculate: boolean,
   setAutoCalculate: (value: boolean) => void,
   ficsitTip: string,
+  engineerId: string,
 };
 
 const ONE_HOUR = 1000 * 60 * 60;
@@ -35,7 +36,9 @@ const TIPS = [
 ];
 
 const TIP_INDEX = Math.floor(rng() * TIPS.length);
-const TIP = `FICSIT Tip #${TIP_INDEX}: ${TIPS[TIP_INDEX]}`
+const TIP = `FICSIT Tip #${TIP_INDEX}: ${TIPS[TIP_INDEX]}`;
+
+const ID = Math.floor(Math.random() * 1e7).toString().padStart(7, '0');
 
 const _handleCalculateFactory = _.debounce(async (
     state: FactoryOptions,
@@ -91,6 +94,7 @@ export const ProductionProvider = ({ children }: PropTypes) => {
   const [autoCalculate, setAutoCalculate] = useLocalStorageValue<'false' | 'true'>({ key: 'auto-calculate', defaultValue: 'true' });
   const [calculating, setCalculating] = useState(false);
   const [solverResults, setSolverResults] = useState<SolverResults | null>(null);
+  const [engineerId] = useLocalStorageValue<string>({ key: 'engineer-id', defaultValue: ID });
   const prevState = usePrevious(state);
 
   const autoCalculateBool = autoCalculate === 'true' ? true : false;
@@ -139,6 +143,7 @@ export const ProductionProvider = ({ children }: PropTypes) => {
       autoCalculate: autoCalculateBool,
       setAutoCalculate: handleSetAutoCalculate,
       ficsitTip: TIP,
+      engineerId,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoCalculateBool, calculating, handleCalculateFactory, solverResults, state]);

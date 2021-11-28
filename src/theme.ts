@@ -6,7 +6,7 @@ export const theme: MantineThemeOverride = {
   colors: {
     'primary': ["#ffefda", "#ffe0b8", "#ffd195", "#ffc272", "#ffb34f", "#ffa42d", "#ff950a", "#d07b0c", "#9c6113", "#6d4715"],
     'danger': ["#fee5e5", "#fecdcd", "#fdb4b4", "#fc9c9c", "#fb8383", "#fb6b6b", "#fa5252", "#ed2626", "#bf1c1c", "#861d1d"],
-    'background': ["#26282b", "#373b40", "#3f434a", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"],
+    'background': ["#26282b", "#373b40", "#3f434a", "#50565e", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"],
     'info': Array(10).fill('#3065c7') as any,
   },
   white: '#eee',
@@ -20,7 +20,7 @@ export const theme: MantineThemeOverride = {
   },
   other: {
     headerHeight: '64px',
-    pageLeftMargin: '45px',
+    pageLeftMargin: '55px',
     drawerWidth: '600px',
   },
 };
@@ -53,21 +53,37 @@ export const styles: any = {
       color: theme.white,
     }
   }),
-  Checkbox: (theme: any) => ({
+  Select: (theme: any) => ({
     label: {
       color: theme.white,
     }
   }),
-  Switch: (theme: any) => ({
+  TextInput: (theme: any) => ({
     label: {
+      color: theme.white,
+    }
+  }),
+  Checkbox: (theme: any) => ({
+    label: {
+      cursor: 'pointer',
       color: theme.white,
     },
     input: {
+      cursor: 'pointer',
+    }
+  }),
+  Switch: (theme: any) => ({
+    label: {
+      cursor: 'pointer',
+      color: theme.white,
+    },
+    input: {
+      cursor: 'pointer',
       background: theme.colors.background[1],
       borderWidth: '2px',
       '&:checked': {
-        background: theme.colors.primary[4],
-        borderColor: theme.colors.primary[4],
+        background: theme.colors.primary[6],
+        borderColor: theme.colors.primary[6],
       }
     }
   }),
@@ -93,9 +109,6 @@ export const styles: any = {
     },
     tabIcon: {
       color: theme.white,
-    },
-    tabControl: {
-      minWidth: '200px',
     },
     tabActive: {
       background: `${theme.colors.background[1]} !important`,

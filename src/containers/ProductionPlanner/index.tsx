@@ -4,7 +4,6 @@ import { Container } from '@mantine/core';
 import { ProductionProvider } from '../../contexts/production';
 import Factory from './Factory';
 
-
 const ProductionPlanner = () => {
   return (
     <MainContainer fluid>

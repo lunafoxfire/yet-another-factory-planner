@@ -94,6 +94,7 @@ export const styles: any = {
   }),
   Button: (theme: any) => ({
     root: {
+      color: '#fff',
       '&[disabled]': {
         color: `${theme.white} !important`,
         backgroundColor: `${theme.colors.primary[7]} !important`,

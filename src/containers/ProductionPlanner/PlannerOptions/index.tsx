@@ -62,5 +62,4 @@ export default PlannerOptions;
 
 const TabContainer = styled(Container)`
   padding: 0px;
-  margin-top: 10px;
 `;

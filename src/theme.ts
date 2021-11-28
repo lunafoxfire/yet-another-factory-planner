@@ -111,7 +111,7 @@ export const styles: any = {
       color: theme.white,
     },
     tabActive: {
-      background: `${theme.colors.background[1]} !important`,
+      background: `${theme.colors.background[0]} !important`,
       borderBottomWidth: `0px !important`,
     },
     body: {

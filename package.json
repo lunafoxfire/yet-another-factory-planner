@@ -6,13 +6,13 @@
     "type": "git",
     "directory": "git+https://github.com/lydianlights/yet-another-factory-planner.git"
   },
-  "homepage": "https://lydianlights.github.io/yet-another-factory-planner",
+  "homepage": "www.satisfactory-planner.net",
   "scripts": {
     "start": "craco start",
     "build": "craco build",
     "parse-docs": "node ./scripts/parse-docs.mjs",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "echo 'www.satisfactory-planner.net' > ./build/CNAME && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

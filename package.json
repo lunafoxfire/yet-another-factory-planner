@@ -12,7 +12,7 @@
     "build": "craco build",
     "parse-docs": "node ./scripts/parse-docs.mjs",
     "predeploy": "npm run build",
-    "deploy": "echo \"www.satisfactory-planner.net\" > ./build/CNAME && gh-pages -d build"
+    "deploy": "echo www.satisfactory-planner.net > ./build/CNAME && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

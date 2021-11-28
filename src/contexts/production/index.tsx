@@ -90,7 +90,8 @@ export function useProductionContext() {
 type PropTypes = { children: React.ReactNode };
 export const ProductionProvider = ({ children }: PropTypes) => {
   const [state, dispatch] = useReducer(reducer, getInitialState());
-  const [loaded, setLoaded] = useState(false);
+  const [loadedFromQuery, setLoadedFromQuery] = useState(false);
+  const [firstCalculationDone, setFirstCalculationDone] = useState(false);
   const [autoCalculate, setAutoCalculate] = useLocalStorageValue<'false' | 'true'>({ key: 'auto-calculate', defaultValue: 'true' });
   const [calculating, setCalculating] = useState(false);
   const [solverResults, setSolverResults] = useState<SolverResults | null>(null);
@@ -111,20 +112,22 @@ export const ProductionProvider = ({ children }: PropTypes) => {
   };
 
   useEffect(() => {
-    if (!loaded) {
-      handleCalculateFactory();
-      setLoaded(true);
-    } else if (autoCalculateBool && prevState !== state) {
-      handleCalculateFactory();
+    if (loadedFromQuery) {
+      if (!firstCalculationDone) {
+        handleCalculateFactory();
+        setFirstCalculationDone(true);
+      } else if (autoCalculateBool && prevState !== state) {
+        handleCalculateFactory();
+      }
     }
-  }, [autoCalculateBool, handleCalculateFactory, loaded, prevState, state]);
+  }, [autoCalculateBool, firstCalculationDone, handleCalculateFactory, loadedFromQuery, prevState, state]);
 
   useEffect(() => {
-    if (!loaded) {
+    if (!loadedFromQuery) {
       dispatch({ type: 'LOAD_FROM_QUERY_PARAM' });
-      setLoaded(true);
+      setLoadedFromQuery(true);
     }
-  }, [loaded]);
+  }, [loadedFromQuery]);
 
   useEffect(() => {
     if (prevState !== state) {

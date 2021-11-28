@@ -19,6 +19,7 @@ const Main = () => {
 export default Main;
 
 const SHeader = styled(Header)`
+  position: fixed;
   margin: 0px;
   padding: 10px;
   background: ${({ theme }) => theme.colors.primary[6]};

@@ -13,7 +13,7 @@ const Factory = () => {
 
   return (
     <>
-      <Card>
+      <Card style={{ marginBottom: '25px' }}>
         <Title order={2}>
           Welcome back, &lt;Engineer ID #{ctx.engineerId}&gt;,
         </Title>

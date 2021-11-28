@@ -312,7 +312,7 @@ export default ProductionGraphTab;
 const GraphContainer = styled(Container)`
   position: relative;
   min-height: 600px;
-  min-width: 600px;
+  min-width: 800px;
   border: 1px solid #fff;
   border-top-width: 0px;
   margin: 0px;

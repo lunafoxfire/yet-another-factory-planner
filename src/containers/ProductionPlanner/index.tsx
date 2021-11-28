@@ -18,5 +18,6 @@ export default ProductionPlanner;
 
 const MainContainer = styled(Container)`
   margin-left: ${({ theme }) => theme.other.pageLeftMargin};
+  margin-top: ${({ theme }) => theme.other.headerHeight};
   padding-left: 0px;
 `;

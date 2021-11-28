@@ -6,7 +6,7 @@
     "type": "git",
     "directory": "git+https://github.com/lydianlights/yet-another-factory-planner.git"
   },
-  "homepage": "www.satisfactory-planner.net",
+  "homepage": "https://www.satisfactory-planner.net",
   "scripts": {
     "start": "craco start",
     "build": "craco build",

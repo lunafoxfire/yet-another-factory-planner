@@ -7,6 +7,7 @@ export const theme: MantineThemeOverride = {
     'primary': ["#ffefda", "#ffe0b8", "#ffd195", "#ffc272", "#ffb34f", "#ffa42d", "#ff950a", "#d07b0c", "#9c6113", "#6d4715"],
     'danger': ["#fee5e5", "#fecdcd", "#fdb4b4", "#fc9c9c", "#fb8383", "#fb6b6b", "#fa5252", "#ed2626", "#bf1c1c", "#861d1d"],
     'background': ["#26282b", "#373b40", "#3f434a", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"],
+    'info': Array(10).fill('#3065c7') as any,
   },
   white: '#eee',
   fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
@@ -19,8 +20,8 @@ export const theme: MantineThemeOverride = {
   },
   other: {
     headerHeight: '64px',
-    drawerOpenWidth: '600px',
-    drawerClosedWidth: '45px',
+    pageLeftMargin: '45px',
+    drawerWidth: '600px',
   },
 };
 

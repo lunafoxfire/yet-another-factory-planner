@@ -18,6 +18,6 @@ const ProductionPlanner = () => {
 export default ProductionPlanner;
 
 const MainContainer = styled(Container)`
-  margin-left: ${({ theme }) => theme.other.drawerClosedWidth};
+  margin-left: ${({ theme }) => theme.other.pageLeftMargin};
   padding-left: 0px;
 `;

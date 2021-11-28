@@ -17,7 +17,7 @@ export default SiteHeader;
 
 const HeaderContainer = styled(Container)`
   display: flex;
-  margin-left: ${({ theme }) => theme.other.drawerClosedWidth};
+  margin-left: ${({ theme }) => theme.other.pageLeftMargin};
   padding: 0px;
 `;
 

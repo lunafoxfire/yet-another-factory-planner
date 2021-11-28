@@ -1,8 +1,7 @@
 import loadGLPK, { GLPK, LP, Var } from 'glpk.js';
 import { nanoid } from 'nanoid';
-import { FactoryOptions } from '../../contexts/production';
+import { FactoryOptions, RecipeMap } from '../../contexts/production/reducer';
 import { buildings, items, recipes, resources, handGatheredItems } from '../../data';
-import { RecipeMap } from '../../contexts/production';
 
 const EPSILON = 1e-8;
 const MAXIMIZE_TARGET_WEIGHTING = 1e6;

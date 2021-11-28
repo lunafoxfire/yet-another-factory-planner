@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, Select, TextInput, Group, Text } from '@mantine/core';
 import { Trash2 } from 'react-feather';
 import { items, recipes, resources } from '../../../../data';
-import { MAX_PRIORITY, useProductionContext } from '../../../../contexts/production';
+import { useProductionContext } from '../../../../contexts/production';
+import { MAX_PRIORITY } from '../../../../contexts/production/reducer';
 import { POINTS_ITEM_KEY } from '../../../../utilities/production-solver';
 
 const itemOptions = Object.keys(items)

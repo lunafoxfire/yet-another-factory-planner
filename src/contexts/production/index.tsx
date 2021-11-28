@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useState, useEffect, useMemo, useCallback } from 'react';
-import _, { random } from 'lodash';
+import _ from 'lodash';
 import seedrandom from 'seedrandom';
 import { usePrevious } from '../../hooks/usePrevious';
 import { ProductionSolver, SolverResults } from '../../utilities/production-solver';

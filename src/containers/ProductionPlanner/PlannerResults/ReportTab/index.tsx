@@ -54,8 +54,8 @@ const ReportTab = (props: Props) => {
         <List listStyleType='none'>
           {renderBuildingsUsed()}
           <List.Item>
-            <Title order={3}>Total</Title>
-            <List withPadding listStyleType='square'>
+            <Title order={3} style={{ marginBottom: '8px' }}>Total</Title>
+            <ListWithLine withPadding listStyleType='none'>
               {
                 Object.entries(report!.totalMaterialCost)
                   .sort((a, b) => {
@@ -69,7 +69,7 @@ const ReportTab = (props: Props) => {
                     </List.Item>
                   ))
               }
-            </List>
+            </ListWithLine>
           </List.Item>
         </List>
       </>
@@ -85,10 +85,10 @@ const ReportTab = (props: Props) => {
       })
       .map(([buildingKey, usageInfo]) => (
       <List.Item key={buildingKey} style={{ paddingBottom: '10px' }}>
-        <Title order={3}>
+        <Title order={3} style={{ marginBottom: '8px' }}>
           {buildings[buildingKey].name} <Count>x{formatFloat(usageInfo.count)}</Count>
         </Title>
-        <List withPadding listStyleType='square' style={{ marginBottom: '10px' }}>
+        <ListWithLine withPadding listStyleType='none' style={{ marginBottom: '10px' }}>
           {
             Object.entries(usageInfo.materialCost)
               .sort((a, b) => {
@@ -102,7 +102,7 @@ const ReportTab = (props: Props) => {
                 </List.Item>
               ))
           }
-        </List>
+        </ListWithLine>
       </List.Item>
     ))
   }
@@ -148,4 +148,17 @@ const ItemLabel = styled.span`
 const Count = styled.span`
   font-size: 15px;
   margin-left: 3px;
+`;
+
+const ListWithLine = styled(List)`
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 12px;
+    width: 3px;
+    background: ${({ theme }) => theme.colors.background[3]};
+  }
 `;

@@ -12,9 +12,14 @@ const GlobalStylesheet = createGlobalStyle<any>`
   #root {
     min-height: 100vh;
   }
-
-  * {
+  
+  html,
+  .custom-scrollbar {
     scrollbar-color: ${({ theme }) => `${theme.other.scrollbarThumbColor} ${theme.other.scrollbarTrackColor}`};
+
+    & > * {
+      scrollbar-color: initial; // prevent inheritance
+    }
 
     ::-webkit-scrollbar {
       width: auto;

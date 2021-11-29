@@ -68,7 +68,7 @@ const Drawer = (props: Props) => {
             )
           }
         </DrawerToggle>
-        <DrawerContent aria-hidden={!open} fullyClosed={fullyClosed} fluid>
+        <DrawerContent className='custom-scrollbar' aria-hidden={!open} fullyClosed={fullyClosed} fluid>
           {children}
         </DrawerContent>
       </DrawerContainer>
@@ -113,8 +113,12 @@ const DrawerToggle = styled.div`
   bottom: 0px;
   right: -25px;
   width: 25px;
-  background: ${({ theme }) => theme.colors.primary[7]};
+  background: ${({ theme }) => theme.colors.primary[6]};
   cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.primary[7]};
+  }
 `;
 
 const ToggleLabel = styled(UnstyledButton)`
@@ -129,10 +133,14 @@ const ToggleLabel = styled(UnstyledButton)`
   border-radius: 2px;
   font-size: 18px;
   font-weight: bold;
-  background: ${({ theme }) => theme.colors.primary[7]};
+  background: ${({ theme }) => theme.colors.primary[6]};
   color: ${({ theme }) => theme.white};
   overflow: visible;
   white-space: nowrap;
+
+  ${DrawerToggle}:hover & {
+    background: ${({ theme }) => theme.colors.primary[7]};
+  }
 
   ::before {
     content: '';
@@ -141,9 +149,13 @@ const ToggleLabel = styled(UnstyledButton)`
     right: 2px;
     width: 50px;
     height: 26px;
-    background: ${({ theme }) => theme.colors.primary[7]};
+    background: ${({ theme }) => theme.colors.primary[6]};
     transform: rotate(50deg);
     z-index: 1;
+
+    ${DrawerToggle}:hover & {
+      background: ${({ theme }) => theme.colors.primary[7]};
+    }
   }
 
   ::after {
@@ -153,9 +165,13 @@ const ToggleLabel = styled(UnstyledButton)`
     right: 2px;
     width: 50px;
     height: 26px;
-    background: ${({ theme }) => theme.colors.primary[7]};
+    background: ${({ theme }) => theme.colors.primary[6]};
     transform: rotate(-50deg);
     z-index: 1;
+
+    ${DrawerToggle}:hover & {
+      background: ${({ theme }) => theme.colors.primary[7]};
+    }
   }
 `;
 

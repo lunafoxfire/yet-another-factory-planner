@@ -61,5 +61,6 @@ const PlannerOptions = () => {
 export default PlannerOptions;
 
 const TabContainer = styled(Container)`
-  padding: 0px;
+  padding: 15px 15px;
+  background: ${({ theme }) => theme.colors.background[1]}
 `;

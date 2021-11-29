@@ -6,9 +6,9 @@ const defaultFont = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'O
 export const theme: MantineThemeOverride = {
   primaryColor: 'primary',
   colors: {
-    'primary': ["#ffefda", "#ffe0b8", "#ffd195", "#ffc272", "#ffb34f", "#ffa42d", "#ff950a", "#d07b0c", "#9c6113", "#6d4715"],
-    'danger': ["#fee5e5", "#fecdcd", "#fdb4b4", "#fc9c9c", "#fb8383", "#fb6b6b", "#fa5252", "#ed2626", "#bf1c1c", "#861d1d"],
-    'background': ["#26282b", "#373b40", "#3f434a", "#50565e", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"],
+    'primary': ["#fcebde", "#f9d8be", "#f7c59f", "#f4b17f", "#f19e60", "#ef8b40", "#ec7821", "#c4631c", "#94501e", "#673c1c"],
+    'danger': ["#fdb5b5", "#fda3a3", "#fc9191", "#fc7e7e", "#fb6c6c", "#fa5959", "#fa4747", "#f12929", "#dc1818", "#b21b1b"],
+    'background': ["#26282b", "#373b40", "#3f434a", "#50565e", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#b3b6ba", "#ffffff"],
     'info': Array(10).fill('#3065c7') as any,
   },
   white: '#eee',
@@ -29,7 +29,7 @@ export const theme: MantineThemeOverride = {
   other: {
     headerHeight: '64px',
     pageLeftMargin: '55px',
-    drawerWidth: '600px',
+    drawerWidth: '620px',
     scrollbarTrackColor: '#212226',
     scrollbarThumbColor: '#6c6c73',
   },
@@ -66,7 +66,17 @@ export const styles: any = {
   Select: (theme: any) => ({
     label: {
       color: theme.white,
-    }
+    },
+    item: {
+      borderRadius: '0px',
+    },
+    hovered: {
+      background: theme.colors.background[8],
+    },
+    selected: {
+      color: theme.white,
+      background: theme.colors.primary[5],
+    },
   }),
   TextInput: (theme: any) => ({
     label: {
@@ -99,7 +109,7 @@ export const styles: any = {
   }),
   Divider: (theme: any) => ({
     horizontal: {
-      borderTopColor: theme.colors.background[2],
+      borderTopColor: theme.colors.background[3],
     }
   }),
   Button: (theme: any) => ({
@@ -107,7 +117,7 @@ export const styles: any = {
       color: '#fff',
       '&[disabled]': {
         color: `${theme.white} !important`,
-        backgroundColor: `${theme.colors.primary[7]} !important`,
+        backgroundColor: `${theme.colors.primary[6]} !important`,
         opacity: 0.5,
       }
     }

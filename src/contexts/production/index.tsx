@@ -19,7 +19,7 @@ export type ProductionContextType = {
 };
 
 const ONE_HOUR = 1000 * 60 * 60;
-const seed = Math.floor(new Date().getTime() / ONE_HOUR);
+const seed = Math.floor(new Date().getTime() / (0.5 * ONE_HOUR));
 const rng = seedrandom(String(seed));
 
 const TIPS = [

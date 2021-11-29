@@ -53,7 +53,7 @@ const stylesheet: Stylesheet[] = [
       'text-halign': 'center',
       'height': '30px',
       'width': '150px',
-      'text-max-width': '153px',
+      'text-max-width': '157px',
       'padding-top': '20px',
       'overlay-padding': 0,
       'overlay-opacity': 0,
@@ -112,8 +112,8 @@ const stylesheet: Stylesheet[] = [
       'z-index': 100,
       'height': '45px',
       'width': '195px',
-      'text-max-width': '210px',
-      'font-size': '18px',
+      'text-max-width': '192px',
+      'font-size': '16px',
       'font-weight': 'bold',
       'border-width': 2,
     },
@@ -234,7 +234,11 @@ function getNodeLabel(node: GraphNode) {
     amountText = `${truncateFloat(node.multiplier)}x ${buildings[recipe.producedIn].name}`;
   } else {
     const item = items[node.key];
-    label = item.name;
+    if (node.type === NODE_TYPE.SIDE_PRODUCT) {
+      label = `Side Product:\n${item.name}`;
+    } else {
+      label = item.name;
+    }
     amountText = `${truncateFloat(node.multiplier)} / min`;
   }
   return `${label}\n${amountText}`;

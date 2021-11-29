@@ -288,7 +288,7 @@ const ProductionGraphTab = (props: Props) => {
                 <AlertCircle color="#eee" size={75} />
                 <Group direction='column' style={{ gap: '0px' }}>
                   <Text size='xl'>
-                    No graph available
+                    Could not build graph
                   </Text>
                   {errorMessage
                     ? (

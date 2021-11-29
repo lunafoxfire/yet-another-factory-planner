@@ -1,5 +1,7 @@
-/data/
-/src/data/json
+/data/**/**
+!/data/.gitkeep
+/src/data/json/**/**
+!/src/data/json/.gitkeep
 
 # dependencies
 /node_modules

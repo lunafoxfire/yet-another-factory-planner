@@ -63,6 +63,11 @@ export const styles: any = {
       color: theme.white,
     }
   }),
+  Anchor: (theme: any) => ({
+    anchor: {
+      color: theme.colors.primary[6],
+    }
+  }),
   Select: (theme: any) => ({
     label: {
       color: theme.white,

@@ -3,6 +3,28 @@ import { MantineThemeOverride } from '@mantine/core';
 
 const defaultFont = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif";
 
+const baseSat = '77%';
+const baseLight = '63%';
+const selectSat = '58%';
+const selectLight = '58%';
+
+
+export const graphColors = {
+  // nodes
+  resource: { base: `hsl(31, ${baseSat}, ${baseLight})`, selected: `hsl(31, ${selectSat}, ${selectLight})` },
+  input: { base: `hsl(0, ${baseSat}, ${baseLight})`, selected: `hsl(0, ${selectSat}, ${selectLight})` },
+  handGathered: { base: `hsl(261, ${baseSat}, ${baseLight})`, selected: `hsl(261, ${selectSat}, ${selectLight})` },
+  sideProduct: { base: `hsl(311, ${baseSat}, ${baseLight})`, selected: `hsl(311, ${selectSat}, ${selectLight})` },
+  finalProduct: { base: `hsl(128, ${baseSat}, ${baseLight})`, selected: `hsl(128, ${selectSat}, ${selectLight})` },
+  recipe: { base: `hsl(197, ${baseSat}, ${baseLight})`, selected: `hsl(197, ${selectSat}, ${selectLight})` },
+  nuclear: { base: `hsl(50, ${baseSat}, ${baseLight})`, selected: `hsl(50, ${selectSat}, ${selectLight})` },
+
+  // edges
+  edge: { line: '#999999', label: '#eeeeee' },
+  incoming: { line: `hsl(31, ${baseSat}, ${baseLight})`, label: `hsl(31, ${baseSat}, ${baseLight})` },
+  outgoing: { line: `hsl(128, ${baseSat}, ${baseLight})`, label: `hsl(128, ${baseSat}, ${baseLight})` },
+}
+
 export const theme: MantineThemeOverride = {
   primaryColor: 'primary',
   colors: {

@@ -8,6 +8,7 @@ import { Text, Container, Center, Group } from '@mantine/core';
 import { AlertCircle } from 'react-feather';
 import { ProductionGraph, GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes, buildings } from '../../../../data';
+import { graphColors } from '../../../../theme';
 
 Cytoscape.use(klay);
 if (process.env.NODE_ENV !== 'development') {
@@ -30,6 +31,7 @@ const layout = {
 
 const stylesheet: Stylesheet[] = [
   {
+    // ====== BASE ====== //
     selector: 'core',
     style: {
       'active-bg-color': '#000',
@@ -50,8 +52,8 @@ const stylesheet: Stylesheet[] = [
       'text-valign': 'center',
       'text-halign': 'center',
       'height': '30px',
-      'width': '140px',
-      'text-max-width': '160px',
+      'width': '150px',
+      'text-max-width': '153px',
       'padding-top': '20px',
       'overlay-padding': 0,
       'overlay-opacity': 0,
@@ -72,7 +74,9 @@ const stylesheet: Stylesheet[] = [
       'overlay-opacity': 0,
       'text-wrap': 'wrap',
       'font-size': '14px',
-      'color': '#eee',
+      'color': graphColors.edge.label,
+      'line-color': graphColors.edge.line,
+      'target-arrow-color': graphColors.edge.line,
     },
   },
   {
@@ -85,6 +89,9 @@ const stylesheet: Stylesheet[] = [
       'target-endpoint': '15% 50%',
     },
   },
+
+
+  // ====== NODES ====== //
   {
     selector: 'node.item-shape',
     style: {
@@ -100,45 +107,107 @@ const stylesheet: Stylesheet[] = [
     },
   },
   {
-    selector: 'node.final-product',
+    selector: 'node.selected, node.grabbed',
     style: {
-      'background-color': '#61e873',
+      'z-index': 100,
+      'height': '45px',
+      'width': '195px',
+      'text-max-width': '210px',
+      'font-size': '18px',
+      'font-weight': 'bold',
+      'border-width': 2,
     },
   },
   {
-    selector: 'node.side-product',
+    selector: 'node.item-shape.selected, node.item-shape.grabbed',
     style: {
-      'background-color': '#f371e2',
-    },
-  },
-  {
-    selector: 'node.input',
-    style: {
-      'background-color': '#e86161',
-    },
-  },
-  {
-    selector: 'node.hand-gathered',
-    style: {
-      'background-color': '#9061e8',
+      'height': '55px',
+      'width': '170px',
     },
   },
   {
     selector: 'node.resource',
-    style: {
-      'background-color': '#e8a761',
-    },
+    style: { 'background-color': graphColors.resource.base },
+  },
+  {
+    selector: 'node.resource.selected, node.resource.grabbed',
+    style: { 'background-color': graphColors.resource.selected },
+  },
+  {
+    selector: 'node.input',
+    style: { 'background-color': graphColors.input.base },
+  },
+  {
+    selector: 'node.input.selected, node.input.grabbed',
+    style: { 'background-color': graphColors.input.selected },
+  },
+  {
+    selector: 'node.hand-gathered',
+    style: { 'background-color': graphColors.handGathered.base },
+  },
+  {
+    selector: 'node.hand-gathered.selected, node.hand-gathered.grabbed',
+    style: { 'background-color': graphColors.handGathered.selected },
+  },
+  {
+    selector: 'node.side-product',
+    style: { 'background-color': graphColors.sideProduct.base },
+  },
+  {
+    selector: 'node.side-product.selected, node.side-product.grabbed',
+    style: { 'background-color': graphColors.sideProduct.selected },
+  },
+  {
+    selector: 'node.final-product',
+    style: { 'background-color': graphColors.finalProduct.base },
+  },
+  {
+    selector: 'node.final-product.selected, node.final-product.grabbed',
+    style: { 'background-color': graphColors.finalProduct.selected },
   },
   {
     selector: 'node.recipe',
-    style: {
-      'background-color': '#61c2e8',
-    },
+    style: { 'background-color': graphColors.recipe.base },
+  },
+  {
+    selector: 'node.recipe.selected, node.recipe.grabbed',
+    style: { 'background-color': graphColors.recipe.selected },
   },
   {
     selector: 'node.nuclear',
+    style: { 'background-color': graphColors.nuclear.base },
+  },
+  {
+    selector: 'node.nuclear.selected, node.nuclear.grabbed',
+    style: { 'background-color': graphColors.nuclear.selected },
+  },
+
+  
+  // ====== EDGES ====== //
+  {
+    selector: 'edge.selected, edge.grabbed',
     style: {
-      'background-color': '#f0ed4c',
+      'width': 4,
+      'font-size': '14px',
+      'font-weight': 'bold',
+      'text-outline-width': 2,
+      'z-index': 100,
+    },
+  },
+  {
+    selector: 'edge.selected-incoming, edge.grabbed-incoming',
+    style: {
+      'color': graphColors.incoming.label,
+      'line-color': graphColors.incoming.line,
+      'target-arrow-color': graphColors.incoming.line,
+    },
+  },
+  {
+    selector: 'edge.selected-outgoing, edge.grabbed-outgoing',
+    style: {
+      'color': graphColors.outgoing.label,
+      'line-color': graphColors.outgoing.line,
+      'target-arrow-color': graphColors.outgoing.line,
     },
   },
 ];
@@ -209,15 +278,49 @@ interface Props {
 
 const ProductionGraphTab = (props: Props) => {
   const { activeGraph, errorMessage } = props;
-  const graphRef = useRef<HTMLDivElement | null>(null);
   const [doFirstRender, setDoFirstRender] = useState(false);
+  const graphRef = useRef<HTMLDivElement | null>(null);
+  const cyRef = useRef<Cytoscape.Core | null>(null);
 
-  function setRef(instance: HTMLDivElement | null) {
+  function setGraphRef(instance: HTMLDivElement | null) {
     if (instance && !graphRef.current) {
       graphRef.current = instance;
       _resizeListener(graphRef);
       setDoFirstRender(true);
     }
+  }
+
+  function setCyRef(instance: Cytoscape.Core | null) {
+    if (instance && cyRef.current !== instance) {
+      cyRef.current = instance;
+      setCyListeners(cyRef.current);
+    }
+  }
+
+  function setCyListeners(cy: Cytoscape.Core) {
+    cy.on('select', 'node', function (e) {
+      e.target.addClass('selected');
+      e.target.outgoers('edge').addClass('selected').addClass('selected-outgoing');
+      e.target.incomers('edge').addClass('selected').addClass('selected-incoming');
+    });
+
+    cy.on('unselect', 'node', function (e) {
+      e.target.removeClass('selected');
+      e.target.outgoers('edge').removeClass('selected').removeClass('selected-outgoing');
+      e.target.incomers('edge').removeClass('selected').removeClass('selected-incoming');
+    });
+
+    cy.on('grab', 'node', function (e) {
+      e.target.addClass('grabbed');
+      e.target.outgoers('edge').addClass('grabbed').addClass('grabbed-outgoing');
+      e.target.incomers('edge').addClass('grabbed').addClass('grabbed-incoming');
+    });
+
+    cy.on('free', 'node', function (e) {
+      e.target.removeClass('grabbed');
+      e.target.outgoers('edge').removeClass('grabbed').removeClass('grabbed-outgoing');
+      e.target.incomers('edge').removeClass('grabbed').removeClass('grabbed-incoming');
+    });
   }
 
   useEffect(() => {
@@ -264,7 +367,7 @@ const ProductionGraphTab = (props: Props) => {
   }, [activeGraph]);
 
   return (
-    <GraphContainer fluid ref={setRef}>
+    <GraphContainer fluid ref={setGraphRef}>
       {
         doFirstRender && (
           graphProps != null
@@ -275,11 +378,11 @@ const ProductionGraphTab = (props: Props) => {
                 layout={layout}
                 stylesheet={stylesheet}
                 boxSelectionEnabled={false}
-                autounselectify={true}
                 wheelSensitivity={0.13}
                 maxZoom={3.0}
                 minZoom={0.1}
                 style={{ position: 'absolute', height: '100%', width: '100%', overflow: 'hidden' }}
+                cy={setCyRef}
               />
           )
           : (

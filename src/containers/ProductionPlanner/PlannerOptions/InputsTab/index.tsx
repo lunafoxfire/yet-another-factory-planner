@@ -216,7 +216,7 @@ const InputsTab = () => {
           </Button>
         </Group>
         <Checkbox
-          label='Allow hand-gathered resources'
+          label='Allow hand-gathered resources (mycelia, flower petals, etc)'
           checked={ctx.state.allowHandGatheredItems}
           onChange={(e) => { ctx.dispatch({ type: 'SET_ALLOW_HAND_GATHERED_ITEMS', active: e.currentTarget.checked }) }}
           style={{ marginBottom: '25px' }}

@@ -24,27 +24,27 @@ const ReportTab = (props: Props) => {
         <SDivider />
         <List listStyleType='none'>
           <List.Item>
-            <H3 order={3}>Points Produced</H3>
+            <SmallerTitle order={3}>Points Produced</SmallerTitle>
             <Text>{formatFloat(report!.pointsProduced)} per min</Text>
             <SDivider />
           </List.Item>
           <List.Item>
-            <H3 order={3}>Estimated Power {report!.powerUsageEstimate < 0 ? 'Production' : 'Usage'}</H3>
+            <SmallerTitle order={3}>Estimated Power {report!.powerUsageEstimate < 0 ? 'Production' : 'Usage'}</SmallerTitle>
             <Text>{formatFloat(Math.abs(report!.powerUsageEstimate))} MW</Text>
             <SDivider />
           </List.Item>
           <List.Item>
-            <H3 order={3}>Resource Usage Score</H3>
+            <SmallerTitle order={3}>Resource Usage Score</SmallerTitle>
             <Text>{formatFloat(report!.resourceEfficiencyScore)}</Text>
             <SDivider />
           </List.Item>
           <List.Item>
-            <H3 order={3}>Total Build Area</H3>
+            <SmallerTitle order={3}>Total Build Area</SmallerTitle>
             <Text>{formatFloat(report!.totalBuildArea)} m²</Text>
             <SDivider />
           </List.Item>
           <List.Item>
-            <H3 order={3}>Estimated Minimal Foundations</H3>
+            <SmallerTitle order={3}>Estimated Minimal Foundations</SmallerTitle>
             <Text>{formatFloat(report!.estimatedFoundations)} foundations ({formatFloat(report!.estimatedFoundations * 8)} Concrete)</Text>
             <SDivider />
           </List.Item>
@@ -54,7 +54,7 @@ const ReportTab = (props: Props) => {
         <List listStyleType='none'>
           {renderBuildingsUsed()}
           <List.Item>
-            <H3 order={3}>Total</H3>
+            <Title order={3}>Total</Title>
             <List withPadding listStyleType='square'>
               {
                 Object.entries(report!.totalMaterialCost)
@@ -65,7 +65,7 @@ const ReportTab = (props: Props) => {
                   })
                   .map(([itemKey, count]) => (
                     <List.Item key={itemKey}>
-                      <b>{items[itemKey].name}</b> <Count>x{formatFloat(count)}</Count>
+                      <ItemLabel>{items[itemKey].name}</ItemLabel> <Count>x{formatFloat(count)}</Count>
                     </List.Item>
                   ))
               }
@@ -85,9 +85,9 @@ const ReportTab = (props: Props) => {
       })
       .map(([buildingKey, usageInfo]) => (
       <List.Item key={buildingKey} style={{ paddingBottom: '10px' }}>
-        <H3 order={3}>
+        <Title order={3}>
           {buildings[buildingKey].name} <Count>x{formatFloat(usageInfo.count)}</Count>
-        </H3>
+        </Title>
         <List withPadding listStyleType='square' style={{ marginBottom: '10px' }}>
           {
             Object.entries(usageInfo.materialCost)
@@ -98,7 +98,7 @@ const ReportTab = (props: Props) => {
               })
               .map(([itemKey, count]) => (
                 <List.Item key={itemKey}>
-                  <b>{items[itemKey].name}</b>  <Count>x{formatFloat(count)}</Count>
+                  <ItemLabel>{items[itemKey].name}</ItemLabel>  <Count>x{formatFloat(count)}</Count>
                 </List.Item>
               ))
           }
@@ -129,18 +129,23 @@ export default ReportTab;
 
 const ReportContainer = styled(Container)`
   padding: 10px;
-  padding-bottom: 30px;
+  padding-bottom: 15px;
 `;
 
 const SDivider = styled(Divider)`
   margin: 10px 0px;
 `;
 
-const H3 = styled(Title)`
-  font-size: 18px;
+const SmallerTitle = styled(Title)`
+  font-size: 19px;
+`;
+
+const ItemLabel = styled.span`
+  font-size: 17px;
+  font-weight: bold;
 `;
 
 const Count = styled.span`
-  font-size: 14px;
+  font-size: 15px;
   margin-left: 3px;
 `;

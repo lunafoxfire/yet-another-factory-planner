@@ -1,6 +1,8 @@
 import { MantineThemeOverride } from '@mantine/core';
 // import { gradientFromColor } from './utilities/color';
 
+const defaultFont = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif";
+
 export const theme: MantineThemeOverride = {
   primaryColor: 'primary',
   colors: {
@@ -10,18 +12,26 @@ export const theme: MantineThemeOverride = {
     'info': Array(10).fill('#3065c7') as any,
   },
   white: '#eee',
-  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-  radius: {
-    xs: 0,
-    sm: 2,
-    md: 4,
-    lg: 8,
-    xl: 16,
+  fontFamily: defaultFont,
+  radius: { xs: 0, sm: 2, md: 4, lg: 8, xl: 16 },
+  headings: {
+    fontFamily: defaultFont,
+    fontWeight: 700,
+    sizes: {
+      h1: { fontSize: 36, lineHeight: 1.3 },
+      h2: { fontSize: 30, lineHeight: 1.35 },
+      h3: { fontSize: 22, lineHeight: 1.4 },
+      h4: { fontSize: 18, lineHeight: 1.45 },
+      h5: { fontSize: 16, lineHeight: 1.5 },
+      h6: { fontSize: 14, lineHeight: 1.5 },
+    }
   },
   other: {
     headerHeight: '64px',
     pageLeftMargin: '55px',
     drawerWidth: '600px',
+    scrollbarTrackColor: '#212226',
+    scrollbarThumbColor: '#6c6c73',
   },
 };
 

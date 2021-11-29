@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { UnstyledButton, Paper, Text, Container } from '@mantine/core';
 import { useLocalStorageValue } from '@mantine/hooks';
@@ -14,6 +14,7 @@ interface Props {
 
 const Drawer = (props: Props) => {
   const { open, onToggle, children } = props;
+  const [fullyClosed, setFullyClosed] = useState(!open);
   const [tooltipDismissed, setTooltipDismissed] = useLocalStorageValue<'false' | 'true'>({ key: 'tooltip-dismissed', defaultValue: 'false' });
   const ctx = useDrawerContext();
 
@@ -25,10 +26,22 @@ const Drawer = (props: Props) => {
     }
   }, [open, setTooltipDismissed]);
 
+  useEffect(() => {
+    if (open) {
+      setFullyClosed(false);
+    }
+  }, [open]);
+
+  function handleTransitionEnd() {
+    if (!open) {
+      setFullyClosed(true);
+    }
+  }
+
   return (
     <Portal rootNode={ctx.rootNode}>
       <DrawerDimmer open={!!open || showTooltip} onClick={() => { !!open && onToggle?.(!open); }} />
-      <DrawerContainer open={!!open}>
+      <DrawerContainer open={!!open} onTransitionEnd={handleTransitionEnd}>
         <DrawerToggle onClick={() => { onToggle?.(!open); }}>
           <ToggleLabel>
             <ToggleLabelText>{open ? 'Close' : 'Open'} Control Panel</ToggleLabelText>
@@ -55,7 +68,7 @@ const Drawer = (props: Props) => {
             )
           }
         </DrawerToggle>
-        <DrawerContent aria-hidden={!open} fluid>
+        <DrawerContent aria-hidden={!open} fullyClosed={fullyClosed} fluid>
           {children}
         </DrawerContent>
       </DrawerContainer>
@@ -91,7 +104,7 @@ const DrawerContainer = styled.div<{ open: boolean }>`
   pointer-events: auto;
 `;
 
-const DrawerToggle = styled(UnstyledButton)`
+const DrawerToggle = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
@@ -101,6 +114,7 @@ const DrawerToggle = styled(UnstyledButton)`
   right: -25px;
   width: 25px;
   background: ${({ theme }) => theme.colors.primary[7]};
+  cursor: pointer;
 `;
 
 const ToggleLabel = styled(UnstyledButton)`
@@ -115,8 +129,6 @@ const ToggleLabel = styled(UnstyledButton)`
   border-radius: 2px;
   font-size: 18px;
   font-weight: bold;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
   background: ${({ theme }) => theme.colors.primary[7]};
   color: ${({ theme }) => theme.white};
   overflow: visible;
@@ -151,6 +163,8 @@ const ToggleLabelText = styled.span`
   position: absolute;
   left: -16px;
   z-index: 2;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 `;
 
 const ToggleLabelIcon = styled.span`
@@ -160,7 +174,7 @@ const ToggleLabelIcon = styled.span`
 `;
 
 const Tooltip = styled(Paper)`
-  @keyframes wiggle {
+  @keyframes lookAtMe {
     from {
       left: 84px;
     }
@@ -170,7 +184,7 @@ const Tooltip = styled(Paper)`
     }
   }
 
-  animation: 300ms infinite alternate wiggle;
+  animation: 300ms infinite alternate lookAtMe;
 
   position: absolute;
   left: 80px;
@@ -211,7 +225,8 @@ const TooltipConfirm = styled(UnstyledButton)`
   text-decoration: underline;
 `;
 
-const DrawerContent = styled(Container)`
+const DrawerContent = styled(Container)<{ fullyClosed: boolean }>`
+  visibility: ${({ fullyClosed }) => fullyClosed ? 'hidden' : 'visible'};
   position: absolute;
   top: 0px;
   bottom: 0px;
@@ -220,4 +235,5 @@ const DrawerContent = styled(Container)`
   padding: 10px;
   padding-bottom: 30px;
   overflow: auto;
+  overscroll-behavior: contain;
 `;

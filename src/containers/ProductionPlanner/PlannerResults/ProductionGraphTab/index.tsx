@@ -276,7 +276,7 @@ const ProductionGraphTab = (props: Props) => {
                 stylesheet={stylesheet}
                 boxSelectionEnabled={false}
                 autounselectify={true}
-                wheelSensitivity={0.1}
+                wheelSensitivity={0.13}
                 maxZoom={3.0}
                 minZoom={0.1}
                 style={{ position: 'absolute', height: '100%', width: '100%', overflow: 'hidden' }}

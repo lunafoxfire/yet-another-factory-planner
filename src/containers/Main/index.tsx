@@ -4,6 +4,7 @@ import { AppShell, Header, Container, useMantineTheme, Anchor } from '@mantine/c
 import SiteHeader from './SiteHeader';
 import ProductionPlanner from '../ProductionPlanner';
 import PaypalButton from '../../components/PaypalButton';
+import ExternalLink from '../../components/ExternalLink';
 
 const Main = () => {
   const theme = useMantineTheme();
@@ -16,7 +17,8 @@ const Main = () => {
         <ProductionPlanner />
         <Footer>
           <FooterContent>
-            Made with ♥ by <Anchor href='https://github.com/lydianlights' target='_blank' rel='noopener noreferrer'>LydianLights</Anchor> - Questions or bugs? File an <Anchor href='https://github.com/lydianlights/yet-another-factory-planner/issues' target='_blank' rel='noopener noreferrer'>issue on github</Anchor>
+            Made with ♥ by <ExternalLink href='https://github.com/lydianlights'>LydianLights</ExternalLink> -
+            Questions or bugs? File an <ExternalLink href='https://github.com/lydianlights/yet-another-factory-planner/issues'>issue on github</ExternalLink> or <ExternalLink href='https://discord.gg/p7e9ZzRHCm'>check out the discord</ExternalLink>
           </FooterContent>
           <PaypalButton />
         </Footer>

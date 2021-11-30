@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Title, Container, Group } from '@mantine/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faGithub, faTwitter, faDiscord } from '@fortawesome/free-brands-svg-icons';
 import logo from '../../../assets/satisfactory_logo_full_color_small.png';
 import SocialIcon from '../../../components/SocialIcon';
 
@@ -14,6 +14,7 @@ const SiteHeader = () => {
       <BetaTag>(BETA)</BetaTag>
       <SocialLinks>
         <SocialIcon href='https://github.com/lydianlights/yet-another-factory-planner' icon={<FontAwesomeIcon icon={faGithub} fontSize={32} />} />
+        <SocialIcon href='https://discord.gg/p7e9ZzRHCm' icon={<FontAwesomeIcon icon={faDiscord} fontSize={32} />} />
         <SocialIcon href='https://twitter.com/LydianLights' icon={<FontAwesomeIcon icon={faTwitter} fontSize={32} />} />
       </SocialLinks>
     </HeaderContainer>

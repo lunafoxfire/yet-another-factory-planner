@@ -364,8 +364,6 @@ export class ProductionSolver {
             bnds: { type: glpk.GLP_LO, ub: 0, lb: this.rateTargets[recipeKey].value },
           });
         }
-      } else {
-        // MAXIMIZE TARGET
       }
 
       if (doPoints) {

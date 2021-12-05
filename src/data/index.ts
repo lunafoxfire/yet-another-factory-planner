@@ -21,6 +21,7 @@ export type BuildingsInfo = {
   power: number,
   area: number,
   buildCost: ItemQuantity[],
+  isFicsmas: boolean,
 };
 
 export type RecipeInfo = {
@@ -30,6 +31,7 @@ export type RecipeInfo = {
   ingredients: ItemRate[],
   products: ItemRate[],
   producedIn: string,
+  isFicsmas: boolean,
 };
 
 export type ResourceInfo = {
@@ -44,6 +46,7 @@ export type ItemInfo = {
   sinkPoints: number,
   usedInRecipes: string[],
   producedFromRecipes: string[],
+  isFicsmas: boolean,
 };
 
 export type BuildingMap = { [key in keyof typeof buildingsRaw]: BuildingsInfo } & { [key: string]: BuildingsInfo };

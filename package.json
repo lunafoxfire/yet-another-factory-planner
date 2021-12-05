@@ -71,6 +71,6 @@
     "@types/seedrandom": "^3.0.1",
     "@types/styled-components": "^5.1.15",
     "babel-plugin-styled-components": "^2.0.1",
-    "satisfactory-docs-parser": "^1.0.4"
+    "satisfactory-docs-parser": "^5.0.0"
   }
 }

@@ -169,6 +169,12 @@ export class ProductionSolver {
       });
     }
 
+    this.inputs['Desc_Gift_C'] = {
+      amount: Infinity,
+      weight: 1000,
+      type: NODE_TYPE.HAND_GATHERED_RESOURCE,
+    };
+
     this.rateTargets = {};
     this.maximizeTargets = [];
     this.hasPointsTarget = false;
@@ -323,6 +329,11 @@ export class ProductionSolver {
     }
   }
 
+  private getItemPoints(itemKey: string) {
+    const itemInfo = items[itemKey];
+    return itemInfo.isFicsmas ? 0 : itemInfo.sinkPoints;
+  }
+
   private async productionSolverPass(targetKey: string, remainingInputs: Inputs, glpk: GLPK): Promise<ProductionSolution> {
     const model: LP = {
       name: 'production',
@@ -370,12 +381,12 @@ export class ProductionSolver {
         let pointCoef = 0;
         for (const product of recipeInfo.products) {
           if (!this.inputs[product.itemClass] || this.inputs[product.itemClass].type === NODE_TYPE.INPUT_ITEM) {
-            pointCoef -= product.perMinute * items[product.itemClass].sinkPoints / 1000;
+            pointCoef -= product.perMinute * this.getItemPoints(product.itemClass) / 1000;
           }
         }
         for (const ingredient of recipeInfo.ingredients) {
           if (!this.inputs[ingredient.itemClass] || this.inputs[ingredient.itemClass].type === NODE_TYPE.INPUT_ITEM) {
-            pointCoef += ingredient.perMinute * items[ingredient.itemClass].sinkPoints / 1000;
+            pointCoef += ingredient.perMinute * this.getItemPoints(ingredient.itemClass) / 1000;
           }
         }
         pointsVars.push({ name: recipeKey, coef: pointCoef });
@@ -387,15 +398,13 @@ export class ProductionSolver {
       let intrinsicPoints = 0;
       for (const [itemKey, inputInfo] of Object.entries(remainingInputs)) {
         if (inputInfo.type === NODE_TYPE.INPUT_ITEM) {
-          const itemInfo = items[itemKey];
-          intrinsicPoints += itemInfo.sinkPoints * inputInfo.amount;
+          intrinsicPoints += this.getItemPoints(itemKey) * inputInfo.amount;
         }
       }
       if (targetKey === RATE_TARGET_KEY) {
         for (const [itemKey, targetInfo] of Object.entries(this.rateTargets)) {
           if (itemKey !== POINTS_ITEM_KEY) {
-            const itemInfo = items[itemKey];
-            intrinsicPoints -= itemInfo.sinkPoints * targetInfo.value;
+            intrinsicPoints -= this.getItemPoints(itemKey) * targetInfo.value;
           }
         }
         model.subjectTo.push({
@@ -662,7 +671,7 @@ export class ProductionSolver {
             let nodeType = NODE_TYPE.SIDE_PRODUCT;
             if (this.rateTargets[itemKey] || this.maximizeTargets.find((t) => t.key === itemKey)) {
               nodeType = NODE_TYPE.FINAL_PRODUCT;
-            } else if (this.hasPointsTarget && items[itemKey].sinkPoints > 0) {
+            } else if (this.hasPointsTarget && this.getItemPoints(itemKey) > 0) {
               nodeType = NODE_TYPE.FINAL_PRODUCT;
             }
             itemNode = {
@@ -734,9 +743,8 @@ export class ProductionSolver {
         continue;
       }
 
-      const itemInfo = items[key];
       if (node.type === NODE_TYPE.FINAL_PRODUCT) {
-        report.pointsProduced += node.multiplier * itemInfo.sinkPoints;
+        report.pointsProduced += node.multiplier * this.getItemPoints(key);
       } else if (node.type === NODE_TYPE.RESOURCE) {
         report.resourceEfficiencyScore += node.multiplier * this.inputs[key].weight;
       }

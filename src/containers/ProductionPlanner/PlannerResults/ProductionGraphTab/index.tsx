@@ -249,7 +249,7 @@ function getNodeClasses(node: GraphNode) {
   if (node.type === NODE_TYPE.RECIPE) {
     classes.push('recipe-shape');
     const recipe = recipes[node.key];
-    if (recipe.producedIn === 'Build_GeneratorNuclear_C') {
+    if (recipe.producedIn === 'Desc_GeneratorNuclear_C') {
       classes.push('nuclear');
     } else {
       classes.push(NODE_COLOR_CLASS[node.type]);

@@ -10,9 +10,12 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "parse-docs": "node ./scripts/parse-docs.mjs",
-    "predeploy": "npm run build",
-    "deploy": "echo www.satisfactory-planner.net > ./build/CNAME && gh-pages -d build"
+    "build:staging": "env-cmd -f .env.staging craco build",
+    "predeploy": "npm run build && echo www.satisfactory-planner.net > ./build/CNAME",
+    "deploy": "gh-pages -d build",
+    "predeploy:staging": "npm run build:staging",
+    "deploy:staging": "gh-pages -d build-staging -o staging",
+    "parse-docs": "node ./scripts/parse-docs.mjs"
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +45,7 @@
     "chroma-js": "^2.1.2",
     "cytoscape": "^3.20.0",
     "cytoscape-klay": "^3.1.4",
+    "env-cmd": "^10.1.0",
     "gh-pages": "^3.2.3",
     "glpk.js": "^4.0.1",
     "lodash": "^4.17.21",

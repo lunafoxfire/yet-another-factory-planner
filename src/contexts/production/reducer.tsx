@@ -155,7 +155,7 @@ export type FactoryAction =
   | { type: 'UPDATE_WEIGHTING_OPTIONS', data: WeightingOptions }
   | { type: 'SET_ALL_WEIGHTS_DEFAULT' }
   | { type: 'SET_RECIPE_ACTIVE', key: string, active: boolean }
-  | { type: 'MASS_SET_RECIPES_ACTIVE', alternates: boolean, active: boolean }
+  | { type: 'MASS_SET_RECIPES_ACTIVE', recipes: string[], active: boolean }
   | { type: 'LOAD_FROM_QUERY_PARAM' };
 
 export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
@@ -284,13 +284,9 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
     }
     case 'MASS_SET_RECIPES_ACTIVE': {
       const newAllowedRecipes = { ...state.allowedRecipes };
-      Object.keys(newAllowedRecipes).forEach((key) => {
-        if (action.alternates && recipes[key].isAlternate) {
-          newAllowedRecipes[key] = action.active;
-        } else if (!action.alternates && !recipes[key].isAlternate) {
-          newAllowedRecipes[key] = action.active;
-        }
-      })
+      action.recipes.forEach((recipeKey) => {
+        newAllowedRecipes[recipeKey] = action.active;
+      });
       return { ...state, allowedRecipes: newAllowedRecipes };
     }
     case 'LOAD_FROM_QUERY_PARAM': {

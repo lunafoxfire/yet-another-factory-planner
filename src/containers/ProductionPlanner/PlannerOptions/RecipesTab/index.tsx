@@ -32,6 +32,7 @@ const RecipesTab = () => {
 
   const renderRecipeList = useCallback((recipeList: { key: string, label: string }[]) => {
     return recipeList.map(({ key, label }) => ({
+      key,
       label,
       component: (
         <List.Item key={key}>
@@ -56,19 +57,21 @@ const RecipesTab = () => {
   const renderedAltRecipes = useMemo(() => renderRecipeList(altRecipes), [renderRecipeList]);
 
   function renderRecipeOptions(alternates: boolean) {
-    const rendered = alternates ? renderedAltRecipes : renderedBaseRecipes
+    const renderedRecipes = alternates ? renderedAltRecipes : renderedBaseRecipes;
+    const filteredRecipes = renderedRecipes.filter(({ label }) => label.toLowerCase().includes(searchValue.toLowerCase()));
+    const filteredRecipeKeys = filteredRecipes.map(({ key }) => key);
     return (
       <>
         <Group style={{ marginTop: '5px', marginBottom: '10px' }}>
-          <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', alternates, active: true }) }}>
+          <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', recipes: filteredRecipeKeys, active: true }) }}>
             Select All
           </Button>
-          <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', alternates, active: false }) }}>
+          <Button onClick={() => { ctx.dispatch({ type: 'MASS_SET_RECIPES_ACTIVE', recipes: filteredRecipeKeys, active: false }) }}>
             Select None
           </Button>
         </Group>
         <List listStyleType='none' spacing={6}>
-          {rendered.filter(({ label }) => label.toLowerCase().includes(searchValue.toLowerCase())).map(({ component }) => component)}
+          {filteredRecipes.map(({ component }) => component)}
         </List>
       </>
     )

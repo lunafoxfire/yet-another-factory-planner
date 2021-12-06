@@ -4,13 +4,18 @@ import { nanoid } from 'nanoid';
 import Cytoscape, { Stylesheet } from 'cytoscape';
 import klay from 'cytoscape-klay';
 import GraphVisualizer from 'react-cytoscapejs';
+import popper from 'cytoscape-popper';
 import { Text, Container, Center, Group } from '@mantine/core';
 import { AlertCircle } from 'react-feather';
 import { ProductionGraph, GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes, buildings } from '../../../../data';
 import { graphColors } from '../../../../theme';
+import GraphPopup from '../../../../components/GraphPopup';
+import { truncateFloat } from '../../../../utilities/number';
 
+Cytoscape.use(popper);
 Cytoscape.use(klay);
+
 if (process.env.NODE_ENV !== 'development') {
   Cytoscape.warnings(false);
 }
@@ -221,10 +226,6 @@ const NODE_COLOR_CLASS = {
   [NODE_TYPE.RECIPE]: 'recipe',
 };
 
-function truncateFloat(n: number) {
-  return n.toFixed(4).replace(/\.?0+$/, '');
-}
-
 function getNodeLabel(node: GraphNode) {
   let label = '';
   let amountText = '';
@@ -280,11 +281,29 @@ interface Props {
   errorMessage: string,
 }
 
+interface PopperRef {
+  popper: any,
+  nodeId: string,
+}
+
+export interface NodeData extends GraphNode {
+  label: string,
+}
+
+export interface EdgeData extends GraphEdge {
+  source: string,
+  target: string,
+  label: string,
+}
+
 const ProductionGraphTab = (props: Props) => {
   const { activeGraph, errorMessage } = props;
   const [doFirstRender, setDoFirstRender] = useState(false);
   const graphRef = useRef<HTMLDivElement | null>(null);
   const cyRef = useRef<Cytoscape.Core | null>(null);
+  const popupRef = useRef<HTMLDivElement | null>(null);
+  const popperRef = useRef<PopperRef | null>(null);
+  const [popupNode, setPopupNode] = useState<any | null>(null);
 
   function setGraphRef(instance: HTMLDivElement | null) {
     if (instance && !graphRef.current) {
@@ -325,6 +344,43 @@ const ProductionGraphTab = (props: Props) => {
       e.target.outgoers('edge').removeClass('grabbed').removeClass('grabbed-outgoing');
       e.target.incomers('edge').removeClass('grabbed').removeClass('grabbed-incoming');
     });
+
+    cy.on('mouseover', 'node', function (e) {
+      const nodeId = e.target.id() as string;
+      if (popperRef.current?.nodeId === nodeId) return;
+      deactivatePopper(cy);
+      activatePopper(cy, e.target);
+    });
+
+    cy.on('mouseout', 'node', function (e) {
+      const nodeId = e.target.id() as string;
+      if (popperRef.current?.nodeId === nodeId) {
+        deactivatePopper(cy);
+      }
+    });
+  }
+
+  function activatePopper(cy: Cytoscape.Core, node: any) {
+    const popper = node.popper({
+      content: () => popupRef.current || undefined,
+      popper: {
+        placement: 'top',
+      }
+    });
+    popperRef.current = { popper, nodeId: node.id() };
+    node.on('position', () => { popper.update(); });
+    cy.on('pan zoom resize', () => { popper.update(); });
+    setPopupNode(node);
+  }
+
+  function deactivatePopper(cy: Cytoscape.Core) {
+    if (!popperRef.current) return;
+    const node = cy.getElementById(popperRef.current.nodeId);
+    node.off('position');
+    cy.off('pan zoom resize');
+    popperRef.current.popper.destroy();
+    popperRef.current = null;
+    setPopupNode(null);
   }
 
   useEffect(() => {
@@ -349,7 +405,7 @@ const ProductionGraphTab = (props: Props) => {
       elements.push({
         group: 'nodes',
         data: {
-          id: node.id,
+          ...node,
           label: getNodeLabel(node),
         },
         classes: getNodeClasses(node),
@@ -359,6 +415,7 @@ const ProductionGraphTab = (props: Props) => {
       elements.push({
         group: 'edges',
         data: {
+          ...edge,
           source: edge.from,
           target: edge.to,
           label: getEdgeLabel(edge),
@@ -371,46 +428,49 @@ const ProductionGraphTab = (props: Props) => {
   }, [activeGraph]);
 
   return (
-    <GraphContainer fluid ref={setGraphRef}>
-      {
-        doFirstRender && (
-          graphProps != null
-          ? (
-              <GraphVisualizer
-                key={graphProps.key}
-                elements={graphProps.elements}
-                layout={layout}
-                stylesheet={stylesheet}
-                boxSelectionEnabled={false}
-                wheelSensitivity={0.13}
-                maxZoom={3.0}
-                minZoom={0.1}
-                style={{ position: 'absolute', height: '100%', width: '100%', overflow: 'hidden' }}
-                cy={setCyRef}
-              />
-          )
-          : (
-            <Center style={{ position: 'absolute', height: '100%', width: '100%' }}>
-              <Group>
-                <AlertCircle color="#eee" size={75} />
-                <Group direction='column' style={{ gap: '0px' }}>
-                  <Text size='xl'>
-                    Could not build graph
-                  </Text>
-                  {errorMessage
-                    ? (
-                      <Text size='sm'>
-                        {`ERROR: ${errorMessage}`}
-                      </Text>
-                    )
-                    : null}
+    <>
+      <GraphContainer fluid ref={setGraphRef}>
+        {
+          doFirstRender && (
+            graphProps != null
+            ? (
+                <GraphVisualizer
+                  key={graphProps.key}
+                  elements={graphProps.elements}
+                  layout={layout}
+                  stylesheet={stylesheet}
+                  boxSelectionEnabled={false}
+                  wheelSensitivity={0.13}
+                  maxZoom={3.0}
+                  minZoom={0.1}
+                  style={{ position: 'absolute', height: '100%', width: '100%', overflow: 'hidden' }}
+                  cy={setCyRef}
+                />
+            )
+            : (
+              <Center style={{ position: 'absolute', height: '100%', width: '100%' }}>
+                <Group>
+                  <AlertCircle color="#eee" size={75} />
+                  <Group direction='column' style={{ gap: '0px' }}>
+                    <Text size='xl'>
+                      Could not build graph
+                    </Text>
+                    {errorMessage
+                      ? (
+                        <Text size='sm'>
+                          {`ERROR: ${errorMessage}`}
+                        </Text>
+                      )
+                      : null}
+                  </Group>
                 </Group>
-              </Group>
-            </Center>
+              </Center>
+            )
           )
-        )
-      }
-    </GraphContainer>
+        }
+      </GraphContainer>
+      <GraphPopup ref={popupRef} currentNode={popupNode} />
+    </>
   );
 };
 

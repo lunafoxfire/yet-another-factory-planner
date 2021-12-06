@@ -30,7 +30,7 @@ export const theme: MantineThemeOverride = {
   colors: {
     'primary': ["#fcebde", "#f9d8be", "#f7c59f", "#f4b17f", "#f19e60", "#ef8b40", "#ec7821", "#c4631c", "#94501e", "#673c1c"],
     'danger': ["#fdb5b5", "#fda3a3", "#fc9191", "#fc7e7e", "#fb6c6c", "#fa5959", "#fa4747", "#f12929", "#dc1818", "#b21b1b"],
-    'background': ["#26282b", "#373b40", "#3f434a", "#50565e", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#b3b6ba", "#ffffff"],
+    'background': ["#26282b", "#373b40", "#3f434a", "#50565e", "#6c7582", "#ffffff", "#ffffff", "#ffffff", "#b3b6ba", "#ffffff"],
     'info': Array(10).fill('#3065c7') as any,
   },
   white: '#eee',
@@ -52,6 +52,8 @@ export const theme: MantineThemeOverride = {
     headerHeight: '64px',
     pageLeftMargin: '55px',
     drawerWidth: '620px',
+    drawerZIndex: '10',
+    tooltipZIndex: '9999',
     scrollbarTrackColor: '#212226',
     scrollbarThumbColor: '#6c6c73',
   },

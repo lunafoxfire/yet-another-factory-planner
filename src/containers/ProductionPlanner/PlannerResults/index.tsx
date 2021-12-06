@@ -26,7 +26,7 @@ const PlannerResults = (props: Props) => {
           <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={solverResults?.error || ''} />
         </Container>
       </Tabs.Tab>
-      <Tabs.Tab label='Report' icon={<Edit size={18} />} sx={tabSx}>
+      <Tabs.Tab label='Factory Report' icon={<Edit size={18} />} sx={tabSx}>
         <Card style={{ paddingLeft: '10px', background: theme.colors.background[0] }}>
           <ReportTab report={solverResults?.report || null} />
         </Card>

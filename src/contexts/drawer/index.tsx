@@ -52,7 +52,7 @@ const DrawerRoot = styled.div<{ topOffset: string }>`
   left: 0px;
   bottom: 0px;
   right: 0px;
-  z-index: 1000;
+  z-index: ${({ theme }) => theme.other.drawerZIndex};
   margin: 0;
   padding: 0;
   pointer-events: none;

@@ -3,7 +3,7 @@ import { recipes, items } from '../../../data'
 import { POINTS_ITEM_KEY } from '../../../utilities/production-solver';
 import { FactoryOptions, getInitialState } from '../reducer';
 
-const FACTORY_SETTINGS_VERSION = 'v2_U5';
+const FACTORY_SETTINGS_VERSION = 'v3_U5';
 
 const SEP0 = ',';
 const SEP1 = '|';
@@ -30,7 +30,7 @@ function getModeBySlug(slug: string) {
   throw new Error('INVALID RECIPE SLUG');
 }
 
-export function decodeState_v2_U5(stateStr: string): FactoryOptions {
+export function decodeState_v3_U5(stateStr: string): FactoryOptions {
   const newState: FactoryOptions = getInitialState();
 
   const fields = stateStr.split(SEP0);
@@ -93,11 +93,11 @@ export function decodeState_v2_U5(stateStr: string): FactoryOptions {
   newState.allowHandGatheredItems = !!parseInt(fields[5]);
 
   const weightingOptionsStrings = fields[6].split(SEP2);
-  if (weightingOptionsStrings.length !== 3) throw new Error('INVALID DATA [weightingOptions]');
+  if (weightingOptionsStrings.length !== 4) throw new Error('INVALID DATA [weightingOptions]');
   newState.weightingOptions.resources = weightingOptionsStrings[0];
   newState.weightingOptions.power = weightingOptionsStrings[1];
   newState.weightingOptions.complexity = weightingOptionsStrings[2];
-  newState.weightingOptions.buildings = '0';
+  newState.weightingOptions.buildings = weightingOptionsStrings[3];
 
   return newState;
 }

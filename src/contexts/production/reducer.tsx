@@ -3,8 +3,9 @@ import { resources, recipes, items } from '../../data'
 import { POINTS_ITEM_KEY } from '../../utilities/production-solver';
 import { decodeState_v1_U5 } from './state-decoders/v1_U5';
 import { decodeState_v2_U5 } from './state-decoders/v2_U5';
+import { decodeState_v3_U5 } from './state-decoders/v3_U5';
 
-export const FACTORY_SETTINGS_VERSION = 'v2_U5';
+export const FACTORY_SETTINGS_VERSION = 'v3_U5';
 export const MAX_PRIORITY = 20;
 
 // TYPES
@@ -19,6 +20,7 @@ export type WeightingOptions = {
   resources: string,
   power: string,
   complexity: string,
+  buildings: string,
 };
 
 export type InputItemOptions = {
@@ -110,8 +112,9 @@ function getInitialInputResources(): InputItemOptions[] {
 function getInitialWeightingOptions(): WeightingOptions {
   return {
     resources: '1000',
-    power: '5',
-    complexity: '3',
+    power: '1',
+    complexity: '1',
+    buildings: '0',
   };
 }
 
@@ -314,6 +317,8 @@ function decodeState(stateStr: string): FactoryOptions {
     return decodeState_v1_U5(stateStr);
   } else if (version === 'v2_U5') {
     return decodeState_v2_U5(stateStr);
+  } else if (version === 'v3_U5') {
+    return decodeState_v3_U5(stateStr);
   } else {
     throw new Error('INVALID VERSION');
   }
@@ -379,7 +384,7 @@ export function encodeState(state: FactoryOptions): string {
 
   fields.push(`${state.allowHandGatheredItems ? '1' : '0'}`);
 
-  fields.push(`${state.weightingOptions.resources}${SEP2}${state.weightingOptions.power}${SEP2}${state.weightingOptions.complexity}`);
+  fields.push(`${state.weightingOptions.resources}${SEP2}${state.weightingOptions.power}${SEP2}${state.weightingOptions.complexity}${SEP2}${state.weightingOptions.buildings}`);
 
   return fields.join(SEP0);
 }

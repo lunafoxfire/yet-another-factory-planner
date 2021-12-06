@@ -171,4 +171,15 @@ export const styles: any = {
       borderBottomRightRadius: '2px',
     },
   }),
+  Tooltip: (theme: any) => ({
+    body: {
+      background: theme.colors.background[2],
+      border: '1px solid #aaa',
+    },
+    arrow: {
+      background: theme.colors.background[2],
+      borderBottom: '1px solid #aaa',
+      borderRight: '1px solid #aaa',
+    }
+  }),
 };

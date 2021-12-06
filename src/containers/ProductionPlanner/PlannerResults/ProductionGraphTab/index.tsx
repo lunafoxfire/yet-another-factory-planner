@@ -10,7 +10,7 @@ import { AlertCircle } from 'react-feather';
 import { ProductionGraph, GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes, buildings } from '../../../../data';
 import { graphColors } from '../../../../theme';
-import GraphPopup from '../../../../components/GraphPopup';
+import GraphTooltip from '../../../../components/GraphTooltip';
 import { truncateFloat } from '../../../../utilities/number';
 
 Cytoscape.use(popper);
@@ -469,7 +469,7 @@ const ProductionGraphTab = (props: Props) => {
           )
         }
       </GraphContainer>
-      <GraphPopup ref={popupRef} currentNode={popupNode} />
+      <GraphTooltip ref={popupRef} currentNode={popupNode} />
     </>
   );
 };

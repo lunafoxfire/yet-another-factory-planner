@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
-import { Paper, Title, Text, Divider, List, useMantineTheme } from '@mantine/core';
+import { Title, Text, Divider, List, useMantineTheme, Paper } from '@mantine/core';
 import { buildings, items, recipes } from '../../data';
 import { truncateFloat } from '../../utilities/number';
 import { NODE_TYPE } from '../../utilities/production-solver';
@@ -11,7 +11,7 @@ interface Props {
   currentNode: any | null,
 }
 
-const GraphPopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
+const GraphTooltip = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { currentNode } = props;
   const theme = useMantineTheme();
 
@@ -42,40 +42,40 @@ const GraphPopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
     const itemsPerMinPerBuilding = primaryProduct.perMinute * data.multiplier / totalBuildings;
 
     return (
-      <Popup>
-        <PopupTitle order={3}>Recipe: [{recipeInfo.name}]</PopupTitle>
-        <PopupDivider />
-        <PopupText>
+      <Tooltip>
+        <TooltipTitle order={3}>Recipe: [{recipeInfo.name}]</TooltipTitle>
+        <TooltipDivider />
+        <TooltipText>
           <b>Buildings:</b> {totalBuildings}x {buildings[recipeInfo.producedIn].name}
-        </PopupText>
-        <PopupText>
+        </TooltipText>
+        <TooltipText>
           <b>Clock speed:</b> {truncateFloat(clockPercentage)}% each
-        </PopupText>
-        <PopupText>
+        </TooltipText>
+        <TooltipText>
           <b>Items per min:</b> {truncateFloat(itemsPerMinPerBuilding)} each
-        </PopupText>
-        <PopupDivider />
-        <PopupText><b>Inputs:</b></PopupText>
+        </TooltipText>
+        <TooltipDivider />
+        <TooltipText><b>Inputs:</b></TooltipText>
         <List listStyleType='none' withPadding>
           {
             recipeInfo.ingredients.map((ingredient) => (
               <List.Item>
-                <PopupText>{items[ingredient.itemClass].name}: {truncateFloat(ingredient.perMinute * data.multiplier)} / min</PopupText>
+                <TooltipText>{items[ingredient.itemClass].name}: {truncateFloat(ingredient.perMinute * data.multiplier)} / min</TooltipText>
               </List.Item>
             ))
           }
         </List>
-        <PopupText><b>Outputs:</b></PopupText>
+        <TooltipText><b>Outputs:</b></TooltipText>
         <List listStyleType='none' withPadding>
           {
             recipeInfo.products.map((product) => (
               <List.Item>
-                <PopupText>{items[product.itemClass].name}: {truncateFloat(product.perMinute * data.multiplier)} / min</PopupText>
+                <TooltipText>{items[product.itemClass].name}: {truncateFloat(product.perMinute * data.multiplier)} / min</TooltipText>
               </List.Item>
             ))
           }
         </List>
-      </Popup>
+      </Tooltip>
     );
   }
 
@@ -83,10 +83,10 @@ const GraphPopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
     const itemInfo = items[data.key];
     const baseNumMiners = data.multiplier / 60;
     return (
-      <Popup>
-        <PopupTitle order={3}>Resource: [{itemInfo.name}]</PopupTitle>
-        <PopupDivider />
-        <PopupText><b>Miners required (assuming normal nodes):</b></PopupText>
+      <Tooltip>
+        <TooltipTitle order={3}>Resource: [{itemInfo.name}]</TooltipTitle>
+        <TooltipDivider />
+        <TooltipText><b>Miners required (assuming normal nodes):</b></TooltipText>
         <Table>
           <thead>
             <tr>
@@ -121,18 +121,18 @@ const GraphPopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
             </tr>
           </tbody>
         </Table>
-      </Popup>
+      </Tooltip>
     );
   }
 
   function renderWaterExtractorInfo(data: NodeData) {
     const itemInfo = items[data.key];
     return (
-      <Popup>
-        <PopupTitle order={3}>Resource: [{itemInfo.name}]</PopupTitle>
-        <PopupDivider />
-        <PopupText><b>Extractors required:</b> {truncateFloat(data.multiplier / 120, 2)}x Water Extractor</PopupText>
-      </Popup>
+      <Tooltip>
+        <TooltipTitle order={3}>Resource: [{itemInfo.name}]</TooltipTitle>
+        <TooltipDivider />
+        <TooltipText><b>Extractors required:</b> {truncateFloat(data.multiplier / 120, 2)}x Water Extractor</TooltipText>
+      </Tooltip>
     );
   }
 
@@ -140,10 +140,10 @@ const GraphPopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
     const itemInfo = items[data.key];
     const baseNumExtractors = data.multiplier / 120;
     return (
-      <Popup>
-        <PopupTitle order={3}>Resource: [{itemInfo.name}]</PopupTitle>
-        <PopupDivider />
-        <PopupText><b>Extractors required:</b></PopupText>
+      <Tooltip>
+        <TooltipTitle order={3}>Resource: [{itemInfo.name}]</TooltipTitle>
+        <TooltipDivider />
+        <TooltipText><b>Extractors required:</b></TooltipText>
         <Table>
           <thead>
             <tr>
@@ -178,7 +178,7 @@ const GraphPopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
             </tr>
           </tbody>
         </Table>
-      </Popup>
+      </Tooltip>
     );
   }
 
@@ -189,9 +189,9 @@ const GraphPopup = forwardRef<HTMLDivElement, Props>((props, ref) => {
   );
 });
 
-export default GraphPopup;
+export default GraphTooltip;
 
-const Popup = styled(Paper)`
+const Tooltip = styled(Paper)`
   position: relative;
   bottom: 50px;
   background: ${({ theme }) => theme.colors.background[2]};
@@ -214,15 +214,15 @@ const Popup = styled(Paper)`
   }
 `;
 
-const PopupTitle = styled(Title)`
+const TooltipTitle = styled(Title)`
   font-size: 16px;
 `;
 
-const PopupText = styled(Text)`
+const TooltipText = styled(Text)`
   font-size: 15px;
 `;
 
-const PopupDivider = styled(Divider)`
+const TooltipDivider = styled(Divider)`
   margin-top: 10px;
   margin-bottom: 10px;
   border-top-color: ${({ theme }) => theme.colors.background[4]};

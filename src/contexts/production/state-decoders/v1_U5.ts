@@ -107,6 +107,7 @@ export function decodeState_v1_U5(stateStr: string): FactoryOptions {
   newState.weightingOptions.resources = weightingOptionsStrings[0];
   newState.weightingOptions.power = weightingOptionsStrings[1];
   newState.weightingOptions.complexity = weightingOptionsStrings[2];
+  newState.weightingOptions.buildings = '0';
 
   return newState;
 }

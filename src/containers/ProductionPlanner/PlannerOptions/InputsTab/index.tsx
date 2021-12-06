@@ -5,6 +5,7 @@ import { items, resources } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
 import TrashButton from '../../../../components/TrashButton';
 import { Section, SectionDescription } from '../../../../components/Section';
+import LabelWithTooltip from '../../../../components/LabelWithTooltip';
 
 const itemOptions = Object.keys(items)
   .filter((key) => items[key].producedFromRecipes.length !== 0 && items[key].usedInRecipes.length !== 0 && !resources[key])
@@ -78,50 +79,67 @@ const InputsTab = () => {
   function renderWeightInputs() {
     const weightingOptions = ctx.state.weightingOptions;
     return (
-      <Group grow>
-        <TextInput
-          label='Resource Efficiency'
-          className='no-spinner'
-          type='number'
-          min='0'
-          step='1'
-          value={weightingOptions.resources}
-          onChange={(e) => {
-            ctx.dispatch({
-              type: 'UPDATE_WEIGHTING_OPTIONS',
-              data: { ...weightingOptions, resources: e.currentTarget.value },
-            });
-          }}
-        />
-        <TextInput
-          label='Power Efficiency'
-          className='no-spinner'
-          type='number'
-          min='0'
-          step='1'
-          value={weightingOptions.power}
-          onChange={(e) => {
-            ctx.dispatch({
-              type: 'UPDATE_WEIGHTING_OPTIONS',
-              data: { ...weightingOptions, power: e.currentTarget.value },
-            });
-          }}
-        />
-        <TextInput
-          label='Complexity'
-          className='no-spinner'
-          type='number'
-          min='0'
-          step='1'
-          value={weightingOptions.complexity}
-          onChange={(e) => {
-            ctx.dispatch({
-              type: 'UPDATE_WEIGHTING_OPTIONS',
-              data: { ...weightingOptions, complexity: e.currentTarget.value },
-            });
-          }}
-        />
-      </Group>
+      <>
+        <Group grow>
+          <TextInput
+            label={<LabelWithTooltip label='Resource Efficiency' tooltip='This weighting prioritizes using as few resources as possible.' />}
+            className='no-spinner'
+            type='number'
+            min='0'
+            step='1'
+            value={weightingOptions.resources}
+            onChange={(e) => {
+              ctx.dispatch({
+                type: 'UPDATE_WEIGHTING_OPTIONS',
+                data: { ...weightingOptions, resources: e.currentTarget.value },
+              });
+            }}
+          />
+          <TextInput
+            label={<LabelWithTooltip label='Power Efficiency' tooltip='This weighting prioritizes using as little power as possible.' />}
+            className='no-spinner'
+            type='number'
+            min='0'
+            step='1'
+            value={weightingOptions.power}
+            onChange={(e) => {
+              ctx.dispatch({
+                type: 'UPDATE_WEIGHTING_OPTIONS',
+                data: { ...weightingOptions, power: e.currentTarget.value },
+              });
+            }}
+          />
+        </Group>
+        <Group grow style={{ marginTop: '10px' }}>
+          <TextInput
+            label={<LabelWithTooltip label='Complexity' tooltip='This weighting prioritizes reducing the number of inputs into each building. May not behave intuitively (WIP).' />}
+            className='no-spinner'
+            type='number'
+            min='0'
+            step='1'
+            value={weightingOptions.complexity}
+            onChange={(e) => {
+              ctx.dispatch({
+                type: 'UPDATE_WEIGHTING_OPTIONS',
+                data: { ...weightingOptions, complexity: e.currentTarget.value },
+              });
+            }}
+          />
+          <TextInput
+            label={<LabelWithTooltip label='Buildings' tooltip='This weighting prioritizes using as few buildings as possible (without overclocking).' />}
+            type='number'
+            min='0'
+            step='1'
+            value={weightingOptions.buildings}
+            onChange={(e) => {
+              ctx.dispatch({
+                type: 'UPDATE_WEIGHTING_OPTIONS',
+                data: { ...weightingOptions, buildings: e.currentTarget.value },
+              });
+            }}
+          />
+        </Group>
+      </>
     )
   }
 

@@ -15,8 +15,6 @@ interface Props {
 
 const ReportTab = (props: Props) => {
   const { report } = props;
-
-  // TODO: Use stylesheets ya dingus
   function renderReport() {
     return (
       <>

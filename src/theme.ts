@@ -88,7 +88,7 @@ export const styles: any = {
     }
   }),
   Anchor: (theme: any) => ({
-    anchor: {
+    root: {
       color: theme.colors.primary[6],
     }
   }),

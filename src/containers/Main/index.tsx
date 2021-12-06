@@ -5,6 +5,7 @@ import SiteHeader from './SiteHeader';
 import ProductionPlanner from '../ProductionPlanner';
 import PaypalButton from '../../components/PaypalButton';
 import ExternalLink from '../../components/ExternalLink';
+import ErrorBoundary from '../ErrorBoundary';
 
 const Main = () => {
   const theme = useMantineTheme();
@@ -14,7 +15,9 @@ const Main = () => {
       header={<SHeader height={theme.other.headerHeight} padding='sm'><SiteHeader /></SHeader>}
     >
       <MainContainer fluid>
-        <ProductionPlanner />
+        <ErrorBoundary>
+          <ProductionPlanner />
+        </ErrorBoundary>
         <Footer>
           <FooterContent>
             Made with ♥ by <ExternalLink href='https://github.com/lydianlights'>LydianLights</ExternalLink> -

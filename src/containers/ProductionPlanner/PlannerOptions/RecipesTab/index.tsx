@@ -68,7 +68,7 @@ const RecipesTab = () => {
           </Button>
         </Group>
         <List listStyleType='none' spacing={6}>
-          {rendered.filter(({ label }) => label.toLowerCase().includes(searchValue)).map(({ component }) => component)}
+          {rendered.filter(({ label }) => label.toLowerCase().includes(searchValue.toLowerCase())).map(({ component }) => component)}
         </List>
       </>
     )

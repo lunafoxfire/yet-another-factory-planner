@@ -61,7 +61,12 @@ export type SolverResults = {
 
 export type Report = {
   pointsProduced: number,
-  powerUsageEstimate: number,
+  powerUsageEstimate: {
+    production: number,
+    extraction: number,
+    generators: number,
+    total: number,
+  },
   resourceEfficiencyScore: number,
   totalBuildArea: number,
   estimatedFoundations: number,
@@ -702,7 +707,12 @@ export class ProductionSolver {
   private generateProductionReport(productionGraph: ProductionGraph): Report {
     const report: Report = {
       pointsProduced: 0,
-      powerUsageEstimate: 0,
+      powerUsageEstimate: {
+        production: 0,
+        extraction: 0,
+        generators: 0,
+        total: 0,
+      },
       resourceEfficiencyScore: 0,
       totalBuildArea: 0,
       estimatedFoundations: 0,
@@ -715,8 +725,13 @@ export class ProductionSolver {
         const recipeInfo = recipes[key];
         const buildingKey = recipeInfo.producedIn;
         const buildingInfo = buildings[buildingKey];
-
-        report.powerUsageEstimate += node.multiplier * buildingInfo.power;
+        const power = node.multiplier * buildingInfo.power;
+        if (power < 0) {
+          report.powerUsageEstimate.generators += -power;
+        } else {
+          report.powerUsageEstimate.production += power;
+        }
+        report.powerUsageEstimate.total += power;
         report.totalBuildArea += Math.ceil(node.multiplier) * buildingInfo.area;
         if (!report.buildingsUsed[buildingKey]) {
           report.buildingsUsed[buildingKey] = {
@@ -747,6 +762,34 @@ export class ProductionSolver {
         report.pointsProduced += node.multiplier * this.getItemPoints(key);
       } else if (node.type === NODE_TYPE.RESOURCE) {
         report.resourceEfficiencyScore += node.multiplier * this.inputs[key].weight;
+        let power = 0;
+        if (key === 'Desc_Water_C') {
+          power = node.multiplier / 120 * buildings['Desc_WaterPump_C'].power;
+
+          const numExtractors = Math.ceil(node.multiplier / 120);
+          report.buildingsUsed['Desc_WaterPump_C'] = {
+            count: numExtractors,
+            materialCost: {},
+          };
+          for (const ingredient of buildings['Desc_WaterPump_C'].buildCost) {
+            const amount = numExtractors * ingredient.quantity;
+            report.buildingsUsed['Desc_WaterPump_C'].materialCost[ingredient.itemClass] = amount;
+            if (!report.totalMaterialCost[ingredient.itemClass]) {
+              report.totalMaterialCost[ingredient.itemClass] = amount;
+            } else {
+              report.totalMaterialCost[ingredient.itemClass] += amount;
+            }
+          }
+
+        } else if (key === 'Desc_LiquidOil_C') {
+          power = node.multiplier / 120 * buildings['Desc_OilPump_C'].power;
+        } else if (key === 'Desc_NitrogenGas_C') {
+          // SKIP
+        } else {
+          power = node.multiplier / 240 * buildings['Desc_MinerMk3_C'].power;
+        }
+        report.powerUsageEstimate.extraction += power;
+        report.powerUsageEstimate.total += power;
       }
     }
 

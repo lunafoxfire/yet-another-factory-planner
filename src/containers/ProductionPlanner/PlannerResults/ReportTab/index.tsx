@@ -22,33 +22,34 @@ const ReportTab = (props: Props) => {
       <>
         <Title order={2}>Statistics</Title>
         <SDivider />
-        <List listStyleType='none'>
-          <List.Item>
-            <SmallerTitle order={3}>Points Produced</SmallerTitle>
-            <Text>{formatFloat(report!.pointsProduced)} per min</Text>
-            <SDivider />
-          </List.Item>
-          <List.Item>
-            <SmallerTitle order={3}>Estimated Power {report!.powerUsageEstimate < 0 ? 'Production' : 'Usage'}</SmallerTitle>
-            <Text>{formatFloat(Math.abs(report!.powerUsageEstimate))} MW</Text>
-            <SDivider />
-          </List.Item>
-          <List.Item>
-            <SmallerTitle order={3}>Resource Usage Score</SmallerTitle>
-            <Text>{formatFloat(report!.resourceEfficiencyScore)}</Text>
-            <SDivider />
-          </List.Item>
-          <List.Item>
-            <SmallerTitle order={3}>Total Build Area</SmallerTitle>
-            <Text>{formatFloat(report!.totalBuildArea)} m²</Text>
-            <SDivider />
-          </List.Item>
-          <List.Item>
-            <SmallerTitle order={3}>Estimated Minimal Foundations</SmallerTitle>
-            <Text>{formatFloat(report!.estimatedFoundations)} foundations ({formatFloat(report!.estimatedFoundations * 8)} Concrete)</Text>
-            <SDivider />
-          </List.Item>
-        </List>
+        <SmallerTitle order={3}>Points Produced</SmallerTitle>
+        <Text>{formatFloat(report!.pointsProduced)} per min</Text>
+        <SDivider />
+        <SmallerTitle order={3}>Resource Usage Score</SmallerTitle>
+        <Text>{formatFloat(report!.resourceEfficiencyScore)}</Text>
+        <SDivider />
+        <SmallerTitle order={3}>Total Build Area</SmallerTitle>
+        <Text>{formatFloat(report!.totalBuildArea)} m²</Text>
+        <SDivider />
+        <SmallerTitle order={3}>Estimated Minimal Foundations</SmallerTitle>
+        <Text>{formatFloat(report!.estimatedFoundations)} foundations ({formatFloat(report!.estimatedFoundations * 8)} Concrete)</Text>
+        <SDivider />
+
+        <Title order={2} style={{ marginTop: '30px' }}>Power</Title>
+        <SDivider />
+        <SmallerTitle order={3}>Manufacturing</SmallerTitle>
+        <Text>{formatFloat(report!.powerUsageEstimate.production)} MW</Text>
+        <SDivider />
+        <SmallerTitle order={3}>Resource Extraction</SmallerTitle>
+        <Text>{formatFloat(report!.powerUsageEstimate.extraction)} MW</Text>
+        <SDivider />
+        <SmallerTitle order={3}>Generation</SmallerTitle>
+        <Text>{formatFloat(report!.powerUsageEstimate.generators)} MW</Text>
+        <SDivider />
+        <SmallerTitle order={3}>Total {report!.powerUsageEstimate.total < 0 ? 'Production' : 'Usage'}</SmallerTitle>
+        <Text>{formatFloat(Math.abs(report!.powerUsageEstimate.total))} MW</Text>
+        <SDivider />
+
         <Title order={2} style={{ marginTop: '30px' }}>Buildings</Title>
         <SDivider />
         <List listStyleType='none'>

@@ -1,20 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Title, List, Divider, Text, Container, Group } from '@mantine/core';
-import { buildings, items } from '../../../../data';
-import { Report } from '../../../../utilities/production-solver';
 import { AlertCircle } from 'react-feather';
+import { buildings, items } from '../../../../data';
+import { useProductionContext } from '../../../../contexts/production';
 
 function formatFloat(n: number) {
   return n.toLocaleString(undefined, { maximumFractionDigits: 3 });
 }
 
-interface Props {
-  report: Report | null,
-}
+const ReportTab = () => {
+  const ctx = useProductionContext();
+  const report = ctx.solverResults?.report;
 
-const ReportTab = (props: Props) => {
-  const { report } = props;
   function renderReport() {
     return (
       <>

@@ -26,7 +26,7 @@ const Factory = () => {
           {ctx.ficsitTip}
         </Text>
       </Card>
-      <PlannerResults solverResults={ctx.solverResults} />
+      <PlannerResults />
       <Drawer open={drawerOpen === 'true'} onToggle={(value) => { setDrawerOpen(value ? 'true' : 'false'); }}>
         <PlannerOptions />
       </Drawer>

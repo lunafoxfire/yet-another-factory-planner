@@ -5,14 +5,14 @@ import Cytoscape, { Stylesheet } from 'cytoscape';
 import klay from 'cytoscape-klay';
 import GraphVisualizer from 'react-cytoscapejs';
 import popper from 'cytoscape-popper';
-import { Text, Container, Center, Group } from '@mantine/core';
+import { Text, Container, Center, Group, Loader } from '@mantine/core';
 import { AlertCircle } from 'react-feather';
-import { ProductionGraph, GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
+import { GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
 import { items, recipes, buildings } from '../../../../data';
 import { graphColors } from '../../../../theme';
 import GraphTooltip from '../../../../components/GraphTooltip';
 import { truncateFloat } from '../../../../utilities/number';
-import { GraphError } from '../../../../utilities/error/GraphError';
+import { useProductionContext } from '../../../../contexts/production';
 
 Cytoscape.use(popper);
 Cytoscape.use(klay);
@@ -277,11 +277,6 @@ function _resizeListener(graphRef: React.RefObject<HTMLDivElement | null>) {
   }
 }
 
-interface Props {
-  resultsGraph: ProductionGraph | null,
-  graphError: GraphError | null,
-}
-
 interface PopperRef {
   popper: any,
   nodeId: string,
@@ -297,14 +292,17 @@ export interface EdgeData extends GraphEdge {
   label: string,
 }
 
-const ProductionGraphTab = (props: Props) => {
-  const { resultsGraph, graphError } = props;
+const ProductionGraphTab = () => {
   const [doFirstRender, setDoFirstRender] = useState(false);
   const graphRef = useRef<HTMLDivElement | null>(null);
   const cyRef = useRef<Cytoscape.Core | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
   const popperRef = useRef<PopperRef | null>(null);
   const [popupNode, setPopupNode] = useState<any | null>(null);
+  const ctx = useProductionContext();
+  const resultsGraph = ctx.solverResults?.productionGraph || null;
+  const graphError = ctx.solverResults?.error || null;
+  const isLoading = ctx.calculating;
 
   function setGraphRef(instance: HTMLDivElement | null) {
     if (instance && !graphRef.current) {
@@ -432,7 +430,14 @@ const ProductionGraphTab = (props: Props) => {
     <>
       <GraphContainer fluid ref={setGraphRef}>
         {
-          doFirstRender && (
+          isLoading && (
+            <Center style={{ position: 'absolute', height: '100%', width: '100%' }}>
+              <Loader size={50} />
+            </Center>
+          )
+        }
+        {
+          doFirstRender && !isLoading && (
             graphProps != null
             ? (
                 <GraphVisualizer

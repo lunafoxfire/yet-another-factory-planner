@@ -5,8 +5,10 @@ import { buildings, items, recipes, resources, handGatheredItems } from '../../d
 import { GraphError } from '../error/GraphError';
 
 const EPSILON = 1e-8;
+const MIN_RESOURCE_WEIGHT = 0.0001;
 const MAXIMIZE_WEIGHT = 1e5;
-const TIME_LIMIT = 1.0;
+const ENFORCE_BIN_WEIGHT = 1000;
+const TIME_LIMIT = 2.0;
 const RATE_TARGET_KEY = 'RATE_TARGET_PASS';
 
 export const NODE_TYPE = {
@@ -117,6 +119,7 @@ export class ProductionSolver {
   private hasPointsTarget: boolean;
   private allowedRecipes: RecipeMap;
   private allowedItems: ItemMap;
+  private scale: number;
 
   public constructor(options: FactoryOptions) {
     this.allowedRecipes = options.allowedRecipes;
@@ -152,7 +155,7 @@ export class ProductionSolver {
       this.globalWeights.buildings
     );
 
-    this.globalWeights.resources = (this.globalWeights.resources / maxGlobalWeight) + 0.0001;
+    this.globalWeights.resources = (this.globalWeights.resources / maxGlobalWeight) + MIN_RESOURCE_WEIGHT;
     this.globalWeights.power = (this.globalWeights.power / maxGlobalWeight);
     this.globalWeights.complexity = 1000 * (this.globalWeights.complexity / maxGlobalWeight);
     this.globalWeights.buildings = (this.globalWeights.buildings / maxGlobalWeight);
@@ -212,6 +215,7 @@ export class ProductionSolver {
     this.rateTargets = {};
     this.maximizeTargets = [];
     this.hasPointsTarget = false;
+    this.scale = 0;
 
     const perMinTargets: RateTargets = {};
     const recipeTargets: RateTargets = {};
@@ -227,6 +231,7 @@ export class ProductionSolver {
       }
       switch (item.mode) {
         case 'per-minute':
+          this.scale += amount;
           if (perMinTargets[item.itemKey]) {
             perMinTargets[item.itemKey].value += amount;
           } else {
@@ -258,6 +263,7 @@ export class ProductionSolver {
               throw new GraphError('CANNOT TARGET DISABLED RECIPE', 'Make sure the recipe you are targeting is enabled in the Recipes tab.');
             }
             const target = recipeInfo.products.find((p) => p.itemClass === item.itemKey)!;
+            this.scale += target.perMinute * amount;
             if (perMinTargets[item.itemKey]) {
               perMinTargets[item.itemKey].value += target.perMinute * amount;
             } else {
@@ -281,6 +287,10 @@ export class ProductionSolver {
           }
       }
     });
+
+    if (this.scale === 0) {
+      this.scale = 1;
+    }
 
     this.maximizeTargets
       .sort((a, b) => {
@@ -478,7 +488,9 @@ export class ProductionSolver {
         const target = recipeInfo.ingredients.find((i) => i.itemClass === itemKey)!;
         vars.push({ name: recipeKey, coef: target.perMinute });
 
-        binVars.push({ name: recipeKey, coef: -1 });
+        if (!handGatheredItems[itemKey]) {
+          binVars.push({ name: recipeKey, coef: -1 });
+        }
       }
 
       for (const recipeKey of itemInfo.producedFromRecipes) {
@@ -494,18 +506,19 @@ export class ProductionSolver {
         }
       }
 
-
-      if (binVars.length > 0) {
-        model.binaries!.push(binKey);
-        model.objective.vars.push({ name: binKey, coef: this.globalWeights.complexity });
-        model.subjectTo.push({
-          name: `${binKey} constraint`,
-          vars: [
-            { name: binKey, coef: MAXIMIZE_WEIGHT },
-            ...binVars,
-          ],
-          bnds: { type: glpk.GLP_LO, ub: NaN, lb: 0 },
-        });
+      if (targetKey === RATE_TARGET_KEY) {
+        if (this.globalWeights.complexity > 0 && binVars.length > 0) {
+          model.binaries!.push(binKey);
+          model.objective.vars.push({ name: binKey, coef: this.globalWeights.complexity });
+          model.subjectTo.push({
+            name: `${binKey} constraint`,
+            vars: [
+              { name: binKey, coef: ENFORCE_BIN_WEIGHT * Math.sqrt(this.scale) },
+              ...binVars,
+            ],
+            bnds: { type: glpk.GLP_LO, ub: NaN, lb: 0 },
+          });
+        }
       }
 
       if (vars.length === 0) continue;

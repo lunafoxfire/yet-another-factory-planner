@@ -112,7 +112,7 @@ const InputsTab = () => {
         </Group>
         <Group grow style={{ marginTop: '10px' }}>
           <TextInput
-            label={<LabelWithTooltip label='Complexity' tooltip='This weighting prioritizes reducing the number of inputs into each building. May not behave intuitively (WIP).' />}
+            label={<LabelWithTooltip label='Complexity' tooltip='This weighting prioritizes reducing the number of item types used in the factory. Very slow to optimize for larger factories (WIP).' />}
             className='no-spinner'
             type='number'
             min='0'

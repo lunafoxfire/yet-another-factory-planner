@@ -41,12 +41,16 @@ const TIP = `FICSIT Tip #${TIP_INDEX}: ${TIPS[TIP_INDEX]}`;
 
 const ID = Math.floor(Math.random() * 1e7).toString().padStart(7, '0');
 
+const _setCalculating = _.debounce((value: boolean, setCalculating: React.Dispatch<React.SetStateAction<boolean>>) => {
+  setCalculating(value);
+}, 300, { leading: false, trailing: true });
+
 const _handleCalculateFactory = _.debounce(async (
     state: FactoryOptions,
     setSolverResults: React.Dispatch<React.SetStateAction<SolverResults | null>>,
     setCalculating: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
-    setCalculating(true);
+    _setCalculating(true, setCalculating);
     try {
       const solver = new ProductionSolver(state);
       const results = await solver.exec();
@@ -66,7 +70,7 @@ const _handleCalculateFactory = _.debounce(async (
         error: e as GraphError,
       });
     } finally {
-      setCalculating(false);
+      _setCalculating(false, setCalculating);
     }
   }, 300, { leading: true, trailing: true });
 

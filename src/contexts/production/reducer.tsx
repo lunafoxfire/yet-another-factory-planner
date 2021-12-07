@@ -113,7 +113,7 @@ function getInitialWeightingOptions(): WeightingOptions {
   return {
     resources: '1000',
     power: '1',
-    complexity: '1',
+    complexity: '0',
     buildings: '0',
   };
 }

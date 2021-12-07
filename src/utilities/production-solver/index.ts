@@ -2,9 +2,11 @@ import loadGLPK, { GLPK, LP, Var } from 'glpk.js';
 import { nanoid } from 'nanoid';
 import { FactoryOptions, RecipeMap } from '../../contexts/production/reducer';
 import { buildings, items, recipes, resources, handGatheredItems } from '../../data';
+import { GraphError } from '../error/GraphError';
 
 const EPSILON = 1e-8;
-const MAXIMIZE_TARGET_WEIGHTING = 1e6;
+const MAXIMIZE_WEIGHT = 1e5;
+const TIME_LIMIT = 1.0;
 const RATE_TARGET_KEY = 'RATE_TARGET_PASS';
 
 export const NODE_TYPE = {
@@ -57,7 +59,7 @@ export type SolverResults = {
   report: Report | null,
   timestamp: number,
   computeTime: number,
-  error: string,
+  error: GraphError | null,
 };
 
 export type Report = {
@@ -103,6 +105,10 @@ export type GraphEdge = {
   productionRate: number,
 };
 
+type ItemMap = {
+  [key: string]: boolean;
+}
+
 export class ProductionSolver {
   private globalWeights: GlobalWeights;
   private inputs: Inputs;
@@ -110,9 +116,22 @@ export class ProductionSolver {
   private maximizeTargets: MaximizeTargets[];
   private hasPointsTarget: boolean;
   private allowedRecipes: RecipeMap;
+  private allowedItems: ItemMap;
 
   public constructor(options: FactoryOptions) {
     this.allowedRecipes = options.allowedRecipes;
+    this.allowedItems = {};
+
+    Object.entries(this.allowedRecipes).forEach(([recipeKey, allowed]) => {
+      if (!allowed) return;
+      const recipeInfo = recipes[recipeKey];
+      recipeInfo.ingredients.forEach((i) => {
+        this.allowedItems[i.itemClass] = true;
+      });
+      recipeInfo.products.forEach((p) => {
+        this.allowedItems[p.itemClass] = true;
+      });
+    });
     
     this.globalWeights = {
       resources: Number(options.weightingOptions.resources),
@@ -133,11 +152,10 @@ export class ProductionSolver {
       this.globalWeights.buildings
     );
 
-    this.globalWeights.resources /= maxGlobalWeight;
-    this.globalWeights.resources += EPSILON; // Always have a tiny amount of resource optimization
-    this.globalWeights.power /= maxGlobalWeight;
-    this.globalWeights.complexity /= (maxGlobalWeight / 10);
-    this.globalWeights.buildings /= maxGlobalWeight;
+    this.globalWeights.resources = (this.globalWeights.resources / maxGlobalWeight) + 0.0001;
+    this.globalWeights.power = (this.globalWeights.power / maxGlobalWeight);
+    this.globalWeights.complexity = 1000 * (this.globalWeights.complexity / maxGlobalWeight);
+    this.globalWeights.buildings = (this.globalWeights.buildings / maxGlobalWeight);
 
     this.inputs = {};
 
@@ -202,7 +220,7 @@ export class ProductionSolver {
       const amount = Number(item.value);
       this.validateNumber(amount);
       if (!amount) return;
-      if (this.inputs[item.itemKey]) throw new Error('CANNOT HAVE ITEM AS BOTH INPUT AND OUTPUT');
+      if (this.inputs[item.itemKey]) throw new GraphError('INVALID INPUT', 'You can\'t set the same item as both an input and an output. Double check your factory settings.');
       const isPoints = item.itemKey === POINTS_ITEM_KEY;
       if (isPoints) {
         this.hasPointsTarget = true;
@@ -237,7 +255,7 @@ export class ProductionSolver {
           const recipeInfo = recipes[recipeKey];
           if (recipeInfo) {
             if (!this.allowedRecipes[recipeKey]) {
-              throw new Error('CANNOT TARGET A DISABLED RECIPE');
+              throw new GraphError('CANNOT TARGET DISABLED RECIPE', 'Make sure the recipe you are targeting is enabled in the Recipes tab.');
             }
             const target = recipeInfo.products.find((p) => p.itemClass === item.itemKey)!;
             if (perMinTargets[item.itemKey]) {
@@ -259,7 +277,7 @@ export class ProductionSolver {
               };
             }
           } else {
-            throw new Error('INVALID OUTPUT MODE SELECTION');
+            throw new GraphError('INVALID OUTPUT MODE SELECTION', 'Something really broke... Try refreshing or resetting your factory.');
           }
       }
     });
@@ -268,7 +286,7 @@ export class ProductionSolver {
       .sort((a, b) => {
         if (a.priority > b.priority) return -1;
         if (a.priority < b.priority) return 1;
-        throw new Error('TWO TARGET ITEMS HAVE THE SAME MAXIMIZATION PRIORITY');
+        throw new GraphError('DUPLICATE MAXIMIZATION PRIORITY', 'Two items have the same maximization priority, which is currently not allowed.');
       });
 
     this.rateTargets = {
@@ -276,15 +294,15 @@ export class ProductionSolver {
       ...recipeTargets,
     };
     if (Object.keys(this.rateTargets).length === 0 && this.maximizeTargets.length === 0) {
-      throw new Error('NO OUTPUTS SET');
+      throw new GraphError('NO OUTPUTS SET', 'Open the control panel to get started.');
     }
   }
 
   private validateNumber(num: Number) {
     if (Number.isNaN(num)) {
-      throw new Error('INVALID VALUE: NOT A NUMBER');
+      throw new GraphError('INVALID VALUE: NOT A NUMBER', 'Double check your factory settings.');
     } else if (num < 0) {
-      throw new Error('INVALID VALUE: NEGATIVE NUMBER');
+      throw new GraphError('INVALID VALUE: NEGATIVE NUMBER', 'Double check your factory settings.');
     }
   }
 
@@ -323,7 +341,7 @@ export class ProductionSolver {
       }
 
       if (Object.keys(productionGraph.nodes).length === 0) {
-        throw new Error('SOLUTION IS EMPTY');
+        throw new GraphError('SOLUTION IS EMPTY', 'For some reason the solution for your parameters is an empty factory. Double check that your factory settings make sense.');
       }
       const report = this.generateProductionReport(productionGraph);
 
@@ -332,15 +350,15 @@ export class ProductionSolver {
         report,
         timestamp,
         computeTime: performance.now() - timestamp,
-        error: '',
+        error: null,
       };
-    } catch (e: any) {
+    } catch (e: unknown) {
       return {
         productionGraph: null,
         report: null,
         timestamp,
         computeTime: performance.now() - timestamp,
-        error: e.message,
+        error: e as GraphError,
       };
     }
   }
@@ -359,7 +377,7 @@ export class ProductionSolver {
         vars: [],
       },
       subjectTo: [],
-      // binaries: [],
+      binaries: [],
     };
 
     const doPoints = (targetKey === RATE_TARGET_KEY && this.rateTargets[POINTS_ITEM_KEY]) || targetKey === POINTS_ITEM_KEY;
@@ -369,7 +387,6 @@ export class ProductionSolver {
       if (!this.allowedRecipes[recipeKey]) continue;
       const buildingInfo = buildings[recipeInfo.producedIn];
       const powerScore = buildingInfo.power > 0 ? buildingInfo.power * this.globalWeights.power : 0;
-      const complexityScore = recipeInfo.ingredients.length * this.globalWeights.complexity;
       const buildingsScore = this.globalWeights.buildings;
       let resourceScore = 0;
 
@@ -383,7 +400,7 @@ export class ProductionSolver {
       
       model.objective.vars.push({
         name: recipeKey,
-        coef: powerScore + resourceScore + buildingsScore + complexityScore,
+        coef: powerScore + resourceScore + buildingsScore,
       });
 
 
@@ -436,11 +453,11 @@ export class ProductionSolver {
         pointsVars.forEach((v) => {
           const existingVar = model.objective.vars.find((ov) => ov.name === v.name);
           if (existingVar) {
-            existingVar.coef += v.coef * MAXIMIZE_TARGET_WEIGHTING;
+            existingVar.coef += v.coef * MAXIMIZE_WEIGHT;
           } else {
             model.objective.vars.push({
               name: v.name,
-              coef: v.coef * MAXIMIZE_TARGET_WEIGHTING,
+              coef: v.coef * MAXIMIZE_WEIGHT,
             });
           }
         });
@@ -449,23 +466,19 @@ export class ProductionSolver {
 
 
     for (const [itemKey, itemInfo] of Object.entries(items)) {
+      if (!this.allowedItems[itemKey]) continue;
       const vars: Var[] = [];
-
-      // const binKey = `${itemKey}_BIN`;
-      // model.binaries!.push(binKey);
-      // model.objective.vars.push({ name: binKey, coef: 1000 * this.globalWeights.complexity });
+      
+      const binKey = `${itemKey}_BIN`;
+      const binVars: Var[] = [];
 
       for (const recipeKey of itemInfo.usedInRecipes) {
         if (!this.allowedRecipes[recipeKey]) continue;
         const recipeInfo = recipes[recipeKey];
         const target = recipeInfo.ingredients.find((i) => i.itemClass === itemKey)!;
         vars.push({ name: recipeKey, coef: target.perMinute });
-        
-        // model.subjectTo.push({
-        //   name: `${binKey} ${recipeKey} constraint`,
-        //   vars: [{ name: binKey, coef: MAXIMIZE_TARGET_WEIGHTING }, { name: recipeKey, coef: -1 }],
-        //   bnds: { type: glpk.GLP_LO, ub: NaN, lb: 0 },
-        // });
+
+        binVars.push({ name: recipeKey, coef: -1 });
       }
 
       for (const recipeKey of itemInfo.producedFromRecipes) {
@@ -479,6 +492,20 @@ export class ProductionSolver {
         } else {
           vars.push({ name: recipeKey, coef: -target.perMinute });
         }
+      }
+
+
+      if (binVars.length > 0) {
+        model.binaries!.push(binKey);
+        model.objective.vars.push({ name: binKey, coef: this.globalWeights.complexity });
+        model.subjectTo.push({
+          name: `${binKey} constraint`,
+          vars: [
+            { name: binKey, coef: MAXIMIZE_WEIGHT },
+            ...binVars,
+          ],
+          bnds: { type: glpk.GLP_LO, ub: NaN, lb: 0 },
+        });
       }
 
       if (vars.length === 0) continue;
@@ -513,11 +540,11 @@ export class ProductionSolver {
         vars.forEach((v) => {
           const existingVar = model.objective.vars.find((ov) => ov.name === v.name);
           if (existingVar) {
-            existingVar.coef += v.coef * MAXIMIZE_TARGET_WEIGHTING;
+            existingVar.coef += v.coef * MAXIMIZE_WEIGHT;
           } else {
             model.objective.vars.push({
               name: v.name,
-              coef: v.coef * MAXIMIZE_TARGET_WEIGHTING,
+              coef: v.coef * MAXIMIZE_WEIGHT,
             });
           }
         });
@@ -532,14 +559,18 @@ export class ProductionSolver {
       }
     }
 
-    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_OFF, tmlim: 1.0 });
+    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_OFF, tmlim: TIME_LIMIT });
+    if (solution.time > TIME_LIMIT) {
+      throw new GraphError('TIMED OUT', 'Try setting the complexity weight to 0. Unfortunately it is currently very slow for large factories. For complex factories, you might try the Buildings optimizer instead.');
+    }
     if (solution.result.status !== glpk.GLP_OPT && solution.result.status !== glpk.GLP_FEAS) {
       if (targetKey === RATE_TARGET_KEY) {
-        throw new Error("NO POSSIBLE SOLUTION");
+        throw new GraphError('NO SOLUTION', 'This could be due to missing recipes, impossible demands, or any number of reasons. Double check your factory settings.');
       } else {
-        throw new Error("SOLUTION IS UNBOUNDED");
+        throw new GraphError('SOLUTION IS UNBOUNDED', 'Somehow an infinite amount of items can be produced. Double check the inputs tab for infinite resources (including the hand gathered resources option).');
       }
     }
+
 
     const result: ProductionSolution = {};
     Object.entries(solution.result.vars).forEach(([key, val]) => {

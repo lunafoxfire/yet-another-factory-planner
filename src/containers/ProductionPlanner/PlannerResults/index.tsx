@@ -23,7 +23,7 @@ const PlannerResults = (props: Props) => {
     <Tabs variant='outline'>
       <Tabs.Tab label='Production Graph' icon={<Share2 size={18} />} sx={tabSx}>
         <Container fluid padding={0}>
-          <ProductionGraphTab activeGraph={solverResults?.productionGraph || null} errorMessage={solverResults?.error || ''} />
+          <ProductionGraphTab resultsGraph={solverResults?.productionGraph || null} graphError={solverResults?.error || null} />
         </Container>
       </Tabs.Tab>
       <Tabs.Tab label='Factory Report' icon={<Edit size={18} />} sx={tabSx}>

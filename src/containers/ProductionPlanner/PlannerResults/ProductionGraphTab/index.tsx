@@ -12,6 +12,7 @@ import { items, recipes, buildings } from '../../../../data';
 import { graphColors } from '../../../../theme';
 import GraphTooltip from '../../../../components/GraphTooltip';
 import { truncateFloat } from '../../../../utilities/number';
+import { GraphError } from '../../../../utilities/error/GraphError';
 
 Cytoscape.use(popper);
 Cytoscape.use(klay);
@@ -277,8 +278,8 @@ function _resizeListener(graphRef: React.RefObject<HTMLDivElement | null>) {
 }
 
 interface Props {
-  activeGraph: ProductionGraph | null,
-  errorMessage: string,
+  resultsGraph: ProductionGraph | null,
+  graphError: GraphError | null,
 }
 
 interface PopperRef {
@@ -297,7 +298,7 @@ export interface EdgeData extends GraphEdge {
 }
 
 const ProductionGraphTab = (props: Props) => {
-  const { activeGraph, errorMessage } = props;
+  const { resultsGraph, graphError } = props;
   const [doFirstRender, setDoFirstRender] = useState(false);
   const graphRef = useRef<HTMLDivElement | null>(null);
   const cyRef = useRef<Cytoscape.Core | null>(null);
@@ -394,14 +395,14 @@ const ProductionGraphTab = (props: Props) => {
   }, []);
 
   const graphProps = useMemo<any>(() => {
-    if (activeGraph == null) {
+    if (resultsGraph == null) {
       return null;
     }
 
     const key = nanoid();
     const elements: any[] = [];
 
-    Object.entries(activeGraph.nodes).forEach(([key, node]) => {
+    Object.entries(resultsGraph.nodes).forEach(([key, node]) => {
       elements.push({
         group: 'nodes',
         data: {
@@ -411,7 +412,7 @@ const ProductionGraphTab = (props: Props) => {
         classes: getNodeClasses(node),
       });
     });
-    activeGraph.edges.forEach((edge) => {
+    resultsGraph.edges.forEach((edge) => {
       elements.push({
         group: 'edges',
         data: {
@@ -425,7 +426,7 @@ const ProductionGraphTab = (props: Props) => {
     });
     
     return { key, elements };
-  }, [activeGraph]);
+  }, [resultsGraph]);
 
   return (
     <>
@@ -450,15 +451,16 @@ const ProductionGraphTab = (props: Props) => {
             : (
               <Center style={{ position: 'absolute', height: '100%', width: '100%' }}>
                 <Group>
-                  <AlertCircle color="#eee" size={75} />
+                  <AlertCircle color="#eee" size={85} style={{ position: 'relative', top: '3px' }} />
                   <Group direction='column' style={{ gap: '0px' }}>
-                    <Text size='xl'>
+                    <Text style={{ fontSize: '28px' }}>
                       Could not build graph
                     </Text>
-                    {errorMessage
+                      {graphError
                       ? (
-                        <Text size='sm'>
-                          {`ERROR: ${errorMessage}`}
+                        <Text style={{ maxWidth: '600px', fontSize: '14px' }}>
+                            {`ERROR: ${graphError.message}`}<br />
+                            {graphError?.helpText || ''}
                         </Text>
                       )
                       : null}

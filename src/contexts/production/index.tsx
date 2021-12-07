@@ -5,6 +5,7 @@ import { usePrevious } from '../../hooks/usePrevious';
 import { ProductionSolver, SolverResults } from '../../utilities/production-solver';
 import { reducer, encodeState, FactoryOptions, FactoryAction, getInitialState } from './reducer';
 import { useLocalStorageValue } from '@mantine/hooks';
+import { GraphError } from '../../utilities/error/GraphError';
 
 export type ProductionContextType = {
   state: FactoryOptions,
@@ -56,13 +57,13 @@ const _handleCalculateFactory = _.debounce(async (
         }
         return prevState;
       });
-    } catch (e: any) {
+    } catch (e: unknown) {
       setSolverResults({
         productionGraph: null,
         report: null,
         timestamp: performance.now(),
         computeTime: 0,
-        error: e.message,
+        error: e as GraphError,
       });
     } finally {
       setCalculating(false);

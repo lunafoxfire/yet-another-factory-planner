@@ -22,58 +22,67 @@ const InputsTab = () => {
   const ctx = useProductionContext();
 
   function renderItemInputs() {
-    return ctx.state.inputItems.map((data) => (
-      <ItemContainer key={data.key}>
-        <Row>
-          <Select
-            placeholder="Select an item"
-            label='Item'
-            clearable
-            searchable
-            data={itemOptions}
-            value={data.itemKey ? data.itemKey : ''}
-            onChange={(value) => {
-              ctx.dispatch({
-                type: 'UPDATE_INPUT_ITEM',
-                data: { ...data, itemKey: (value as string) },
-              });
-            }}
-            style={{ flex: '1 1 auto' }}
-          />
-          <TrashButton onClick={() => { ctx.dispatch({ type: 'DELETE_INPUT_ITEM', key: data.key }); }} style={{ position: 'relative', top: '13px' }} />
-        </Row>
-        <Row>
-          <TextInput
-            label='Amount'
-            className='no-spinner'
-            type='number'
-            min='0'
-            step='1'
-            disabled={data.unlimited}
-            value={data.value}
-            onChange={(e) => {
-              ctx.dispatch({
-                type: 'UPDATE_INPUT_ITEM',
-                data: { ...data, value: e.currentTarget.value },
-              });
-            }}
-          />
-          <Checkbox
-            className='label'
-            label='Unlimited'
-            checked={data.unlimited}
-            onChange={() => {
-              ctx.dispatch({
-                type: 'UPDATE_INPUT_ITEM',
-                data: { ...data, unlimited: !data.unlimited },
-              });
-            }}
-            style={{ position: 'relative', top: '13px' }}
-          />
-        </Row>
-        <Divider style={{ marginTop: '10px', marginBottom: '10px' }} />
-      </ItemContainer>
-    ));
+    return ctx.state.inputItems.map((data) => {
+      const selectedItem = itemOptions.find((io) => io.value === data.itemKey);
+      return (
+        <ItemContainer key={data.key}>
+          <Row>
+            <Select
+              placeholder="Select an item"
+              label='Item'
+              clearable
+              searchable
+              filter={(value, item) => {
+                if (selectedItem && value === selectedItem.label) {
+                  return true;
+                }
+                return !!item.label?.toLowerCase().includes(value.toLowerCase());
+              }}
+              data={itemOptions}
+              value={data.itemKey ? data.itemKey : ''}
+              onChange={(value) => {
+                ctx.dispatch({
+                  type: 'UPDATE_INPUT_ITEM',
+                  data: { ...data, itemKey: (value as string) },
+                });
+              }}
+              style={{ flex: '1 1 auto' }}
+            />
+            <TrashButton onClick={() => { ctx.dispatch({ type: 'DELETE_INPUT_ITEM', key: data.key }); }} style={{ position: 'relative', top: '13px' }} />
+          </Row>
+          <Row>
+            <TextInput
+              label='Amount'
+              className='no-spinner'
+              type='number'
+              min='0'
+              step='1'
+              disabled={data.unlimited}
+              value={data.value}
+              onChange={(e) => {
+                ctx.dispatch({
+                  type: 'UPDATE_INPUT_ITEM',
+                  data: { ...data, value: e.currentTarget.value },
+                });
+              }}
+            />
+            <Checkbox
+              className='label'
+              label='Unlimited'
+              checked={data.unlimited}
+              onChange={() => {
+                ctx.dispatch({
+                  type: 'UPDATE_INPUT_ITEM',
+                  data: { ...data, unlimited: !data.unlimited },
+                });
+              }}
+              style={{ position: 'relative', top: '13px' }}
+            />
+          </Row>
+          <Divider style={{ marginTop: '10px', marginBottom: '10px' }} />
+        </ItemContainer>
+      )
+    });
   }
 
   function renderWeightInputs() {

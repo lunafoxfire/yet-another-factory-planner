@@ -51,6 +51,7 @@ const ProductionTab = () => {
           }
         });
       }
+      const selectedItem = itemOptions.find((io) => io.value === data.itemKey);
       return (
         <ItemContainer key={data.key}>
           <Row>
@@ -59,6 +60,12 @@ const ProductionTab = () => {
               label='Item'
               clearable
               searchable
+              filter={(value, item) => {
+                if (selectedItem && value === selectedItem.label) {
+                  return true;
+                }
+                return !!item.label?.toLowerCase().includes(value.toLowerCase());
+              }}
               data={itemOptions}
               value={data.itemKey ? data.itemKey : ''}
               onChange={(value) => {

@@ -8,7 +8,7 @@ const EPSILON = 1e-8;
 const MIN_RESOURCE_WEIGHT = 0.0001;
 const MAXIMIZE_WEIGHT = 1e5;
 const ENFORCE_BIN_WEIGHT = 1000;
-const TIME_LIMIT = 2.0;
+const TIME_LIMIT = 3.0;
 const RATE_TARGET_KEY = 'RATE_TARGET_PASS';
 
 export const NODE_TYPE = {

@@ -182,7 +182,12 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
       const newProductionItems = state.productionItems
         .map((item) => {
           if (item.key === action.data.key) {
-            const newItem = { ...item };
+            let newItem;
+            if (item.mode === 'per-minute' || item.mode === 'maximize') {
+              newItem = { ...item };
+            } else {
+              newItem = getDefaultProductionItem();
+            }
             newItem.itemKey = action.data.itemKey;
             return newItem;
           }

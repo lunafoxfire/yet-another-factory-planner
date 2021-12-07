@@ -126,7 +126,7 @@ const InputsTab = () => {
             }}
           />
           <TextInput
-            label={<LabelWithTooltip label='Buildings' tooltip='This weighting prioritizes using as few buildings as possible (without overclocking).' />}
+            label={<LabelWithTooltip label='Buildings' tooltip='This weighting prioritizes using as few buildings as possible, discounting overclocking. May not be perfectly optimal, especially for smaller factories (WIP).' />}
             type='number'
             min='0'
             step='1'

@@ -40,6 +40,7 @@ type GlobalWeights = {
   resources: number,
   power: number,
   complexity: number,
+  buildings: number
 };
 
 type ProductionSolution = { [key: string]: number };
@@ -117,16 +118,26 @@ export class ProductionSolver {
       resources: Number(options.weightingOptions.resources),
       power: Number(options.weightingOptions.power),
       complexity: Number(options.weightingOptions.complexity),
+      buildings: Number(options.weightingOptions.buildings),
     };
 
     this.validateNumber(this.globalWeights.resources);
     this.validateNumber(this.globalWeights.power);
     this.validateNumber(this.globalWeights.complexity);
+    this.validateNumber(this.globalWeights.buildings);
 
-    const maxGlobalWeight = Math.max(this.globalWeights.resources, this.globalWeights.power, this.globalWeights.complexity);
+    const maxGlobalWeight = Math.max(
+      this.globalWeights.resources,
+      this.globalWeights.power,
+      this.globalWeights.complexity,
+      this.globalWeights.buildings
+    );
+
     this.globalWeights.resources /= maxGlobalWeight;
+    this.globalWeights.resources += EPSILON; // Always have a tiny amount of resource optimization
     this.globalWeights.power /= maxGlobalWeight;
     this.globalWeights.complexity /= (maxGlobalWeight / 10);
+    this.globalWeights.buildings /= maxGlobalWeight;
 
     this.inputs = {};
 
@@ -348,6 +359,7 @@ export class ProductionSolver {
         vars: [],
       },
       subjectTo: [],
+      // binaries: [],
     };
 
     const doPoints = (targetKey === RATE_TARGET_KEY && this.rateTargets[POINTS_ITEM_KEY]) || targetKey === POINTS_ITEM_KEY;
@@ -358,6 +370,7 @@ export class ProductionSolver {
       const buildingInfo = buildings[recipeInfo.producedIn];
       const powerScore = buildingInfo.power > 0 ? buildingInfo.power * this.globalWeights.power : 0;
       const complexityScore = recipeInfo.ingredients.length * this.globalWeights.complexity;
+      const buildingsScore = this.globalWeights.buildings;
       let resourceScore = 0;
 
       for (const ingredient of recipeInfo.ingredients) {
@@ -367,10 +380,12 @@ export class ProductionSolver {
         }
       }
 
+      
       model.objective.vars.push({
         name: recipeKey,
-        coef: powerScore + complexityScore + resourceScore,
+        coef: powerScore + resourceScore + buildingsScore + complexityScore,
       });
+
 
       if (targetKey === RATE_TARGET_KEY) {
         if (this.rateTargets[recipeKey]) {
@@ -436,11 +451,21 @@ export class ProductionSolver {
     for (const [itemKey, itemInfo] of Object.entries(items)) {
       const vars: Var[] = [];
 
+      // const binKey = `${itemKey}_BIN`;
+      // model.binaries!.push(binKey);
+      // model.objective.vars.push({ name: binKey, coef: 1000 * this.globalWeights.complexity });
+
       for (const recipeKey of itemInfo.usedInRecipes) {
         if (!this.allowedRecipes[recipeKey]) continue;
         const recipeInfo = recipes[recipeKey];
         const target = recipeInfo.ingredients.find((i) => i.itemClass === itemKey)!;
         vars.push({ name: recipeKey, coef: target.perMinute });
+        
+        // model.subjectTo.push({
+        //   name: `${binKey} ${recipeKey} constraint`,
+        //   vars: [{ name: binKey, coef: MAXIMIZE_TARGET_WEIGHTING }, { name: recipeKey, coef: -1 }],
+        //   bnds: { type: glpk.GLP_LO, ub: NaN, lb: 0 },
+        // });
       }
 
       for (const recipeKey of itemInfo.producedFromRecipes) {
@@ -507,8 +532,8 @@ export class ProductionSolver {
       }
     }
 
-    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_OFF });
-    if (solution.result.status !== glpk.GLP_OPT) {
+    const solution = await glpk.solve(model, { msglev: glpk.GLP_MSG_OFF, tmlim: 1.0 });
+    if (solution.result.status !== glpk.GLP_OPT && solution.result.status !== glpk.GLP_FEAS) {
       if (targetKey === RATE_TARGET_KEY) {
         throw new Error("NO POSSIBLE SOLUTION");
       } else {
@@ -519,7 +544,9 @@ export class ProductionSolver {
     const result: ProductionSolution = {};
     Object.entries(solution.result.vars).forEach(([key, val]) => {
       if (val > EPSILON) {
-        result[key] = val;
+        if (recipes[key]) {
+          result[key] = val;
+        }
       }
     });
     return result;

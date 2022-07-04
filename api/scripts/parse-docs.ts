@@ -1,16 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import parseDocs from 'satisfactory-docs-parser';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, '..');
-const DOCS_PATH = path.join(ROOT_DIR, 'data/Docs_U5.json');
-const OUTPUT_DIR = path.join(ROOT_DIR, 'src/data/json');
+const DOCS_PATH = path.join(ROOT_DIR, 'data/Docs.json');
+const OUTPUT_DIR = path.join(ROOT_DIR, 'data/parsed');
 
 const data = parseDocs(fs.readFileSync(DOCS_PATH));
 
-const buildings = {};
+const buildings: any = {};
 Object.entries(data.buildables).forEach(([buildingKey, buildingData]) => {
   if (!(buildingData.isProduction || buildingData.isGenerator || buildingData.isResourceExtractor)) {
     return;
@@ -28,11 +28,12 @@ Object.entries(data.buildables).forEach(([buildingKey, buildingData]) => {
     area = length * width;
   }
 
-  let buildCost = [];
+  let buildCost: any[] = [];
   const recipeData = Object.values(data.buildableRecipes).find((br) => br.product === buildingKey);
   if (recipeData) {
     buildCost = recipeData.ingredients;
   } else {
+    // eslint-disable-next-line no-console
     console.warn(`BUILDING ${buildingKey} HAS NO BUILD COST`);
   }
 
@@ -43,10 +44,10 @@ Object.entries(data.buildables).forEach(([buildingKey, buildingData]) => {
     area,
     buildCost,
     isFicsmas: buildingData.event === 'FICSMAS',
-  }
+  };
 });
 
-const recipes = {};
+const recipes: any = {};
 Object.entries((data.productionRecipes)).forEach(([recipeKey, recipeData]) => {
   if (!recipeData.producedIn) {
     return;
@@ -97,7 +98,7 @@ recipes['Recipe_CUSTOM_PlutoniumPower_C'] = {
   isFicsmas: false,
 };
 
-const resources = {};
+const resources: any = {};
 let maxExtraction = 0;
 Object.entries(data.resources).forEach(([resourceKey, resourceData]) => {
   if (resourceData.maxExtraction !== Infinity) {
@@ -112,22 +113,23 @@ Object.entries(data.resources).forEach(([resourceKey, resourceData]) => {
   };
 });
 
-Object.entries(resources).forEach(([resourceKey, resourceData]) => {
+Object.entries<any>(resources).forEach(([resourceKey, resourceData]) => {
   if (resourceData.maxExtraction && resourceData.maxExtraction !== Infinity) {
+    // eslint-disable-next-line no-param-reassign
     resourceData.relativeValue = Math.floor(maxExtraction / resourceData.maxExtraction * 100);
   }
 });
 
-const items = {};
-const handGatheredItems = {};
+const items: any = {};
+const handGatheredItems: any = {};
 Object.entries(data.items).forEach(([itemKey, itemData]) => {
-  const usedInRecipes = [];
-  const producedFromRecipes = [];
-  Object.entries(recipes).forEach(([recipeKey, recipeData]) => {
-    if (recipeData.ingredients.find((i) => i.itemClass === itemKey)) {
+  const usedInRecipes: any[] = [];
+  const producedFromRecipes: any[] = [];
+  Object.entries<any>(recipes).forEach(([recipeKey, recipeData]) => {
+    if (recipeData.ingredients.find((i: any) => i.itemClass === itemKey)) {
       usedInRecipes.push(recipeKey);
     }
-    if (recipeData.products.find((p) => p.itemClass === itemKey)) {
+    if (recipeData.products.find((p: any) => p.itemClass === itemKey)) {
       producedFromRecipes.push(recipeKey);
     }
   });
@@ -152,8 +154,8 @@ writeFileSafe(path.join(OUTPUT_DIR, 'resources.json'), resources);
 writeFileSafe(path.join(OUTPUT_DIR, 'items.json'), items);
 writeFileSafe(path.join(OUTPUT_DIR, 'handGatheredItems.json'), handGatheredItems);
 
-function writeFileSafe(filePath, data) {
-  const json = JSON.stringify(data, null, 2);
+function writeFileSafe(filePath: any, writeData: any) {
+  const json = JSON.stringify(writeData, null, 2);
   const pathInfo = path.parse(filePath);
   fs.mkdirSync(pathInfo.dir, { recursive: true });
   fs.writeFileSync(filePath, json);

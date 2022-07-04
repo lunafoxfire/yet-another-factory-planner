@@ -1,5 +1,8 @@
 import express from 'express';
+import helmet from 'helmet';
+import 'express-async-errors';
 import { createLogger } from 'util/logger';
+import { registerRoutes } from 'app/api/routes';
 
 export default class App {
   public static server = express();
@@ -8,12 +11,15 @@ export default class App {
   public static async init() {
     const port = App.getPort();
 
+    App.server.use(helmet());
+    registerRoutes();
+
     App.server.listen(port, () => {
-      this.logger.info(`API listening on port ${port}`);
+      App.logger.info(`API listening on port ${port}`);
     });
   }
 
   public static getPort(): number {
-    return Number(process.env.API_PORT);
+    return Number(process.env.PORT);
   }
 }

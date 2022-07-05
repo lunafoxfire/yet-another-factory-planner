@@ -14,9 +14,7 @@ const getSharedFactory: RequestHandler = async (req, res) => {
   const factory = await SharedFactory.getByKey(factoryKey);
   if (!factory) {
     res.status(400).json({
-      data: {
-        message: 'Invalid factory id',
-      },
+      message: 'Invalid factory id',
     });
     return;
   }

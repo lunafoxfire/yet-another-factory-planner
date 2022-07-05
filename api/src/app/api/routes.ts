@@ -4,7 +4,7 @@ import { createValidator } from 'express-joi-validation';
 import { factoryConfigSchema } from 'models/SharedFactory';
 import handlers from './handlers';
 
-const validator = createValidator();
+const validator = createValidator({ passError: true });
 
 export function registerRoutes() {
   App.server.get(
@@ -23,7 +23,7 @@ export function registerRoutes() {
   App.server.post(
     '/share-factory',
     validator.body(Joi.object({
-      factoryConfig: factoryConfigSchema,
+      factoryConfig: factoryConfigSchema.required(),
     }).required()),
     handlers.postSharedFactory,
   );

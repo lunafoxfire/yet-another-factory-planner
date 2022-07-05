@@ -11,7 +11,7 @@ interface PostSharedFactoryResponse {
 }
 
 export function usePostSharedFactory() {
-  const { data, loading, error, request } = useApi<PostSharedFactoryResponse, PostSharedFactoryRequest>(async (req) => {
+  return useApi<PostSharedFactoryResponse, PostSharedFactoryRequest>(async (req) => {
     const body = {
       factoryConfig: {
         gameVersion: req.factoryConfig.gameVersion,
@@ -46,6 +46,4 @@ export function usePostSharedFactory() {
     const json = res.data;
     return json.data;
   });
-
-  return { data, loading, error, request };
 }

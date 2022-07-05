@@ -3,10 +3,11 @@ import _ from 'lodash';
 import seedrandom from 'seedrandom';
 import { usePrevious } from '../../hooks/usePrevious';
 import { ProductionSolver, SolverResults } from '../../utilities/production-solver';
-import { reducer, FactoryOptions, FactoryAction, getInitialState } from './reducer';
+import { reducer, FactoryOptions, FactoryAction, getInitialState, SHARE_QUERY_KEY } from './reducer';
 import { useLocalStorageValue } from '@mantine/hooks';
 import { GraphError } from '../../utilities/error/GraphError';
 import { usePostSharedFactory } from '../../api/modules/shared-factories/usePostSharedFactory';
+import { useGetSharedFactory } from '../../api/modules/shared-factories/useGetSharedFactory';
 
 export type ProductionContextType = {
   state: FactoryOptions,
@@ -103,7 +104,8 @@ export function useProductionContext() {
 type PropTypes = { children: React.ReactNode };
 export const ProductionProvider = ({ children }: PropTypes) => {
   const [state, dispatch] = useReducer(reducer, getInitialState());
-  const [loadedFromQuery, setLoadedFromQuery] = useState(false);
+  const [initialized, setInitialized] = useState(false);
+  const [loadingSharedFactory, setLoadingSharedFactory] = useState(false);
   const [firstCalculationDone, setFirstCalculationDone] = useState(false);
   const [autoCalculate, setAutoCalculate] = useLocalStorageValue<'false' | 'true'>({ key: 'auto-calculate', defaultValue: 'true' });
   const [calculating, setCalculating] = useState(false);
@@ -112,6 +114,7 @@ export const ProductionProvider = ({ children }: PropTypes) => {
   const prevState = usePrevious(state);
 
   const postSharedFactory = usePostSharedFactory();
+  const getSharedFactory = useGetSharedFactory();
 
   const autoCalculateBool = autoCalculate === 'true' ? true : false;
 
@@ -133,13 +136,13 @@ export const ProductionProvider = ({ children }: PropTypes) => {
   const shareLink = useMemo(() => {
     const key = postSharedFactory.data?.key;
     if (key) {
-      return `${window.location.protocol}//${window.location.host}${window.location.pathname}?share=${key}`;
+      return `${window.location.protocol}//${window.location.host}${window.location.pathname}?${SHARE_QUERY_KEY}=${key}`;
     }
     return '';
   }, [postSharedFactory.data?.key]);
 
   useEffect(() => {
-    if (loadedFromQuery) {
+    if (initialized) {
       if (!firstCalculationDone) {
         handleCalculateFactory();
         setFirstCalculationDone(true);
@@ -147,14 +150,34 @@ export const ProductionProvider = ({ children }: PropTypes) => {
         handleCalculateFactory();
       }
     }
-  }, [autoCalculateBool, firstCalculationDone, handleCalculateFactory, loadedFromQuery, prevState, state]);
+  }, [autoCalculateBool, firstCalculationDone, handleCalculateFactory, initialized, prevState, state]);
 
   useEffect(() => {
-    if (!loadedFromQuery) {
-      dispatch({ type: 'LOAD_FROM_QUERY_PARAM' });
-      setLoadedFromQuery(true);
+    if (!initialized && !loadingSharedFactory) {
+      const params = new URLSearchParams(window.location.search);
+      const shareKey = params.get(SHARE_QUERY_KEY);
+      const legacyParamEncoding = params.get('f');
+      if (shareKey) {
+        getSharedFactory.request({ factoryKey: shareKey });
+        setLoadingSharedFactory(true);
+        params.delete(SHARE_QUERY_KEY);
+        window.history.replaceState(null, '', `${window.location.pathname}`);
+      } else if (legacyParamEncoding) {
+        dispatch({ type: 'LEGACY_LOAD_FROM_QUERY_PARAM' });
+        setInitialized(true);
+      } else {
+        setInitialized(true);
+      }
     }
-  }, [loadedFromQuery]);
+  }, [getSharedFactory, initialized, loadingSharedFactory]);
+  
+  useEffect(() => {
+    if (getSharedFactory.completedThisFrame && getSharedFactory.data?.factory_config) {
+      dispatch({ type: 'LOAD_FROM_SHARED_FACTORY', data: getSharedFactory.data.factory_config });
+      setLoadingSharedFactory(false);
+      setInitialized(true);
+    }
+  }, [getSharedFactory]);
 
   const ctxValue = useMemo(() => {
     return {

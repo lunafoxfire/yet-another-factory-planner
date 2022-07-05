@@ -5,6 +5,7 @@ import { decodeState_v2_U5 } from './state-decoders/v2_U5';
 import { decodeState_v3_U5 } from './state-decoders/v3_U5';
 
 export const GAME_VERSION = 'U5';
+export const SHARE_QUERY_KEY = 'factory';
 export const MAX_PRIORITY = 20;
 
 // TYPES
@@ -158,7 +159,8 @@ export type FactoryAction =
   | { type: 'SET_ALL_WEIGHTS_DEFAULT' }
   | { type: 'SET_RECIPE_ACTIVE', key: string, active: boolean }
   | { type: 'MASS_SET_RECIPES_ACTIVE', recipes: string[], active: boolean }
-  | { type: 'LOAD_FROM_QUERY_PARAM' };
+  | { type: 'LOAD_FROM_SHARED_FACTORY', data: any }
+  | { type: 'LEGACY_LOAD_FROM_QUERY_PARAM' };
 
 export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
   switch (action.type) {
@@ -296,7 +298,46 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
       });
       return { ...state, allowedRecipes: newAllowedRecipes };
     }
-    case 'LOAD_FROM_QUERY_PARAM': {
+    case 'LOAD_FROM_SHARED_FACTORY': {
+      try {
+        const newState: FactoryOptions = getInitialState();
+        newState.gameVersion = action.data.gameVersion;
+        newState.productionItems = (action.data.productionItems as any[]).map((i) => ({
+          ...getDefaultProductionItem(),
+          itemKey: i.itemKey,
+          mode: i.mode,
+          value: String(i.value),
+        }));
+        newState.inputItems = (action.data.inputItems as any[]).map((i) => ({
+          ...getDefaultInputItem(),
+          itemKey: i.itemKey,
+          value: String(i.value),
+          weight: String(i.weight),
+          unlimited: i.unlimited,
+        }));
+        newState.inputResources.forEach((r) => {
+          const resourceOptions = (action.data.inputResources as any[]).find((i) => r.itemKey === i.itemKey);
+          r.value = String(resourceOptions.value);
+          r.weight = String(resourceOptions.weight);
+          r.unlimited = resourceOptions.unlimited;
+        });
+        newState.allowHandGatheredItems = action.data.allowHandGatheredItems;
+        newState.weightingOptions.resources = String(action.data.weightingOptions.resources);
+        newState.weightingOptions.power = String(action.data.weightingOptions.power);
+        newState.weightingOptions.complexity = String(action.data.weightingOptions.complexity);
+        newState.weightingOptions.buildings = String(action.data.weightingOptions.buildings);
+        (action.data.allowedRecipes as any[]).forEach((key) => {
+          if (newState.allowedRecipes[key] != null) {
+            newState.allowedRecipes[key] = true;
+          }
+        });
+        return newState;
+      } catch (e) {
+        console.error(e);
+      }
+      return state;
+    }
+    case 'LEGACY_LOAD_FROM_QUERY_PARAM': {
       const params = new URLSearchParams(window.location.search);
       const encodedState = params.get('f');
       if (encodedState) {

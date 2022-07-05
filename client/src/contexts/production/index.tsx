@@ -3,9 +3,10 @@ import _ from 'lodash';
 import seedrandom from 'seedrandom';
 import { usePrevious } from '../../hooks/usePrevious';
 import { ProductionSolver, SolverResults } from '../../utilities/production-solver';
-import { reducer, encodeState, FactoryOptions, FactoryAction, getInitialState } from './reducer';
+import { reducer, FactoryOptions, FactoryAction, getInitialState } from './reducer';
 import { useLocalStorageValue } from '@mantine/hooks';
 import { GraphError } from '../../utilities/error/GraphError';
+import { usePostSharedFactory } from '../../api/modules/shared-factories/usePostSharedFactory';
 
 export type ProductionContextType = {
   state: FactoryOptions,
@@ -15,6 +16,9 @@ export type ProductionContextType = {
   calculate: () => void,
   autoCalculate: boolean,
   setAutoCalculate: (value: boolean) => void,
+  generateShareLink: () => void,
+  shareLinkLoading: boolean,
+  shareLink: string,
   ficsitTip: string,
   engineerId: string,
 };
@@ -26,14 +30,18 @@ const rng = seedrandom(String(seed));
 const TIPS = [
   'Pet the lizard doggo!',
   'Get back to work!',
-  'Update 5 now available!',
+  'Update 6 now available!',
   'Arachnophobia mode enabled.',
   'FICSIT does not waste.',
-  'Linear algebra!',
+  'Linear programming!',
   'Do not pet the spiders.',
-  'BEAMS.',
+  'Just slap some beams on it!',
   'Just 5 more minutes...',
   'Thanks, Jace. Helps a lot!',
+  'Thanks, Snutt. Helps a lot!',
+  'Check out the new Spire Coast!',
+  'ADA says it\'s my turn to play with the nuke nobelisk.',
+  'Harvest.',
 ];
 
 const TIP_INDEX = Math.floor(rng() * TIPS.length);
@@ -103,6 +111,8 @@ export const ProductionProvider = ({ children }: PropTypes) => {
   const [engineerId] = useLocalStorageValue<string>({ key: 'engineer-id', defaultValue: ID });
   const prevState = usePrevious(state);
 
+  const postSharedFactory = usePostSharedFactory();
+
   const autoCalculateBool = autoCalculate === 'true' ? true : false;
 
   const handleCalculateFactory = useCallback(() => {
@@ -115,6 +125,18 @@ export const ProductionProvider = ({ children }: PropTypes) => {
       handleCalculateFactory();
     }
   };
+
+  const handleGenerateShareLink = () => {
+    postSharedFactory.request({ factoryConfig: state });
+  };
+
+  const shareLink = useMemo(() => {
+    const key = postSharedFactory.data?.key;
+    if (key) {
+      return `${window.location.protocol}//${window.location.host}${window.location.pathname}?share=${key}`;
+    }
+    return '';
+  }, [postSharedFactory.data?.key]);
 
   useEffect(() => {
     if (loadedFromQuery) {
@@ -134,13 +156,6 @@ export const ProductionProvider = ({ children }: PropTypes) => {
     }
   }, [loadedFromQuery]);
 
-  useEffect(() => {
-    if (prevState !== state) {
-      const encodedState = encodeState(state);
-      window.history.replaceState(null, '', window.location.pathname + '?f=' + encodedState);
-    }
-  }, [prevState, state]);
-
   const ctxValue = useMemo(() => {
     return {
       state,
@@ -150,11 +165,14 @@ export const ProductionProvider = ({ children }: PropTypes) => {
       calculate: handleCalculateFactory,
       autoCalculate: autoCalculateBool,
       setAutoCalculate: handleSetAutoCalculate,
+      generateShareLink: handleGenerateShareLink,
+      shareLink,
+      shareLinkLoading: postSharedFactory.loading,
       ficsitTip: TIP,
       engineerId,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoCalculateBool, calculating, handleCalculateFactory, solverResults, state]);
+  }, [autoCalculateBool, calculating, handleCalculateFactory, solverResults, state, shareLink, postSharedFactory.loading]);
 
   return (
     <ProductionContext.Provider value={ctxValue}>

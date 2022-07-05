@@ -4,23 +4,23 @@ import { nanoid } from 'nanoid';
 
 export const factoryConfigSchema = Joi.object({
   gameVersion: Joi.string().required(),
-  productionItems: Joi.array().items({
+  productionItems: Joi.array().items(Joi.object({
     itemKey: Joi.string().required(),
     mode: Joi.string().required(),
     value: Joi.number().strict().required(),
-  }).required(),
-  inputItems: Joi.array().items({
+  })).required(),
+  inputItems: Joi.array().items(Joi.object({
     itemKey: Joi.string().required(),
     value: Joi.number().strict().required(),
     weight: Joi.number().strict().required(),
     unlimited: Joi.boolean().required(),
-  }).required(),
-  inputResources: Joi.array().items({
+  })).required(),
+  inputResources: Joi.array().items(Joi.object({
     itemKey: Joi.string().required(),
     value: Joi.number().strict().required(),
     weight: Joi.number().strict().required(),
     unlimited: Joi.boolean().required(),
-  }).required(),
+  })).required(),
   allowHandGatheredItems: Joi.boolean().required(),
   weightingOptions: Joi.object({
     resources: Joi.number().strict().required(),
@@ -53,10 +53,9 @@ export default class SharedFactory {
     if (validation.error) throw validation.error;
 
     const key = nanoid();
-    const factory = await DB.knex(SharedFactory.TABLE_NAME)
+    const [factory] = await DB.knex(SharedFactory.TABLE_NAME)
       .insert({ key, factory_config: JSON.stringify(config) })
-      .returning('*')
-      .first();
+      .returning('*');
     return factory;
   }
 }

@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Container, Tabs, Paper, Title, Divider, Group, Button, Switch } from '@mantine/core';
+import { Container, Tabs, Paper, Title, Divider, Group, Button, Switch, Space, TextInput, Popover, Text } from '@mantine/core';
 import { TrendingUp, Shuffle, Box } from 'react-feather';
 import { useProductionContext } from '../../../contexts/production';
 import ProductionTab from './ProductionTab';
 import InputsTab from './InputsTab';
 import RecipesTab from './RecipesTab';
+import { usePrevious } from '../../../hooks/usePrevious';
 
 const PlannerOptions = () => {
   const ctx = useProductionContext();
+  const [popoverOpened, setPopoverOpened] = useState(false);
+
+  const prevShareLink = usePrevious(ctx.shareLink);
+  useEffect(() => {
+    if (ctx.shareLink && ctx.shareLink !== prevShareLink) {
+      navigator.clipboard.writeText(ctx.shareLink);
+      setPopoverOpened(true);
+    }
+  }, [ctx.shareLink, prevShareLink]);
+
+  const handleLinkInputClicked = () => {
+    if (ctx.shareLink) {
+      navigator.clipboard.writeText(ctx.shareLink);
+      setPopoverOpened(true);
+    }
+  }
   
   return (
     <>
@@ -19,10 +36,58 @@ const PlannerOptions = () => {
           <Button
             onClick={() => { ctx.calculate(); }}
             disabled={ctx.autoCalculate}
-            style={{ marginRight: '15px' }}
+            style={{ marginRight: '15px', width: '125px' }}
           >
             Calculate
           </Button>
+          <Switch
+            size='md'
+            label='Auto-calculate (disable if things get laggy)'
+            checked={ctx.autoCalculate}
+            onChange={(e) => { ctx.setAutoCalculate(e.currentTarget.checked); }}
+          />
+        </Group>
+        <Group style={{ marginBottom: '15px' }}>
+          <Button
+            color='positive'
+            onClick={() => { ctx.generateShareLink(); }}
+            loading={ctx.shareLinkLoading}
+            style={{ width: '125px' }}
+          >
+            Save & Share
+          </Button>
+          <Popover
+            opened={popoverOpened}
+            onClose={() => setPopoverOpened(false)}
+            position='right'
+            withArrow
+            styles={{
+              root: {
+                flex: '1 1 auto !important',
+              },
+              inner: {
+                padding: '10px 16px',
+              },
+            }}
+            target={
+              <TextInput
+                value={ctx.shareLink}
+                placeholder='Save factory to generate a link'
+                readOnly={true}
+                onClick={() => { handleLinkInputClicked(); }}
+                styles={{
+                  root: {
+                    flex: '1 1 auto !important',
+                  },
+                }}
+              />
+            }
+          >
+            <Text>Link copied!</Text>
+          </Popover>
+        </Group>
+        <Space />
+        <Group style={{ marginBottom: '15px' }} position='right'>
           <Button
             color='danger'
             onClick={() => { ctx.dispatch({ type: 'RESET_FACTORY' }) }}
@@ -30,12 +95,6 @@ const PlannerOptions = () => {
             Reset ALL Factory Options
           </Button>
         </Group>
-        <Switch
-          size='md'
-          label='Auto-calculate (turn this off if changing options is too slow)'
-          checked={ctx.autoCalculate}
-          onChange={(e) => { ctx.setAutoCalculate(e.currentTarget.checked); }}
-        />
       </Paper>
       <Tabs grow variant='outline'>
         <Tabs.Tab label='Production' icon={<TrendingUp size={18} />}>

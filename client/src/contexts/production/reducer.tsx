@@ -1,11 +1,10 @@
 import { nanoid } from 'nanoid';
-import { resources, recipes, items } from '../../data'
-import { POINTS_ITEM_KEY } from '../../utilities/production-solver';
+import { resources, recipes } from '../../data'
 import { decodeState_v1_U5 } from './state-decoders/v1_U5';
 import { decodeState_v2_U5 } from './state-decoders/v2_U5';
 import { decodeState_v3_U5 } from './state-decoders/v3_U5';
 
-export const FACTORY_SETTINGS_VERSION = 'v3_U5';
+export const GAME_VERSION = 'U5';
 export const MAX_PRIORITY = 20;
 
 // TYPES
@@ -36,7 +35,7 @@ export type RecipeMap = {
 };
 
 export type FactoryOptions = {
-  version: string,
+  gameVersion: string,
   key: string,
   productionItems: ProductionItemOptions[],
   inputItems: InputItemOptions[],
@@ -128,7 +127,7 @@ function getInitialAllowedRecipes(): RecipeMap {
 
 export function getInitialState(): FactoryOptions {
   return {
-    version: FACTORY_SETTINGS_VERSION,
+    gameVersion: GAME_VERSION,
     key: nanoid(),
     productionItems: [],
     inputItems: [],
@@ -302,7 +301,7 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
       const encodedState = params.get('f');
       if (encodedState) {
         try {
-          return decodeState(encodedState);
+          return decodeState_LEGACY(encodedState);
         } catch (e) {
           console.error(e);
         }
@@ -316,7 +315,7 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
 
 
 // ENCODE/DECODE STATE
-function decodeState(stateStr: string): FactoryOptions {
+function decodeState_LEGACY(stateStr: string): FactoryOptions {
   const version = stateStr.substring(0, 5);
   if (version === 'v1_U5') {
     return decodeState_v1_U5(stateStr);
@@ -327,69 +326,4 @@ function decodeState(stateStr: string): FactoryOptions {
   } else {
     throw new Error('INVALID VERSION');
   }
-}
-
-function getItemSlug(itemKey: string) {
-  if (itemKey === POINTS_ITEM_KEY) {
-    return 'points';
-  }
-  return items[itemKey].slug;
-}
-
-function getModeSlug(mode: string) {
-  if (mode === 'per-minute') return 'per_minute';
-  if (mode === 'maximize') return 'maximize';
-  const recipeKey = mode;
-  const recipeInfo = recipes[recipeKey];
-  if (recipeInfo) {
-    return recipeInfo.slug;
-  } else {
-    return 'null';
-  }
-}
-
-const SEP0 = ',';
-const SEP1 = '|';
-const SEP2 = ':';
-
-export function encodeState(state: FactoryOptions): string {
-  const fields: string[] = [];
-
-  fields.push(state.version);
-
-  const allowedRecipesBits = Object.keys((state.allowedRecipes))
-    .sort((a, b) => {
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    })
-    .map((key) => state.allowedRecipes[key] ? '1' : '0')
-    .join('');
-  fields.push(BigInt(`0b${allowedRecipesBits}`).toString(16));
-
-  const productionItemsField: string[] = [];
-  state.productionItems.forEach((item) => {
-    if (!item.itemKey) return;
-    productionItemsField.push(`${getItemSlug(item.itemKey)}${SEP2}${getModeSlug(item.mode)}${SEP2}${item.value}`);
-  });
-  fields.push(productionItemsField.join(SEP1));
-
-  const inputItemsField: string[] = [];
-  state.inputItems.forEach((item) => {
-    if (!item.itemKey) return;
-    inputItemsField.push(`${getItemSlug(item.itemKey)}${SEP2}${item.value}${SEP2}${item.weight}${SEP2}${item.unlimited ? '1' : '0'}`);
-  });
-  fields.push(inputItemsField.join(SEP1));
-
-  const inputResourcesField: string[] = [];
-  state.inputResources.forEach((item) => {
-    inputResourcesField.push(`${item.value}${SEP2}${item.weight}${SEP2}${item.unlimited ? '1' : '0'}`);
-  });
-  fields.push(inputResourcesField.join(SEP1));
-
-  fields.push(`${state.allowHandGatheredItems ? '1' : '0'}`);
-
-  fields.push(`${state.weightingOptions.resources}${SEP2}${state.weightingOptions.power}${SEP2}${state.weightingOptions.complexity}${SEP2}${state.weightingOptions.buildings}`);
-
-  return fields.join(SEP0);
 }

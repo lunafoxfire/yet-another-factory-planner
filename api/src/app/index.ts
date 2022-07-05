@@ -11,6 +11,7 @@ export default class App {
   public static async init() {
     const port = App.getPort();
 
+    App.server.use(express.json());
     App.server.use(helmet());
     registerRoutes();
 

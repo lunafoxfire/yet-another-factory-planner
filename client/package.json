@@ -42,6 +42,7 @@
     "@fortawesome/react-fontawesome": "^0.1.16",
     "@mantine/core": "^3.3.4",
     "@mantine/hooks": "^3.3.4",
+    "axios": "^0.27.2",
     "chroma-js": "^2.1.2",
     "cytoscape": "^3.20.0",
     "cytoscape-klay": "^3.1.4",

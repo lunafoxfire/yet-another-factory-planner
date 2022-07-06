@@ -16,7 +16,10 @@
     "db:migrate:make": "knex migrate:make -x ts",
     "db:reset:dev": "npm run db:create:dev && npm run db:migrate",
     "db:print-schema": "ts-node -r tsconfig-paths/register scripts/print-schema.ts",
-    "parse-docs": "ts-node -r tsconfig-paths/register scripts/parse-docs.ts"
+    "parse-docs": "ts-node -r tsconfig-paths/register scripts/parse-docs.ts",
+    "heroku": "set HEROKU_APP=lydian-satisfactory-planner&& heroku",
+    "heroku:staging": "set HEROKU_APP=lydian-satisfactory-planner-st&& heroku"
+
   },
   "engines": {
     "node": "v16.11.1"

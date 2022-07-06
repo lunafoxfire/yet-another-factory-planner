@@ -48,6 +48,7 @@ export default class App {
     App.server.use(errorHandler);
 
     App.server.listen(port, () => {
+      App.logger.info(`environment: ${process.env.NODE_ENV}`);
       App.logger.info(`API listening on port ${port}`);
     });
   }

@@ -5,8 +5,8 @@ import { fileURLToPath } from 'url';
 import parseDocs from 'satisfactory-docs-parser';
 
 const ROOT_DIR = path.join(__dirname, '..');
-const DOCS_PATH = path.join(ROOT_DIR, 'data/Docs.json');
-const OUTPUT_DIR = path.join(ROOT_DIR, 'data/parsed');
+const DOCS_DIR = path.join(ROOT_DIR, 'src/data/docs/u6');
+const DOCS_PATH = path.join(DOCS_DIR, 'Docs.json');
 
 const data = parseDocs(fs.readFileSync(DOCS_PATH));
 
@@ -148,11 +148,11 @@ Object.entries(data.items).forEach(([itemKey, itemData]) => {
   };
 });
 
-writeFileSafe(path.join(OUTPUT_DIR, 'buildings.json'), buildings);
-writeFileSafe(path.join(OUTPUT_DIR, 'recipes.json'), recipes);
-writeFileSafe(path.join(OUTPUT_DIR, 'resources.json'), resources);
-writeFileSafe(path.join(OUTPUT_DIR, 'items.json'), items);
-writeFileSafe(path.join(OUTPUT_DIR, 'handGatheredItems.json'), handGatheredItems);
+writeFileSafe(path.join(DOCS_DIR, 'buildings.json'), buildings);
+writeFileSafe(path.join(DOCS_DIR, 'recipes.json'), recipes);
+writeFileSafe(path.join(DOCS_DIR, 'resources.json'), resources);
+writeFileSafe(path.join(DOCS_DIR, 'items.json'), items);
+writeFileSafe(path.join(DOCS_DIR, 'handGatheredItems.json'), handGatheredItems);
 
 function writeFileSafe(filePath: any, writeData: any) {
   const json = JSON.stringify(writeData, null, 2);

@@ -1,0 +1,1935 @@
+{
+  "Desc_Beacon_C": {
+    "slug": "beacon",
+    "name": "Beacon",
+    "sinkPoints": 320,
+    "usedInRecipes": [
+      "Recipe_Alternate_NuclearFuelRod_1_C",
+      "Recipe_Cartridge_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_Beacon_1_C",
+      "Recipe_Beacon_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PortableMiner_C": {
+    "slug": "portable_miner",
+    "name": "Portable Miner",
+    "sinkPoints": 56,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_Alternate_AutomatedMiner_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CandyCane_C": {
+    "slug": "candy_cane",
+    "name": "Candy Cane",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_XmasStar_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_CandyCane_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_NuclearWaste_C": {
+    "slug": "uranium_waste",
+    "name": "Uranium Waste",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_NonFissileUranium_C",
+      "Recipe_Alternate_FertileUranium_C",
+      "Recipe_Plutonium_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_CUSTOM_NuclearPower_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PlutoniumWaste_C": {
+    "slug": "plutonium_waste",
+    "name": "Plutonium Waste",
+    "sinkPoints": 0,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_CUSTOM_PlutoniumPower_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Cement_C": {
+    "slug": "concrete",
+    "name": "Concrete",
+    "sinkPoints": 12,
+    "usedInRecipes": [
+      "Recipe_UraniumCell_C",
+      "Recipe_EncasedIndustrialBeam_C",
+      "Recipe_PlutoniumCell_C",
+      "Recipe_Alternate_ModularFrameHeavy_C",
+      "Recipe_Alternate_EncasedIndustrialBeam_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Concrete_C",
+      "Recipe_Alternate_RubberConcrete_C",
+      "Recipe_Alternate_WetConcrete_C",
+      "Recipe_Alternate_Concrete_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Silica_C": {
+    "slug": "silica",
+    "name": "Silica",
+    "sinkPoints": 20,
+    "usedInRecipes": [
+      "Recipe_NonFissileUranium_C",
+      "Recipe_IngotAluminum_C",
+      "Recipe_Alternate_CircuitBoard_1_C",
+      "Recipe_Alternate_Concrete_C",
+      "Recipe_Alternate_HighSpeedConnector_C",
+      "Recipe_Alternate_UraniumCell_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_AluminaSolution_C",
+      "Recipe_Alternate_Silica_C",
+      "Recipe_Silica_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_IronPlate_C": {
+    "slug": "iron_plate",
+    "name": "Iron Plate",
+    "sinkPoints": 6,
+    "usedInRecipes": [
+      "Recipe_IronPlateReinforced_C",
+      "Recipe_Alternate_AdheredIronPlate_C",
+      "Recipe_Alternate_CoatedIronCanister_C",
+      "Recipe_NitricAcid_C",
+      "Recipe_Alternate_AutomatedMiner_C",
+      "Recipe_Alternate_ReinforcedIronPlate_1_C",
+      "Recipe_Alternate_ReinforcedIronPlate_2_C",
+      "Recipe_Beacon_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_IronPlate_C",
+      "Recipe_Alternate_CoatedIronPlate_C",
+      "Recipe_Alternate_SteelCoatedPlate_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SteelPlate_C": {
+    "slug": "steel_beam",
+    "name": "Steel Beam",
+    "sinkPoints": 64,
+    "usedInRecipes": [
+      "Recipe_Alternate_FlexibleFramework_C",
+      "Recipe_EncasedIndustrialBeam_C",
+      "Recipe_SpaceElevatorPart_2_C",
+      "Recipe_PlutoniumFuelRod_C",
+      "Recipe_Alternate_Beacon_1_C",
+      "Recipe_Alternate_Screw_2_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_SteelBeam_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Battery_C": {
+    "slug": "battery",
+    "name": "Battery",
+    "sinkPoints": 465,
+    "usedInRecipes": [
+      "Recipe_Alternate_SuperStateComputer_C",
+      "Recipe_SpaceElevatorPart_6_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_ClassicBattery_C",
+      "Recipe_Battery_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Fuel_C": {
+    "slug": "packaged_fuel",
+    "name": "Packaged Fuel",
+    "sinkPoints": 270,
+    "usedInRecipes": [
+      "Recipe_UnpackageFuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Fuel_C",
+      "Recipe_Alternate_DilutedPackagedFuel_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_TurboFuel_C": {
+    "slug": "packaged_turbofuel",
+    "name": "Packaged Turbofuel",
+    "sinkPoints": 570,
+    "usedInRecipes": [
+      "Recipe_UnpackageTurboFuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PackagedTurboFuel_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_HazmatFilter_C": {
+    "slug": "iodine_infused_filter",
+    "name": "Iodine Infused Filter",
+    "sinkPoints": 2718,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_FilterHazmat_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_IronRod_C": {
+    "slug": "iron_rod",
+    "name": "Iron Rod",
+    "sinkPoints": 4,
+    "usedInRecipes": [
+      "Recipe_Screw_C",
+      "Recipe_ModularFrame_C",
+      "Recipe_Rotor_C",
+      "Recipe_Alternate_AutomatedMiner_C",
+      "Recipe_Beacon_C",
+      "Recipe_SpikedRebar_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_IronRod_C",
+      "Recipe_Alternate_SteelRod_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Wire_C": {
+    "slug": "wire",
+    "name": "Wire",
+    "sinkPoints": 6,
+    "usedInRecipes": [
+      "Recipe_Cable_C",
+      "Recipe_Alternate_CoatedCable_C",
+      "Recipe_Alternate_HighSpeedWiring_C",
+      "Recipe_Stator_C",
+      "Recipe_Alternate_ClassicBattery_C",
+      "Recipe_Alternate_SuperStateComputer_C",
+      "Recipe_Alternate_Cable_1_C",
+      "Recipe_Alternate_ReinforcedIronPlate_2_C",
+      "Recipe_Alternate_Rotor_C",
+      "Recipe_Beacon_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Wire_C",
+      "Recipe_Alternate_FusedWire_C",
+      "Recipe_Alternate_Wire_1_C",
+      "Recipe_Alternate_Wire_2_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Cable_C": {
+    "slug": "cable",
+    "name": "Cable",
+    "sinkPoints": 24,
+    "usedInRecipes": [
+      "Recipe_CrystalOscillator_C",
+      "Recipe_Computer_C",
+      "Recipe_SpaceElevatorPart_3_C",
+      "Recipe_HighSpeedConnector_C",
+      "Recipe_Beacon_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Cable_C",
+      "Recipe_Alternate_CoatedCable_C",
+      "Recipe_Alternate_Cable_1_C",
+      "Recipe_Alternate_Cable_2_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CrystalShard_C": {
+    "slug": "power_shard",
+    "name": "Power Shard",
+    "sinkPoints": 0,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_PowerCrystalShard_1_C",
+      "Recipe_PowerCrystalShard_2_C",
+      "Recipe_PowerCrystalShard_3_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Filter_C": {
+    "slug": "gas_filter",
+    "name": "Gas Filter",
+    "sinkPoints": 830,
+    "usedInRecipes": [
+      "Recipe_FilterHazmat_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_FilterGasMask_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_IronPlateReinforced_C": {
+    "slug": "reinforced_iron_plate",
+    "name": "Reinforced Iron Plate",
+    "sinkPoints": 120,
+    "usedInRecipes": [
+      "Recipe_Alternate_BoltedFrame_C",
+      "Recipe_ModularFrame_C",
+      "Recipe_SpaceElevatorPart_1_C",
+      "Recipe_CrystalOscillator_C",
+      "Recipe_Alternate_PlasticSmartPlating_C",
+      "Recipe_Alternate_ModularFrame_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_IronPlateReinforced_C",
+      "Recipe_Alternate_AdheredIronPlate_C",
+      "Recipe_Alternate_ReinforcedIronPlate_1_C",
+      "Recipe_Alternate_ReinforcedIronPlate_2_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CopperIngot_C": {
+    "slug": "copper_ingot",
+    "name": "Copper Ingot",
+    "sinkPoints": 6,
+    "usedInRecipes": [
+      "Recipe_Wire_C",
+      "Recipe_CopperSheet_C",
+      "Recipe_AluminumSheet_C",
+      "Recipe_Alternate_FusedWire_C",
+      "Recipe_Alternate_SteamedCopperSheet_C",
+      "Recipe_Alternate_AlcladCasing_C",
+      "Recipe_CopperDust_C",
+      "Recipe_Alternate_Quickwire_C",
+      "Recipe_XmasBall3_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_IngotCopper_C",
+      "Recipe_Alternate_CopperAlloyIngot_C",
+      "Recipe_Alternate_PureCopperIngot_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_IronScrew_C": {
+    "slug": "screw",
+    "name": "Screw",
+    "sinkPoints": 2,
+    "usedInRecipes": [
+      "Recipe_IronPlateReinforced_C",
+      "Recipe_Alternate_BoltedFrame_C",
+      "Recipe_Rotor_C",
+      "Recipe_Alternate_CopperRotor_C",
+      "Recipe_Alternate_HeavyFlexibleFrame_C",
+      "Recipe_Computer_C",
+      "Recipe_ModularFrameHeavy_C",
+      "Recipe_Alternate_ReinforcedIronPlate_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Screw_C",
+      "Recipe_Alternate_Screw_C",
+      "Recipe_Alternate_Screw_2_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Gift_C": {
+    "slug": "ficsmas_gift",
+    "name": "FICSMAS Gift",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_XmasBranch_C",
+      "Recipe_CandyCane_C",
+      "Recipe_XmasBow_C",
+      "Recipe_Snow_C",
+      "Recipe_XmasBall1_C",
+      "Recipe_XmasBall2_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": true
+  },
+  "Desc_XmasStar_C": {
+    "slug": "ficsmas_wonder_star",
+    "name": "FICSMAS Wonder Star",
+    "sinkPoints": 1,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_XmasStar_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_Snow_C": {
+    "slug": "actual_snow",
+    "name": "Actual Snow",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_Snowball_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Snow_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_XmasBall1_C": {
+    "slug": "red_ficsmas_ornament",
+    "name": "Red FICSMAS Ornament",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_XmasBall3_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_XmasBall1_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_XmasBall2_C": {
+    "slug": "blue_ficsmas_ornament",
+    "name": "Blue FICSMAS Ornament",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_XmasBall4_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_XmasBall2_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_XmasBall3_C": {
+    "slug": "copper_ficsmas_ornament",
+    "name": "Copper FICSMAS Ornament",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_XmasBallCluster_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_XmasBall3_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_XmasBall4_C": {
+    "slug": "iron_ficsmas_ornament",
+    "name": "Iron FICSMAS Ornament",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_XmasBallCluster_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_XmasBall4_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_XmasBallCluster_C": {
+    "slug": "ficsmas_ornament_bundle",
+    "name": "FICSMAS Ornament Bundle",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_XmasWreath_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_XmasBallCluster_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_XmasBow_C": {
+    "slug": "ficsmas_bow",
+    "name": "FICSMAS Bow",
+    "sinkPoints": 1,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_XmasBow_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_XmasBranch_C": {
+    "slug": "ficsmas_tree_branch",
+    "name": "FICSMAS Tree Branch",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_XmasWreath_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_XmasBranch_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_XmasWreath_C": {
+    "slug": "ficsmas_decoration",
+    "name": "FICSMAS Decoration",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_XmasStar_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_XmasWreath_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_ModularFrameFused_C": {
+    "slug": "fused_modular_frame",
+    "name": "Fused Modular Frame",
+    "sinkPoints": 62840,
+    "usedInRecipes": [
+      "Recipe_PressureConversionCube_C",
+      "Recipe_SpaceElevatorPart_8_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_FusedModularFrame_C",
+      "Recipe_Alternate_HeatFusedFrame_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CircuitBoard_C": {
+    "slug": "circuit_board",
+    "name": "Circuit Board",
+    "sinkPoints": 696,
+    "usedInRecipes": [
+      "Recipe_Computer_C",
+      "Recipe_SpaceElevatorPart_5_C",
+      "Recipe_HighSpeedConnector_C",
+      "Recipe_Alternate_RadioControlSystem_C",
+      "Recipe_Alternate_Computer_1_C",
+      "Recipe_Alternate_Computer_2_C",
+      "Recipe_Alternate_HighSpeedConnector_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_CircuitBoard_C",
+      "Recipe_Alternate_ElectrodeCircuitBoard_C",
+      "Recipe_Alternate_CircuitBoard_1_C",
+      "Recipe_Alternate_CircuitBoard_2_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CopperSheet_C": {
+    "slug": "copper_sheet",
+    "name": "Copper Sheet",
+    "sinkPoints": 24,
+    "usedInRecipes": [
+      "Recipe_CircuitBoard_C",
+      "Recipe_Alternate_CoatedIronCanister_C",
+      "Recipe_Alternate_CopperRotor_C",
+      "Recipe_AILimiter_C",
+      "Recipe_HeatSink_C",
+      "Recipe_Alternate_CircuitBoard_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_CopperSheet_C",
+      "Recipe_Alternate_SteamedCopperSheet_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CrystalOscillator_C": {
+    "slug": "crystal_oscillator",
+    "name": "Crystal Oscillator",
+    "sinkPoints": 3072,
+    "usedInRecipes": [
+      "Recipe_RadioControlUnit_C",
+      "Recipe_Alternate_RadioControlSystem_C",
+      "Recipe_Alternate_Beacon_1_C",
+      "Recipe_Alternate_Computer_2_C",
+      "Recipe_Alternate_Motor_1_C",
+      "Recipe_Alternate_Nobelisk_1_C",
+      "Recipe_Alternate_NuclearFuelRod_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_CrystalOscillator_C",
+      "Recipe_Alternate_CrystalOscillator_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SpaceElevatorPart_1_C": {
+    "slug": "smart_plating",
+    "name": "Smart Plating",
+    "sinkPoints": 520,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_4_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_SpaceElevatorPart_1_C",
+      "Recipe_Alternate_PlasticSmartPlating_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SpaceElevatorPart_2_C": {
+    "slug": "versatile_framework",
+    "name": "Versatile Framework",
+    "sinkPoints": 1176,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_6_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_FlexibleFramework_C",
+      "Recipe_SpaceElevatorPart_2_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SpaceElevatorPart_3_C": {
+    "slug": "automated_wiring",
+    "name": "Automated Wiring",
+    "sinkPoints": 1440,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_5_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_HighSpeedWiring_C",
+      "Recipe_SpaceElevatorPart_3_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SpaceElevatorPart_4_C": {
+    "slug": "modular_engine",
+    "name": "Modular Engine",
+    "sinkPoints": 9960,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_8_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_SpaceElevatorPart_4_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PackagedWater_C": {
+    "slug": "packaged_water",
+    "name": "Packaged Water",
+    "sinkPoints": 130,
+    "usedInRecipes": [
+      "Recipe_UnpackageWater_C",
+      "Recipe_Alternate_DilutedPackagedFuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PackagedWater_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SpaceElevatorPart_5_C": {
+    "slug": "adaptive_control_unit",
+    "name": "Adaptive Control Unit",
+    "sinkPoints": 86120,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_7_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_SpaceElevatorPart_5_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SpaceElevatorPart_6_C": {
+    "slug": "magnetic_field_generator",
+    "name": "Magnetic Field Generator",
+    "sinkPoints": 15650,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_SpaceElevatorPart_6_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SpaceElevatorPart_7_C": {
+    "slug": "assembly_director_system",
+    "name": "Assembly Director System",
+    "sinkPoints": 543632,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_SpaceElevatorPart_7_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SpaceElevatorPart_8_C": {
+    "slug": "thermal_propulsion_rocket",
+    "name": "Thermal Propulsion Rocket",
+    "sinkPoints": 732956,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_SpaceElevatorPart_8_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SpaceElevatorPart_9_C": {
+    "slug": "nuclear_pasta",
+    "name": "Nuclear Pasta",
+    "sinkPoints": 543424,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_SpaceElevatorPart_9_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_IronIngot_C": {
+    "slug": "iron_ingot",
+    "name": "Iron Ingot",
+    "sinkPoints": 2,
+    "usedInRecipes": [
+      "Recipe_IronPlate_C",
+      "Recipe_IronRod_C",
+      "Recipe_Alternate_CoatedIronPlate_C",
+      "Recipe_Alternate_IngotSteel_1_C",
+      "Recipe_Alternate_Screw_C",
+      "Recipe_Alternate_Wire_1_C",
+      "Recipe_XmasBall4_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_IngotIron_C",
+      "Recipe_Alternate_PureIronIngot_C",
+      "Recipe_Alternate_IngotIron_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_AluminumPlate_C": {
+    "slug": "alclad_aluminum_sheet",
+    "name": "Alclad Aluminum Sheet",
+    "sinkPoints": 266,
+    "usedInRecipes": [
+      "Recipe_Alternate_ClassicBattery_C",
+      "Recipe_HeatSink_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_AluminumSheet_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Motor_C": {
+    "slug": "motor",
+    "name": "Motor",
+    "sinkPoints": 1520,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_4_C",
+      "Recipe_Alternate_AutomatedMiner_C",
+      "Recipe_Alternate_CoolingDevice_C",
+      "Recipe_Alternate_TurboPressureMotor_C",
+      "Recipe_Alternate_TurboMotor_1_C",
+      "Recipe_MotorTurbo_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Motor_C",
+      "Recipe_Alternate_ElectricMotor_C",
+      "Recipe_Alternate_Motor_1_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Rotor_C": {
+    "slug": "rotor",
+    "name": "Rotor",
+    "sinkPoints": 140,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_1_C",
+      "Recipe_Motor_C",
+      "Recipe_Alternate_PlasticSmartPlating_C",
+      "Recipe_Alternate_ElectricMotor_C",
+      "Recipe_Alternate_Motor_1_C",
+      "Recipe_Alternate_TurboMotor_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Rotor_C",
+      "Recipe_Alternate_CopperRotor_C",
+      "Recipe_Alternate_Rotor_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Rubber_C": {
+    "slug": "rubber",
+    "name": "Rubber",
+    "sinkPoints": 60,
+    "usedInRecipes": [
+      "Recipe_Alternate_AdheredIronPlate_C",
+      "Recipe_CoolingSystem_C",
+      "Recipe_Alternate_ElectrodeCircuitBoard_C",
+      "Recipe_Alternate_FlexibleFramework_C",
+      "Recipe_Alternate_HeavyFlexibleFrame_C",
+      "Recipe_SpaceElevatorPart_4_C",
+      "Recipe_Alternate_RubberConcrete_C",
+      "Recipe_Alternate_RadioControlSystem_C",
+      "Recipe_Alternate_Cable_1_C",
+      "Recipe_Alternate_Cable_2_C",
+      "Recipe_Alternate_Computer_1_C",
+      "Recipe_Alternate_CrystalOscillator_C",
+      "Recipe_Alternate_HeatSink_1_C",
+      "Recipe_Alternate_Plastic_1_C",
+      "Recipe_MotorTurbo_C",
+      "Recipe_FilterGasMask_C",
+      "Recipe_Cartridge_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Rubber_C",
+      "Recipe_ResidualRubber_C",
+      "Recipe_Alternate_RecycledRubber_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Plastic_C": {
+    "slug": "plastic",
+    "name": "Plastic",
+    "sinkPoints": 75,
+    "usedInRecipes": [
+      "Recipe_CircuitBoard_C",
+      "Recipe_FluidCanister_C",
+      "Recipe_Alternate_CoatedIronPlate_C",
+      "Recipe_Computer_C",
+      "Recipe_Alternate_PlasticSmartPlating_C",
+      "Recipe_Alternate_RecycledRubber_C",
+      "Recipe_Alternate_SteelCoatedPlate_C",
+      "Recipe_Alternate_ClassicBattery_C",
+      "Recipe_ComputerSuper_C",
+      "Recipe_Alternate_CircuitBoard_2_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Plastic_C",
+      "Recipe_ResidualPlastic_C",
+      "Recipe_Alternate_Plastic_1_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SteelPlateReinforced_C": {
+    "slug": "encased_industrial_beam",
+    "name": "Encased Industrial Beam",
+    "sinkPoints": 632,
+    "usedInRecipes": [
+      "Recipe_Alternate_HeavyFlexibleFrame_C",
+      "Recipe_ModularFrameHeavy_C",
+      "Recipe_NuclearFuelRod_C",
+      "Recipe_Alternate_ModularFrameHeavy_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_EncasedIndustrialBeam_C",
+      "Recipe_Alternate_EncasedIndustrialBeam_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SteelPipe_C": {
+    "slug": "steel_pipe",
+    "name": "Steel Pipe",
+    "sinkPoints": 24,
+    "usedInRecipes": [
+      "Recipe_Stator_C",
+      "Recipe_ModularFrameHeavy_C",
+      "Recipe_Alternate_AutomatedMiner_C",
+      "Recipe_Alternate_Beacon_1_C",
+      "Recipe_Alternate_ModularFrameHeavy_C",
+      "Recipe_Alternate_ModularFrame_C",
+      "Recipe_Alternate_Nobelisk_1_C",
+      "Recipe_Nobelisk_C",
+      "Recipe_Alternate_EncasedIndustrialBeam_C",
+      "Recipe_Alternate_Rotor_C",
+      "Recipe_Alternate_Stator_C",
+      "Recipe_Cartridge_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_SteelPipe_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_LiquidFuel_C": {
+    "slug": "fuel",
+    "name": "Fuel",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_Fuel_C",
+      "Recipe_Alternate_RecycledRubber_C",
+      "Recipe_Alternate_HeatFusedFrame_C",
+      "Recipe_Alternate_TurboBlendFuel_C",
+      "Recipe_Alternate_Plastic_1_C",
+      "Recipe_Alternate_Turbofuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_LiquidFuel_C",
+      "Recipe_ResidualFuel_C",
+      "Recipe_UnpackageFuel_C",
+      "Recipe_Alternate_DilutedFuel_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PolymerResin_C": {
+    "slug": "polymer_resin",
+    "name": "Polymer Resin",
+    "sinkPoints": 12,
+    "usedInRecipes": [
+      "Recipe_ResidualPlastic_C",
+      "Recipe_ResidualRubber_C",
+      "Recipe_Alternate_PolyesterFabric_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_LiquidFuel_C",
+      "Recipe_Alternate_HeavyOilResidue_C",
+      "Recipe_Alternate_PolymerResin_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_HeavyOilResidue_C": {
+    "slug": "heavy_oil_residue",
+    "name": "Heavy Oil Residue",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_PetroleumCoke_C",
+      "Recipe_ResidualFuel_C",
+      "Recipe_Alternate_CoatedCable_C",
+      "Recipe_PackagedOilResidue_C",
+      "Recipe_Alternate_DilutedPackagedFuel_C",
+      "Recipe_Alternate_TurboHeavyFuel_C",
+      "Recipe_Alternate_DilutedFuel_C",
+      "Recipe_Alternate_TurboBlendFuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Plastic_C",
+      "Recipe_Rubber_C",
+      "Recipe_UnpackageOilResidue_C",
+      "Recipe_Alternate_HeavyOilResidue_C",
+      "Recipe_Alternate_PolymerResin_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PetroleumCoke_C": {
+    "slug": "petroleum_coke",
+    "name": "Petroleum Coke",
+    "sinkPoints": 20,
+    "usedInRecipes": [
+      "Recipe_Alternate_CokeSteelIngot_C",
+      "Recipe_Alternate_ElectroAluminumScrap_C",
+      "Recipe_Alternate_ElectrodeCircuitBoard_C",
+      "Recipe_Alternate_TurboBlendFuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PetroleumCoke_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_ModularFrame_C": {
+    "slug": "modular_frame",
+    "name": "Modular Frame",
+    "sinkPoints": 408,
+    "usedInRecipes": [
+      "Recipe_Alternate_FlexibleFramework_C",
+      "Recipe_Alternate_HeavyFlexibleFrame_C",
+      "Recipe_ModularFrameHeavy_C",
+      "Recipe_SpaceElevatorPart_2_C",
+      "Recipe_Alternate_ModularFrameHeavy_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_BoltedFrame_C",
+      "Recipe_ModularFrame_C",
+      "Recipe_Alternate_ModularFrame_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_FluidCanister_C": {
+    "slug": "empty_canister",
+    "name": "Empty Canister",
+    "sinkPoints": 60,
+    "usedInRecipes": [
+      "Recipe_Fuel_C",
+      "Recipe_PackagedBiofuel_C",
+      "Recipe_PackagedCrudeOil_C",
+      "Recipe_PackagedOilResidue_C",
+      "Recipe_PackagedWater_C",
+      "Recipe_PackagedAlumina_C",
+      "Recipe_PackagedTurboFuel_C",
+      "Recipe_PackagedSulfuricAcid_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_CoatedIronCanister_C",
+      "Recipe_FluidCanister_C",
+      "Recipe_UnpackageBioFuel_C",
+      "Recipe_UnpackageFuel_C",
+      "Recipe_UnpackageOil_C",
+      "Recipe_UnpackageOilResidue_C",
+      "Recipe_UnpackageWater_C",
+      "Recipe_UnpackageAlumina_C",
+      "Recipe_Alternate_SteelCanister_C",
+      "Recipe_UnpackageTurboFuel_C",
+      "Recipe_UnpackageSulfuricAcid_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_ModularFrameHeavy_C": {
+    "slug": "heavy_modular_frame",
+    "name": "Heavy Modular Frame",
+    "sinkPoints": 11520,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_5_C",
+      "Recipe_FusedModularFrame_C",
+      "Recipe_Alternate_HeatFusedFrame_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_HeavyFlexibleFrame_C",
+      "Recipe_ModularFrameHeavy_C",
+      "Recipe_Alternate_ModularFrameHeavy_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PackagedOil_C": {
+    "slug": "packaged_oil",
+    "name": "Packaged Oil",
+    "sinkPoints": 180,
+    "usedInRecipes": [
+      "Recipe_UnpackageOil_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PackagedCrudeOil_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PackagedOilResidue_C": {
+    "slug": "packaged_heavy_oil_residue",
+    "name": "Packaged Heavy Oil Residue",
+    "sinkPoints": 180,
+    "usedInRecipes": [
+      "Recipe_UnpackageOilResidue_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PackagedOilResidue_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SteelIngot_C": {
+    "slug": "steel_ingot",
+    "name": "Steel Ingot",
+    "sinkPoints": 8,
+    "usedInRecipes": [
+      "Recipe_Alternate_SteelCanister_C",
+      "Recipe_Alternate_SteelCoatedPlate_C",
+      "Recipe_Alternate_SteelRod_C",
+      "Recipe_SteelBeam_C",
+      "Recipe_SteelPipe_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_CokeSteelIngot_C",
+      "Recipe_IngotSteel_C",
+      "Recipe_Alternate_IngotSteel_1_C",
+      "Recipe_Alternate_IngotSteel_2_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_AluminaSolution_C": {
+    "slug": "alumina_solution",
+    "name": "Alumina Solution",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_Alternate_ElectroAluminumScrap_C",
+      "Recipe_AluminumScrap_C",
+      "Recipe_PackagedAlumina_C",
+      "Recipe_Battery_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_AluminaSolution_C",
+      "Recipe_UnpackageAlumina_C",
+      "Recipe_Alternate_SloppyAlumina_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_AluminumScrap_C": {
+    "slug": "aluminum_scrap",
+    "name": "Aluminum Scrap",
+    "sinkPoints": 27,
+    "usedInRecipes": [
+      "Recipe_IngotAluminum_C",
+      "Recipe_PureAluminumIngot_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_ElectroAluminumScrap_C",
+      "Recipe_AluminumScrap_C",
+      "Recipe_Alternate_InstantScrap_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SulfuricAcid_C": {
+    "slug": "sulfuric_acid",
+    "name": "Sulfuric Acid",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_UraniumCell_C",
+      "Recipe_NonFissileUranium_C",
+      "Recipe_Battery_C",
+      "Recipe_PackagedSulfuricAcid_C",
+      "Recipe_Alternate_FertileUranium_C",
+      "Recipe_Alternate_InstantScrap_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_UraniumCell_C",
+      "Recipe_SulfuricAcid_C",
+      "Recipe_UnpackageSulfuricAcid_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_UraniumCell_C": {
+    "slug": "encased_uranium_cell",
+    "name": "Encased Uranium Cell",
+    "sinkPoints": 147,
+    "usedInRecipes": [
+      "Recipe_NuclearFuelRod_C",
+      "Recipe_Alternate_NuclearFuelRod_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_UraniumCell_C",
+      "Recipe_Alternate_UraniumCell_1_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_AluminumPlateReinforced_C": {
+    "slug": "heat_sink",
+    "name": "Heat Sink",
+    "sinkPoints": 2804,
+    "usedInRecipes": [
+      "Recipe_CoolingSystem_C",
+      "Recipe_Alternate_CoolingDevice_C",
+      "Recipe_PlutoniumFuelRod_C",
+      "Recipe_Alternate_RadioControlUnit_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_HeatSink_C",
+      "Recipe_Alternate_HeatSink_1_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CoolingSystem_C": {
+    "slug": "cooling_system",
+    "name": "Cooling System",
+    "sinkPoints": 12006,
+    "usedInRecipes": [
+      "Recipe_Alternate_OCSupercomputer_C",
+      "Recipe_MotorTurbo_C",
+      "Recipe_SpaceElevatorPart_8_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_CoolingSystem_C",
+      "Recipe_Alternate_CoolingDevice_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_NitricAcid_C": {
+    "slug": "nitric_acid",
+    "name": "Nitric Acid",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_NonFissileUranium_C",
+      "Recipe_Alternate_FertileUranium_C",
+      "Recipe_PackagedNitricAcid_C",
+      "Recipe_Alternate_HeatFusedFrame_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_NitricAcid_C",
+      "Recipe_UnpackageNitricAcid_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_NonFissibleUranium_C": {
+    "slug": "non_fissile_uranium",
+    "name": "Non-fissile Uranium",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_Plutonium_C",
+      "Recipe_Alternate_InstantPlutoniumCell_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_NonFissileUranium_C",
+      "Recipe_Alternate_FertileUranium_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_AluminumCasing_C": {
+    "slug": "aluminum_casing",
+    "name": "Aluminum Casing",
+    "sinkPoints": 393,
+    "usedInRecipes": [
+      "Recipe_RadioControlUnit_C",
+      "Recipe_Battery_C",
+      "Recipe_FusedModularFrame_C",
+      "Recipe_Alternate_InstantPlutoniumCell_C",
+      "Recipe_Alternate_RadioControlSystem_C",
+      "Recipe_Alternate_HeatSink_1_C",
+      "Recipe_FilterHazmat_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_AluminumCasing_C",
+      "Recipe_Alternate_AlcladCasing_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_ModularFrameLightweight_C": {
+    "slug": "radio_control_unit",
+    "name": "Radio Control Unit",
+    "sinkPoints": 32908,
+    "usedInRecipes": [
+      "Recipe_PressureConversionCube_C",
+      "Recipe_Alternate_OCSupercomputer_C",
+      "Recipe_Alternate_TurboMotor_1_C",
+      "Recipe_MotorTurbo_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_RadioControlUnit_C",
+      "Recipe_Alternate_RadioControlSystem_C",
+      "Recipe_Alternate_RadioControlUnit_1_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_AluminumIngot_C": {
+    "slug": "aluminum_ingot",
+    "name": "Aluminum Ingot",
+    "sinkPoints": 131,
+    "usedInRecipes": [
+      "Recipe_AluminumCasing_C",
+      "Recipe_AluminumSheet_C",
+      "Recipe_Alternate_AlcladCasing_C",
+      "Recipe_GasTank_C",
+      "Recipe_Alternate_HeatFusedFrame_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_IngotAluminum_C",
+      "Recipe_PureAluminumIngot_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Computer_C": {
+    "slug": "computer",
+    "name": "Computer",
+    "sinkPoints": 17260,
+    "usedInRecipes": [
+      "Recipe_RadioControlUnit_C",
+      "Recipe_SpaceElevatorPart_5_C",
+      "Recipe_ComputerSuper_C",
+      "Recipe_Alternate_SuperStateComputer_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Computer_C",
+      "Recipe_Alternate_Computer_1_C",
+      "Recipe_Alternate_Computer_2_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_QuartzCrystal_C": {
+    "slug": "quartz_crystal",
+    "name": "Quartz Crystal",
+    "sinkPoints": 50,
+    "usedInRecipes": [
+      "Recipe_CrystalOscillator_C",
+      "Recipe_Alternate_CrystalOscillator_C",
+      "Recipe_Alternate_RadioControlUnit_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_QuartzCrystal_C",
+      "Recipe_Alternate_PureQuartzCrystal_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_GoldIngot_C": {
+    "slug": "caterium_ingot",
+    "name": "Caterium Ingot",
+    "sinkPoints": 42,
+    "usedInRecipes": [
+      "Recipe_Alternate_FusedWire_C",
+      "Recipe_Alternate_Quickwire_C",
+      "Recipe_Alternate_Wire_2_C",
+      "Recipe_Quickwire_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_PureCateriumIngot_C",
+      "Recipe_IngotCaterium_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_HighSpeedConnector_C": {
+    "slug": "high_speed_connector",
+    "name": "High-Speed Connector",
+    "sinkPoints": 3776,
+    "usedInRecipes": [
+      "Recipe_Alternate_HighSpeedWiring_C",
+      "Recipe_ComputerSuper_C",
+      "Recipe_Alternate_ElectromagneticControlRod_1_C",
+      "Recipe_Alternate_RadioControlUnit_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_HighSpeedConnector_C",
+      "Recipe_Alternate_HighSpeedConnector_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Stator_C": {
+    "slug": "stator",
+    "name": "Stator",
+    "sinkPoints": 240,
+    "usedInRecipes": [
+      "Recipe_Alternate_HighSpeedWiring_C",
+      "Recipe_Motor_C",
+      "Recipe_SpaceElevatorPart_3_C",
+      "Recipe_ElectromagneticControlRod_C",
+      "Recipe_Alternate_TurboPressureMotor_C",
+      "Recipe_Alternate_ElectromagneticControlRod_1_C",
+      "Recipe_Alternate_Motor_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Stator_C",
+      "Recipe_Alternate_Stator_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CircuitBoardHighSpeed_C": {
+    "slug": "ai_limiter",
+    "name": "AI Limiter",
+    "sinkPoints": 920,
+    "usedInRecipes": [
+      "Recipe_ComputerSuper_C",
+      "Recipe_ElectromagneticControlRod_C",
+      "Recipe_Alternate_CrystalOscillator_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_AILimiter_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_HighSpeedWire_C": {
+    "slug": "quickwire",
+    "name": "Quickwire",
+    "sinkPoints": 17,
+    "usedInRecipes": [
+      "Recipe_AILimiter_C",
+      "Recipe_HighSpeedConnector_C",
+      "Recipe_Alternate_Cable_2_C",
+      "Recipe_Alternate_CircuitBoard_2_C",
+      "Recipe_Alternate_Computer_1_C",
+      "Recipe_Alternate_HighSpeedConnector_C",
+      "Recipe_Alternate_Stator_C",
+      "Recipe_Alternate_UraniumCell_1_C",
+      "Recipe_FilterHazmat_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_Quickwire_C",
+      "Recipe_Quickwire_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CompactedCoal_C": {
+    "slug": "compacted_coal",
+    "name": "Compacted Coal",
+    "sinkPoints": 28,
+    "usedInRecipes": [
+      "Recipe_Alternate_TurboHeavyFuel_C",
+      "Recipe_Alternate_Gunpowder_1_C",
+      "Recipe_Alternate_IngotSteel_2_C",
+      "Recipe_Alternate_Turbofuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_EnrichedCoal_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_LiquidTurboFuel_C": {
+    "slug": "turbofuel",
+    "name": "Turbofuel",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_PackagedTurboFuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_TurboHeavyFuel_C",
+      "Recipe_UnpackageTurboFuel_C",
+      "Recipe_Alternate_TurboBlendFuel_C",
+      "Recipe_Alternate_Turbofuel_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_ComputerSuper_C": {
+    "slug": "supercomputer",
+    "name": "Supercomputer",
+    "sinkPoints": 99576,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_7_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_ComputerSuper_C",
+      "Recipe_Alternate_OCSupercomputer_C",
+      "Recipe_Alternate_SuperStateComputer_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_GasTank_C": {
+    "slug": "empty_fluid_tank",
+    "name": "Empty Fluid Tank",
+    "sinkPoints": 225,
+    "usedInRecipes": [
+      "Recipe_PackagedNitrogen_C",
+      "Recipe_PackagedNitricAcid_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_GasTank_C",
+      "Recipe_UnpackageNitrogen_C",
+      "Recipe_UnpackageNitricAcid_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_ElectromagneticControlRod_C": {
+    "slug": "electromagnetic_control_rod",
+    "name": "Electromagnetic Control Rod",
+    "sinkPoints": 2560,
+    "usedInRecipes": [
+      "Recipe_Alternate_ElectricMotor_C",
+      "Recipe_PlutoniumFuelRod_C",
+      "Recipe_Alternate_SuperStateComputer_C",
+      "Recipe_NuclearFuelRod_C",
+      "Recipe_SpaceElevatorPart_6_C",
+      "Recipe_Alternate_NuclearFuelRod_1_C",
+      "Recipe_Alternate_TurboMotor_1_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_ElectromagneticControlRod_C",
+      "Recipe_Alternate_ElectromagneticControlRod_1_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PlutoniumCell_C": {
+    "slug": "encased_plutonium_cell",
+    "name": "Encased Plutonium Cell",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_PlutoniumFuelRod_C",
+      "Recipe_Alternate_PlutoniumFuelUnit_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PlutoniumCell_C",
+      "Recipe_Alternate_InstantPlutoniumCell_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PlutoniumPellet_C": {
+    "slug": "plutonium_pellet",
+    "name": "Plutonium Pellet",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_PlutoniumCell_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Plutonium_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PressureConversionCube_C": {
+    "slug": "pressure_conversion_cube",
+    "name": "Pressure Conversion Cube",
+    "sinkPoints": 257312,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_9_C",
+      "Recipe_Alternate_PlutoniumFuelUnit_C",
+      "Recipe_Alternate_TurboPressureMotor_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PressureConversionCube_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_MotorLightweight_C": {
+    "slug": "turbo_motor",
+    "name": "Turbo Motor",
+    "sinkPoints": 242720,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_8_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_TurboPressureMotor_C",
+      "Recipe_Alternate_TurboMotor_1_C",
+      "Recipe_MotorTurbo_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CopperDust_C": {
+    "slug": "copper_powder",
+    "name": "Copper Powder",
+    "sinkPoints": 72,
+    "usedInRecipes": [
+      "Recipe_SpaceElevatorPart_9_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_CopperDust_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Gunpowder_C": {
+    "slug": "black_powder",
+    "name": "Black Powder",
+    "sinkPoints": 50,
+    "usedInRecipes": [
+      "Recipe_Alternate_Nobelisk_1_C",
+      "Recipe_Nobelisk_C",
+      "Recipe_Cartridge_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_Gunpowder_1_C",
+      "Recipe_Gunpowder_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Crystal_C": {
+    "slug": "blue_power_slug",
+    "name": "Blue Power Slug",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_PowerCrystalShard_1_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_Crystal_mk2_C": {
+    "slug": "yellow_power_slug",
+    "name": "Yellow Power Slug",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_PowerCrystalShard_2_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_Crystal_mk3_C": {
+    "slug": "purple_power_slug",
+    "name": "Purple Power Slug",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_PowerCrystalShard_3_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_Biofuel_C": {
+    "slug": "solid_biofuel",
+    "name": "Solid Biofuel",
+    "sinkPoints": 48,
+    "usedInRecipes": [
+      "Recipe_LiquidBiofuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Biofuel_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PackagedBiofuel_C": {
+    "slug": "packaged_liquid_biofuel",
+    "name": "Packaged Liquid Biofuel",
+    "sinkPoints": 370,
+    "usedInRecipes": [
+      "Recipe_UnpackageBioFuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PackagedBiofuel_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_FlowerPetals_C": {
+    "slug": "flower_petals",
+    "name": "Flower Petals",
+    "sinkPoints": 10,
+    "usedInRecipes": [
+      "Recipe_ColorCartridge_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_GenericBiomass_C": {
+    "slug": "biomass",
+    "name": "Biomass",
+    "sinkPoints": 12,
+    "usedInRecipes": [
+      "Recipe_Fabric_C",
+      "Recipe_Alternate_Coal_2_C",
+      "Recipe_Biofuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Biomass_Leaves_C",
+      "Recipe_Biomass_Wood_C",
+      "Recipe_Biomass_AlienCarapace_C",
+      "Recipe_Biomass_AlienOrgans_C",
+      "Recipe_Biomass_Mycelia_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Leaves_C": {
+    "slug": "leaves",
+    "name": "Leaves",
+    "sinkPoints": 3,
+    "usedInRecipes": [
+      "Recipe_Biomass_Leaves_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_Wood_C": {
+    "slug": "wood",
+    "name": "Wood",
+    "sinkPoints": 30,
+    "usedInRecipes": [
+      "Recipe_Biomass_Wood_C",
+      "Recipe_Alternate_Coal_1_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_LiquidBiofuel_C": {
+    "slug": "liquid_biofuel",
+    "name": "Liquid Biofuel",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_PackagedBiofuel_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_LiquidBiofuel_C",
+      "Recipe_UnpackageBioFuel_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PackagedAlumina_C": {
+    "slug": "packaged_alumina_solution",
+    "name": "Packaged Alumina Solution",
+    "sinkPoints": 160,
+    "usedInRecipes": [
+      "Recipe_UnpackageAlumina_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PackagedAlumina_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Fabric_C": {
+    "slug": "fabric",
+    "name": "Fabric",
+    "sinkPoints": 140,
+    "usedInRecipes": [
+      "Recipe_FilterGasMask_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_PolyesterFabric_C",
+      "Recipe_Fabric_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Mycelia_C": {
+    "slug": "mycelia",
+    "name": "Mycelia",
+    "sinkPoints": 10,
+    "usedInRecipes": [
+      "Recipe_Fabric_C",
+      "Recipe_Biomass_Mycelia_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_PackagedSulfuricAcid_C": {
+    "slug": "packaged_sulfuric_acid",
+    "name": "Packaged Sulfuric Acid",
+    "sinkPoints": 152,
+    "usedInRecipes": [
+      "Recipe_UnpackageSulfuricAcid_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PackagedSulfuricAcid_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PackagedNitrogenGas_C": {
+    "slug": "packaged_nitrogen_gas",
+    "name": "Packaged Nitrogen Gas",
+    "sinkPoints": 312,
+    "usedInRecipes": [
+      "Recipe_UnpackageNitrogen_C",
+      "Recipe_Alternate_TurboPressureMotor_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PackagedNitrogen_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PackagedNitricAcid_C": {
+    "slug": "packaged_nitric_acid",
+    "name": "Packaged Nitric Acid",
+    "sinkPoints": 412,
+    "usedInRecipes": [
+      "Recipe_UnpackageNitricAcid_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PackagedNitricAcid_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_HogParts_C": {
+    "slug": "alien_carapace",
+    "name": "Alien Carapace",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_Biomass_AlienCarapace_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_SpitterParts_C": {
+    "slug": "alien_organs",
+    "name": "Alien Organs",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_Biomass_AlienOrgans_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_NuclearFuelRod_C": {
+    "slug": "uranium_fuel_rod",
+    "name": "Uranium Fuel Rod",
+    "sinkPoints": 44092,
+    "usedInRecipes": [
+      "Recipe_CUSTOM_NuclearPower_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_NuclearFuelRod_C",
+      "Recipe_Alternate_NuclearFuelRod_1_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_PlutoniumFuelRod_C": {
+    "slug": "plutonium_fuel_rod",
+    "name": "Plutonium Fuel Rod",
+    "sinkPoints": 153184,
+    "usedInRecipes": [
+      "Recipe_CUSTOM_PlutoniumPower_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_PlutoniumFuelRod_C",
+      "Recipe_Alternate_PlutoniumFuelUnit_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Water_C": {
+    "slug": "water",
+    "name": "Water",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_ResidualPlastic_C",
+      "Recipe_ResidualRubber_C",
+      "Recipe_LiquidBiofuel_C",
+      "Recipe_PackagedWater_C",
+      "Recipe_CoolingSystem_C",
+      "Recipe_NitricAcid_C",
+      "Recipe_AluminaSolution_C",
+      "Recipe_Alternate_PolyesterFabric_C",
+      "Recipe_Alternate_PureCateriumIngot_C",
+      "Recipe_Alternate_PureCopperIngot_C",
+      "Recipe_Alternate_PureIronIngot_C",
+      "Recipe_Alternate_PureQuartzCrystal_C",
+      "Recipe_Alternate_SteamedCopperSheet_C",
+      "Recipe_Alternate_WetConcrete_C",
+      "Recipe_SulfuricAcid_C",
+      "Recipe_Alternate_DilutedFuel_C",
+      "Recipe_Alternate_InstantScrap_C",
+      "Recipe_Alternate_SloppyAlumina_C",
+      "Recipe_CUSTOM_NuclearPower_C",
+      "Recipe_CUSTOM_PlutoniumPower_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_UnpackageWater_C",
+      "Recipe_Alternate_ElectroAluminumScrap_C",
+      "Recipe_NonFissileUranium_C",
+      "Recipe_AluminumScrap_C",
+      "Recipe_Battery_C",
+      "Recipe_Alternate_FertileUranium_C",
+      "Recipe_Alternate_InstantScrap_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_OreIron_C": {
+    "slug": "iron_ore",
+    "name": "Iron Ore",
+    "sinkPoints": 1,
+    "usedInRecipes": [
+      "Recipe_IngotIron_C",
+      "Recipe_Alternate_CokeSteelIngot_C",
+      "Recipe_Alternate_CopperAlloyIngot_C",
+      "Recipe_Alternate_PureIronIngot_C",
+      "Recipe_IngotSteel_C",
+      "Recipe_Alternate_IngotIron_C",
+      "Recipe_Alternate_IngotSteel_2_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_OreCopper_C": {
+    "slug": "copper_ore",
+    "name": "Copper Ore",
+    "sinkPoints": 3,
+    "usedInRecipes": [
+      "Recipe_IngotCopper_C",
+      "Recipe_Alternate_CopperAlloyIngot_C",
+      "Recipe_Alternate_PureCopperIngot_C",
+      "Recipe_Alternate_IngotIron_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_Stone_C": {
+    "slug": "limestone",
+    "name": "Limestone",
+    "sinkPoints": 2,
+    "usedInRecipes": [
+      "Recipe_Concrete_C",
+      "Recipe_Alternate_RubberConcrete_C",
+      "Recipe_Alternate_WetConcrete_C",
+      "Recipe_Alternate_Concrete_C",
+      "Recipe_Alternate_Silica_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_Coal_C": {
+    "slug": "coal",
+    "name": "Coal",
+    "sinkPoints": 3,
+    "usedInRecipes": [
+      "Recipe_AluminumScrap_C",
+      "Recipe_IngotSteel_C",
+      "Recipe_Alternate_EnrichedCoal_C",
+      "Recipe_Alternate_InstantScrap_C",
+      "Recipe_Alternate_IngotSteel_1_C",
+      "Recipe_FilterGasMask_C",
+      "Recipe_Gunpowder_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_Alternate_Coal_1_C",
+      "Recipe_Alternate_Coal_2_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_LiquidOil_C": {
+    "slug": "crude_oil",
+    "name": "Crude Oil",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_LiquidFuel_C",
+      "Recipe_Plastic_C",
+      "Recipe_Rubber_C",
+      "Recipe_PackagedCrudeOil_C",
+      "Recipe_Alternate_HeavyOilResidue_C",
+      "Recipe_Alternate_PolymerResin_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_UnpackageOil_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_OreBauxite_C": {
+    "slug": "bauxite",
+    "name": "Bauxite",
+    "sinkPoints": 8,
+    "usedInRecipes": [
+      "Recipe_AluminaSolution_C",
+      "Recipe_Alternate_InstantScrap_C",
+      "Recipe_Alternate_SloppyAlumina_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_OreGold_C": {
+    "slug": "caterium_ore",
+    "name": "Caterium Ore",
+    "sinkPoints": 7,
+    "usedInRecipes": [
+      "Recipe_Alternate_PureCateriumIngot_C",
+      "Recipe_IngotCaterium_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_OreUranium_C": {
+    "slug": "uranium",
+    "name": "Uranium",
+    "sinkPoints": 35,
+    "usedInRecipes": [
+      "Recipe_UraniumCell_C",
+      "Recipe_Alternate_FertileUranium_C",
+      "Recipe_Alternate_UraniumCell_1_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_RawQuartz_C": {
+    "slug": "raw_quartz",
+    "name": "Raw Quartz",
+    "sinkPoints": 15,
+    "usedInRecipes": [
+      "Recipe_QuartzCrystal_C",
+      "Recipe_Alternate_PureQuartzCrystal_C",
+      "Recipe_Alternate_Silica_C",
+      "Recipe_Silica_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_Sulfur_C": {
+    "slug": "sulfur",
+    "name": "Sulfur",
+    "sinkPoints": 11,
+    "usedInRecipes": [
+      "Recipe_Alternate_EnrichedCoal_C",
+      "Recipe_Alternate_ClassicBattery_C",
+      "Recipe_SulfuricAcid_C",
+      "Recipe_Alternate_TurboBlendFuel_C",
+      "Recipe_Alternate_Gunpowder_1_C",
+      "Recipe_Alternate_UraniumCell_1_C",
+      "Recipe_Gunpowder_C"
+    ],
+    "producedFromRecipes": [],
+    "isFicsmas": false
+  },
+  "Desc_NitrogenGas_C": {
+    "slug": "nitrogen_gas",
+    "name": "Nitrogen Gas",
+    "sinkPoints": 0,
+    "usedInRecipes": [
+      "Recipe_CoolingSystem_C",
+      "Recipe_NitricAcid_C",
+      "Recipe_Alternate_CoolingDevice_C",
+      "Recipe_FusedModularFrame_C",
+      "Recipe_PackagedNitrogen_C"
+    ],
+    "producedFromRecipes": [
+      "Recipe_UnpackageNitrogen_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_ColorCartridge_C": {
+    "slug": "color_cartridge",
+    "name": "Color Cartridge",
+    "sinkPoints": 10,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_ColorCartridge_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_CartridgeStandard_C": {
+    "slug": "rifle_cartridge",
+    "name": "Rifle Cartridge",
+    "sinkPoints": 664,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_Cartridge_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SpikedRebar_C": {
+    "slug": "spiked_rebar",
+    "name": "Spiked Rebar",
+    "sinkPoints": 8,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_SpikedRebar_C"
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SnowballProjectile_C": {
+    "slug": "snowball",
+    "name": "Snowball",
+    "sinkPoints": 1,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_Snowball_C"
+    ],
+    "isFicsmas": true
+  },
+  "Desc_NobeliskExplosive_C": {
+    "slug": "nobelisk",
+    "name": "Nobelisk",
+    "sinkPoints": 980,
+    "usedInRecipes": [],
+    "producedFromRecipes": [
+      "Recipe_Alternate_Nobelisk_1_C",
+      "Recipe_Nobelisk_C"
+    ],
+    "isFicsmas": false
+  }
+}

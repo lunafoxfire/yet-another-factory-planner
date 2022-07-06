@@ -1,0 +1,5370 @@
+{
+  "Recipe_Alternate_ClassicBattery_C": {
+    "slug": "alternate_classic_battery_recipe",
+    "name": "Alternate: Classic Battery",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Sulfur_C",
+        "perMinute": 45
+      },
+      {
+        "itemClass": "Desc_AluminumPlate_C",
+        "perMinute": 52.5
+      },
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 60
+      },
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 90
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Battery_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Cable_C": {
+    "slug": "cable_recipe",
+    "name": "Cable",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Cable_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Wire_C": {
+    "slug": "wire_recipe",
+    "name": "Wire",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_IngotCopper_C": {
+    "slug": "copper_ingot_recipe",
+    "name": "Copper Ingot",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreCopper_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_SmelterMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_IronPlateReinforced_C": {
+    "slug": "reinforced_iron_plate_recipe",
+    "name": "Reinforced Iron Plate",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Concrete_C": {
+    "slug": "concrete_recipe",
+    "name": "Concrete",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Stone_C",
+        "perMinute": 45
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Cement_C",
+        "perMinute": 15
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Screw_C": {
+    "slug": "screw_recipe",
+    "name": "Screw",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronRod_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 40
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Biomass_Leaves_C": {
+    "slug": "biomass_leaves_recipe",
+    "name": "Biomass (Leaves)",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Leaves_C",
+        "perMinute": 120
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_GenericBiomass_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Biomass_Wood_C": {
+    "slug": "biomass_wood_recipe",
+    "name": "Biomass (Wood)",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Wood_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_GenericBiomass_C",
+        "perMinute": 300
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Fireworks_01_C": {
+    "slug": "sweet_fireworks_recipe",
+    "name": "Sweet Fireworks",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_XmasBranch_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_CandyCane_C",
+        "perMinute": 7.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Fireworks_Projectile_01_C",
+        "perMinute": 2.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Fireworks_02_C": {
+    "slug": "fancy_fireworks_recipe",
+    "name": "Fancy Fireworks",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_XmasBranch_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_XmasBow_C",
+        "perMinute": 7.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Fireworks_Projectile_02_C",
+        "perMinute": 2.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Fireworks_03_C": {
+    "slug": "sparkly_fireworks_recipe",
+    "name": "Sparkly Fireworks",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_XmasBranch_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_Snow_C",
+        "perMinute": 5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Fireworks_Projectile_03_C",
+        "perMinute": 2.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_XmasBranch_C": {
+    "slug": "ficsmas_tree_branch_recipe",
+    "name": "FICSMAS Tree Branch",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Gift_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_XmasBranch_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_IronPlate_C": {
+    "slug": "iron_plate_recipe",
+    "name": "Iron Plate",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronIngot_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_IronRod_C": {
+    "slug": "iron_rod_recipe",
+    "name": "Iron Rod",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronIngot_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronRod_C",
+        "perMinute": 15
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_IngotIron_C": {
+    "slug": "iron_ingot_recipe",
+    "name": "Iron Ingot",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreIron_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronIngot_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_SmelterMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_AdheredIronPlate_C": {
+    "slug": "alternate_adhered_iron_plate_recipe",
+    "name": "Alternate: Adhered Iron Plate",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 11.25
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 3.75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "perMinute": 3.75
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_CircuitBoard_C": {
+    "slug": "circuit_board_recipe",
+    "name": "Circuit Board",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 7.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_LiquidFuel_C": {
+    "slug": "fuel_recipe",
+    "name": "Fuel",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidOil_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidFuel_C",
+        "perMinute": 40
+      },
+      {
+        "itemClass": "Desc_PolymerResin_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_PetroleumCoke_C": {
+    "slug": "petroleum_coke_recipe",
+    "name": "Petroleum Coke",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 40
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PetroleumCoke_C",
+        "perMinute": 120
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Plastic_C": {
+    "slug": "plastic_recipe",
+    "name": "Plastic",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidOil_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Rubber_C": {
+    "slug": "rubber_recipe",
+    "name": "Rubber",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidOil_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_ResidualFuel_C": {
+    "slug": "residual_fuel_recipe",
+    "name": "Residual Fuel",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidFuel_C",
+        "perMinute": 40
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_ResidualPlastic_C": {
+    "slug": "residual_plastic_recipe",
+    "name": "Residual Plastic",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PolymerResin_C",
+        "perMinute": 60
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_ResidualRubber_C": {
+    "slug": "residual_rubber_recipe",
+    "name": "Residual Rubber",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PolymerResin_C",
+        "perMinute": 40
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 40
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_BoltedFrame_C": {
+    "slug": "alternate_bolted_frame_recipe",
+    "name": "Alternate: Bolted Frame",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 140
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrame_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_ModularFrame_C": {
+    "slug": "modular_frame_recipe",
+    "name": "Modular Frame",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "perMinute": 3
+      },
+      {
+        "itemClass": "Desc_IronRod_C",
+        "perMinute": 12
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrame_C",
+        "perMinute": 2
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Rotor_C": {
+    "slug": "rotor_recipe",
+    "name": "Rotor",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronRod_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 100
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Rotor_C",
+        "perMinute": 4
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_CopperSheet_C": {
+    "slug": "copper_sheet_recipe",
+    "name": "Copper Sheet",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SpaceElevatorPart_1_C": {
+    "slug": "smart_plating_recipe",
+    "name": "Smart Plating",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "perMinute": 2
+      },
+      {
+        "itemClass": "Desc_Rotor_C",
+        "perMinute": 2
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_1_C",
+        "perMinute": 2
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_CoatedCable_C": {
+    "slug": "alternate_coated_cable_recipe",
+    "name": "Alternate: Coated Cable",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 37.5
+      },
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Cable_C",
+        "perMinute": 67.5
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_CoatedIronCanister_C": {
+    "slug": "alternate_coated_iron_canister_recipe",
+    "name": "Alternate: Coated Iron Canister",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_ColorCartridge_C": {
+    "slug": "color_cartridge_recipe",
+    "name": "Color Cartridge",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_FlowerPetals_C",
+        "perMinute": 50
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ColorCartridge_C",
+        "perMinute": 100
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_FluidCanister_C": {
+    "slug": "empty_canister_recipe",
+    "name": "Empty Canister",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Fuel_C": {
+    "slug": "packaged_fuel_recipe",
+    "name": "Packaged Fuel",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidFuel_C",
+        "perMinute": 40
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 40
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Fuel_C",
+        "perMinute": 40
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_LiquidBiofuel_C": {
+    "slug": "liquid_biofuel_recipe",
+    "name": "Liquid Biofuel",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Biofuel_C",
+        "perMinute": 90
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 45
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidBiofuel_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_PackagedBiofuel_C": {
+    "slug": "packaged_liquid_biofuel_recipe",
+    "name": "Packaged Liquid Biofuel",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidBiofuel_C",
+        "perMinute": 40
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 40
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PackagedBiofuel_C",
+        "perMinute": 40
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_PackagedCrudeOil_C": {
+    "slug": "packaged_oil_recipe",
+    "name": "Packaged Oil",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidOil_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PackagedOil_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_PackagedOilResidue_C": {
+    "slug": "packaged_heavy_oil_residue_recipe",
+    "name": "Packaged Heavy Oil Residue",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PackagedOilResidue_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_PackagedWater_C": {
+    "slug": "packaged_water_recipe",
+    "name": "Packaged Water",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 60
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PackagedWater_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_UnpackageBioFuel_C": {
+    "slug": "unpackage_liquid_biofuel_recipe",
+    "name": "Unpackage Liquid Biofuel",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PackagedBiofuel_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidBiofuel_C",
+        "perMinute": 60
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_UnpackageFuel_C": {
+    "slug": "unpackage_fuel_recipe",
+    "name": "Unpackage Fuel",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Fuel_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidFuel_C",
+        "perMinute": 60
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_UnpackageOil_C": {
+    "slug": "unpackage_oil_recipe",
+    "name": "Unpackage Oil",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PackagedOil_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidOil_C",
+        "perMinute": 60
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_UnpackageOilResidue_C": {
+    "slug": "unpackage_heavy_oil_residue_recipe",
+    "name": "Unpackage Heavy Oil Residue",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PackagedOilResidue_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_UnpackageWater_C": {
+    "slug": "unpackage_water_recipe",
+    "name": "Unpackage Water",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PackagedWater_C",
+        "perMinute": 120
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 120
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 120
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_CoatedIronPlate_C": {
+    "slug": "alternate_coated_iron_plate_recipe",
+    "name": "Alternate: Coated Iron Plate",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronIngot_C",
+        "perMinute": 50
+      },
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 75
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_CokeSteelIngot_C": {
+    "slug": "alternate_coke_steel_ingot_recipe",
+    "name": "Alternate: Coke Steel Ingot",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreIron_C",
+        "perMinute": 75
+      },
+      {
+        "itemClass": "Desc_PetroleumCoke_C",
+        "perMinute": 75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SteelIngot_C",
+        "perMinute": 100
+      }
+    ],
+    "producedIn": "Desc_FoundryMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_CopperAlloyIngot_C": {
+    "slug": "alternate_copper_alloy_ingot_recipe",
+    "name": "Alternate: Copper Alloy Ingot",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreCopper_C",
+        "perMinute": 50
+      },
+      {
+        "itemClass": "Desc_OreIron_C",
+        "perMinute": 25
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 100
+      }
+    ],
+    "producedIn": "Desc_FoundryMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_CopperRotor_C": {
+    "slug": "alternate_copper_rotor_recipe",
+    "name": "Alternate: Copper Rotor",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "perMinute": 22.5
+      },
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 195
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Rotor_C",
+        "perMinute": 11.25
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_DilutedPackagedFuel_C": {
+    "slug": "alternate_diluted_packaged_fuel_recipe",
+    "name": "Alternate: Diluted Packaged Fuel",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_PackagedWater_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Fuel_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_ElectroAluminumScrap_C": {
+    "slug": "alternate_electrode_aluminum_scrap_recipe",
+    "name": "Alternate: Electrode - Aluminum Scrap",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminaSolution_C",
+        "perMinute": 180
+      },
+      {
+        "itemClass": "Desc_PetroleumCoke_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminumScrap_C",
+        "perMinute": 300
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 105
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_UraniumCell_C": {
+    "slug": "encased_uranium_cell_recipe",
+    "name": "Encased Uranium Cell",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreUranium_C",
+        "perMinute": 50
+      },
+      {
+        "itemClass": "Desc_Cement_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_SulfuricAcid_C",
+        "perMinute": 40
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_UraniumCell_C",
+        "perMinute": 25
+      },
+      {
+        "itemClass": "Desc_SulfuricAcid_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_CoolingSystem_C": {
+    "slug": "cooling_system_recipe",
+    "name": "Cooling System",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumPlateReinforced_C",
+        "perMinute": 12
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 12
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_NitrogenGas_C",
+        "perMinute": 150
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CoolingSystem_C",
+        "perMinute": 6
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_NitricAcid_C": {
+    "slug": "nitric_acid_recipe",
+    "name": "Nitric Acid",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NitrogenGas_C",
+        "perMinute": 120
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NitricAcid_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_NonFissileUranium_C": {
+    "slug": "non_fissile_uranium_recipe",
+    "name": "Non-fissile Uranium",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NuclearWaste_C",
+        "perMinute": 37.5
+      },
+      {
+        "itemClass": "Desc_Silica_C",
+        "perMinute": 25
+      },
+      {
+        "itemClass": "Desc_NitricAcid_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_SulfuricAcid_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NonFissibleUranium_C",
+        "perMinute": 50
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 15
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_AluminumCasing_C": {
+    "slug": "aluminum_casing_recipe",
+    "name": "Aluminum Casing",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumIngot_C",
+        "perMinute": 90
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_AluminumSheet_C": {
+    "slug": "alclad_aluminum_sheet_recipe",
+    "name": "Alclad Aluminum Sheet",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumIngot_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminumPlate_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_RadioControlUnit_C": {
+    "slug": "radio_control_unit_recipe",
+    "name": "Radio Control Unit",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 40
+      },
+      {
+        "itemClass": "Desc_CrystalOscillator_C",
+        "perMinute": 1.25
+      },
+      {
+        "itemClass": "Desc_Computer_C",
+        "perMinute": 1.25
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrameLightweight_C",
+        "perMinute": 2.5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_AluminaSolution_C": {
+    "slug": "alumina_solution_recipe",
+    "name": "Alumina Solution",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreBauxite_C",
+        "perMinute": 120
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 180
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminaSolution_C",
+        "perMinute": 120
+      },
+      {
+        "itemClass": "Desc_Silica_C",
+        "perMinute": 50
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_AluminumScrap_C": {
+    "slug": "aluminum_scrap_recipe",
+    "name": "Aluminum Scrap",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminaSolution_C",
+        "perMinute": 240
+      },
+      {
+        "itemClass": "Desc_Coal_C",
+        "perMinute": 120
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminumScrap_C",
+        "perMinute": 360
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 120
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_PackagedAlumina_C": {
+    "slug": "packaged_alumina_solution_recipe",
+    "name": "Packaged Alumina Solution",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminaSolution_C",
+        "perMinute": 120
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 120
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PackagedAlumina_C",
+        "perMinute": 120
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_IngotAluminum_C": {
+    "slug": "aluminum_ingot_recipe",
+    "name": "Aluminum Ingot",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumScrap_C",
+        "perMinute": 90
+      },
+      {
+        "itemClass": "Desc_Silica_C",
+        "perMinute": 75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminumIngot_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_FoundryMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_QuartzCrystal_C": {
+    "slug": "quartz_crystal_recipe",
+    "name": "Quartz Crystal",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_RawQuartz_C",
+        "perMinute": 37.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_QuartzCrystal_C",
+        "perMinute": 22.5
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_CrystalOscillator_C": {
+    "slug": "crystal_oscillator_recipe",
+    "name": "Crystal Oscillator",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_QuartzCrystal_C",
+        "perMinute": 18
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "perMinute": 14
+      },
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "perMinute": 2.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CrystalOscillator_C",
+        "perMinute": 1
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_UnpackageAlumina_C": {
+    "slug": "unpackage_alumina_solution_recipe",
+    "name": "Unpackage Alumina Solution",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PackagedAlumina_C",
+        "perMinute": 120
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminaSolution_C",
+        "perMinute": 120
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 120
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_ElectrodeCircuitBoard_C": {
+    "slug": "alternate_electrode_circuit_board_recipe",
+    "name": "Alternate: Electrode Circuit Board",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_PetroleumCoke_C",
+        "perMinute": 45
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_FlexibleFramework_C": {
+    "slug": "alternate_flexible_framework_recipe",
+    "name": "Alternate: Flexible Framework",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_ModularFrame_C",
+        "perMinute": 3.75
+      },
+      {
+        "itemClass": "Desc_SteelPlate_C",
+        "perMinute": 22.5
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_2_C",
+        "perMinute": 7.5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_FusedWire_C": {
+    "slug": "alternate_fused_wire_recipe",
+    "name": "Alternate: Fused Wire",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 12
+      },
+      {
+        "itemClass": "Desc_GoldIngot_C",
+        "perMinute": 3
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 90
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_HeavyFlexibleFrame_C": {
+    "slug": "alternate_heavy_flexible_frame_recipe",
+    "name": "Alternate: Heavy Flexible Frame",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_ModularFrame_C",
+        "perMinute": 18.75
+      },
+      {
+        "itemClass": "Desc_SteelPlateReinforced_C",
+        "perMinute": 11.25
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 75
+      },
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 390
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "perMinute": 3.75
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Computer_C": {
+    "slug": "computer_recipe",
+    "name": "Computer",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 25
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "perMinute": 22.5
+      },
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 45
+      },
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 130
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Computer_C",
+        "perMinute": 2.5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SpaceElevatorPart_4_C": {
+    "slug": "modular_engine_recipe",
+    "name": "Modular Engine",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "perMinute": 2
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_SpaceElevatorPart_1_C",
+        "perMinute": 2
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_4_C",
+        "perMinute": 1
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SpaceElevatorPart_5_C": {
+    "slug": "adaptive_control_unit_recipe",
+    "name": "Adaptive Control Unit",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_3_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 5
+      },
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "perMinute": 1
+      },
+      {
+        "itemClass": "Desc_Computer_C",
+        "perMinute": 1
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_5_C",
+        "perMinute": 1
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_HeavyOilResidue_C": {
+    "slug": "alternate_heavy_oil_residue_recipe",
+    "name": "Alternate: Heavy Oil Residue",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidOil_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 40
+      },
+      {
+        "itemClass": "Desc_PolymerResin_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_HighSpeedWiring_C": {
+    "slug": "alternate_automated_speed_wiring_recipe",
+    "name": "Alternate: Automated Speed Wiring",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Stator_C",
+        "perMinute": 3.75
+      },
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 75
+      },
+      {
+        "itemClass": "Desc_HighSpeedConnector_C",
+        "perMinute": 1.875
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_3_C",
+        "perMinute": 7.5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_EncasedIndustrialBeam_C": {
+    "slug": "encased_industrial_beam_recipe",
+    "name": "Encased Industrial Beam",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelPlate_C",
+        "perMinute": 24
+      },
+      {
+        "itemClass": "Desc_Cement_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SteelPlateReinforced_C",
+        "perMinute": 6
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Motor_C": {
+    "slug": "motor_recipe",
+    "name": "Motor",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Rotor_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_Stator_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Stator_C": {
+    "slug": "stator_recipe",
+    "name": "Stator",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 40
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Stator_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_ModularFrameHeavy_C": {
+    "slug": "heavy_modular_frame_recipe",
+    "name": "Heavy Modular Frame",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_ModularFrame_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_SteelPlateReinforced_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 200
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "perMinute": 2
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SpaceElevatorPart_3_C": {
+    "slug": "automated_wiring_recipe",
+    "name": "Automated Wiring",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Stator_C",
+        "perMinute": 2.5
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "perMinute": 50
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_3_C",
+        "perMinute": 2.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_AILimiter_C": {
+    "slug": "ai_limiter_recipe",
+    "name": "AI Limiter",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "perMinute": 25
+      },
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 100
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CircuitBoardHighSpeed_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_PlasticSmartPlating_C": {
+    "slug": "alternate_plastic_smart_plating_recipe",
+    "name": "Alternate: Plastic Smart Plating",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "perMinute": 2.5
+      },
+      {
+        "itemClass": "Desc_Rotor_C",
+        "perMinute": 2.5
+      },
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 7.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_1_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_PolymerResin_C": {
+    "slug": "alternate_polymer_resin_recipe",
+    "name": "Alternate: Polymer Resin",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidOil_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PolymerResin_C",
+        "perMinute": 130
+      },
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_PureAluminumIngot_C": {
+    "slug": "alternate_pure_aluminum_ingot_recipe",
+    "name": "Alternate: Pure Aluminum Ingot",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumScrap_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminumIngot_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_SmelterMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_PureCateriumIngot_C": {
+    "slug": "alternate_pure_caterium_ingot_recipe",
+    "name": "Alternate: Pure Caterium Ingot",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreGold_C",
+        "perMinute": 24
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 24
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_GoldIngot_C",
+        "perMinute": 12
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_PureCopperIngot_C": {
+    "slug": "alternate_pure_copper_ingot_recipe",
+    "name": "Alternate: Pure Copper Ingot",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreCopper_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 37.5
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_PureIronIngot_C": {
+    "slug": "alternate_pure_iron_ingot_recipe",
+    "name": "Alternate: Pure Iron Ingot",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreIron_C",
+        "perMinute": 35
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronIngot_C",
+        "perMinute": 65
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_PureQuartzCrystal_C": {
+    "slug": "alternate_pure_quartz_crystal_recipe",
+    "name": "Alternate: Pure Quartz Crystal",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_RawQuartz_C",
+        "perMinute": 67.5
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 37.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_QuartzCrystal_C",
+        "perMinute": 52.5
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_RecycledRubber_C": {
+    "slug": "alternate_recycled_rubber_recipe",
+    "name": "Alternate: Recycled Rubber",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_LiquidFuel_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_RubberConcrete_C": {
+    "slug": "alternate_rubber_concrete_recipe",
+    "name": "Alternate: Rubber Concrete",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Stone_C",
+        "perMinute": 50
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Cement_C",
+        "perMinute": 45
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_SteamedCopperSheet_C": {
+    "slug": "alternate_steamed_copper_sheet_recipe",
+    "name": "Alternate: Steamed Copper Sheet",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 22.5
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 22.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "perMinute": 22.5
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_SteelCanister_C": {
+    "slug": "alternate_steel_canister_recipe",
+    "name": "Alternate: Steel Canister",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelIngot_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 40
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_SteelCoatedPlate_C": {
+    "slug": "alternate_steel_coated_plate_recipe",
+    "name": "Alternate: Steel Coated Plate",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelIngot_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 45
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_SteelRod_C": {
+    "slug": "alternate_steel_rod_recipe",
+    "name": "Alternate: Steel Rod",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelIngot_C",
+        "perMinute": 12
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronRod_C",
+        "perMinute": 48
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SteelBeam_C": {
+    "slug": "steel_beam_recipe",
+    "name": "Steel Beam",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelIngot_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SteelPlate_C",
+        "perMinute": 15
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SteelPipe_C": {
+    "slug": "steel_pipe_recipe",
+    "name": "Steel Pipe",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelIngot_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_IngotSteel_C": {
+    "slug": "steel_ingot_recipe",
+    "name": "Steel Ingot",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreIron_C",
+        "perMinute": 45
+      },
+      {
+        "itemClass": "Desc_Coal_C",
+        "perMinute": 45
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SteelIngot_C",
+        "perMinute": 45
+      }
+    ],
+    "producedIn": "Desc_FoundryMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SpaceElevatorPart_2_C": {
+    "slug": "versatile_framework_recipe",
+    "name": "Versatile Framework",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_ModularFrame_C",
+        "perMinute": 2.5
+      },
+      {
+        "itemClass": "Desc_SteelPlate_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_2_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_TurboHeavyFuel_C": {
+    "slug": "alternate_turbo_heavy_fuel_recipe",
+    "name": "Alternate: Turbo Heavy Fuel",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 37.5
+      },
+      {
+        "itemClass": "Desc_CompactedCoal_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidTurboFuel_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_PackagedTurboFuel_C": {
+    "slug": "packaged_turbofuel_recipe",
+    "name": "Packaged Turbofuel",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidTurboFuel_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_TurboFuel_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_UnpackageTurboFuel_C": {
+    "slug": "unpackage_turbofuel_recipe",
+    "name": "Unpackage Turbofuel",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_TurboFuel_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidTurboFuel_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Coal_1_C": {
+    "slug": "alternate_charcoal_recipe",
+    "name": "Alternate: Charcoal",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Wood_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Coal_C",
+        "perMinute": 150
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Coal_2_C": {
+    "slug": "alternate_biocoal_recipe",
+    "name": "Alternate: Biocoal",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_GenericBiomass_C",
+        "perMinute": 37.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Coal_C",
+        "perMinute": 45
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_EnrichedCoal_C": {
+    "slug": "alternate_compacted_coal_recipe",
+    "name": "Alternate: Compacted Coal",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Coal_C",
+        "perMinute": 25
+      },
+      {
+        "itemClass": "Desc_Sulfur_C",
+        "perMinute": 25
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CompactedCoal_C",
+        "perMinute": 25
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_WetConcrete_C": {
+    "slug": "alternate_wet_concrete_recipe",
+    "name": "Alternate: Wet Concrete",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Stone_C",
+        "perMinute": 120
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 100
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Cement_C",
+        "perMinute": 80
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_AlcladCasing_C": {
+    "slug": "alternate_alclad_casing_recipe",
+    "name": "Alternate: Alclad Casing",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumIngot_C",
+        "perMinute": 150
+      },
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 112.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_AutomatedMiner_C": {
+    "slug": "alternate_automated_miner_recipe",
+    "name": "Alternate: Automated Miner",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "perMinute": 1
+      },
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 4
+      },
+      {
+        "itemClass": "Desc_IronRod_C",
+        "perMinute": 4
+      },
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 2
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PortableMiner_C",
+        "perMinute": 1
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Battery_C": {
+    "slug": "battery_recipe",
+    "name": "Battery",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SulfuricAcid_C",
+        "perMinute": 50
+      },
+      {
+        "itemClass": "Desc_AluminaSolution_C",
+        "perMinute": 40
+      },
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Battery_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_ComputerSuper_C": {
+    "slug": "supercomputer_recipe",
+    "name": "Supercomputer",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Computer_C",
+        "perMinute": 3.75
+      },
+      {
+        "itemClass": "Desc_CircuitBoardHighSpeed_C",
+        "perMinute": 3.75
+      },
+      {
+        "itemClass": "Desc_HighSpeedConnector_C",
+        "perMinute": 5.625
+      },
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 52.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ComputerSuper_C",
+        "perMinute": 1.875
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SulfuricAcid_C": {
+    "slug": "sulfuric_acid_recipe",
+    "name": "Sulfuric Acid",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Sulfur_C",
+        "perMinute": 50
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 50
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SulfuricAcid_C",
+        "perMinute": 50
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_PackagedSulfuricAcid_C": {
+    "slug": "packaged_sulfuric_acid_recipe",
+    "name": "Packaged Sulfuric Acid",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SulfuricAcid_C",
+        "perMinute": 40
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 40
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PackagedSulfuricAcid_C",
+        "perMinute": 40
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_SpaceElevatorPart_7_C": {
+    "slug": "assembly_director_system_recipe",
+    "name": "Assembly Director System",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_5_C",
+        "perMinute": 1.5
+      },
+      {
+        "itemClass": "Desc_ComputerSuper_C",
+        "perMinute": 0.75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_7_C",
+        "perMinute": 0.75
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_HighSpeedConnector_C": {
+    "slug": "high_speed_connector_recipe",
+    "name": "High-Speed Connector",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 210
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "perMinute": 37.5
+      },
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 3.75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_HighSpeedConnector_C",
+        "perMinute": 3.75
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_UnpackageSulfuricAcid_C": {
+    "slug": "unpackage_sulfuric_acid_recipe",
+    "name": "Unpackage Sulfuric Acid",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PackagedSulfuricAcid_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SulfuricAcid_C",
+        "perMinute": 60
+      },
+      {
+        "itemClass": "Desc_FluidCanister_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_CoolingDevice_C": {
+    "slug": "alternate_cooling_device_recipe",
+    "name": "Alternate: Cooling Device",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumPlateReinforced_C",
+        "perMinute": 9.375
+      },
+      {
+        "itemClass": "Desc_Motor_C",
+        "perMinute": 1.875
+      },
+      {
+        "itemClass": "Desc_NitrogenGas_C",
+        "perMinute": 45
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CoolingSystem_C",
+        "perMinute": 3.75
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_HeatSink_C": {
+    "slug": "heat_sink_recipe",
+    "name": "Heat Sink",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumPlate_C",
+        "perMinute": 37.5
+      },
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "perMinute": 22.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminumPlateReinforced_C",
+        "perMinute": 7.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_FusedModularFrame_C": {
+    "slug": "fused_modular_frame_recipe",
+    "name": "Fused Modular Frame",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "perMinute": 1.5
+      },
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 75
+      },
+      {
+        "itemClass": "Desc_NitrogenGas_C",
+        "perMinute": 37.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrameFused_C",
+        "perMinute": 1.5
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_GasTank_C": {
+    "slug": "empty_fluid_tank_recipe",
+    "name": "Empty Fluid Tank",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumIngot_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_GasTank_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_PackagedNitrogen_C": {
+    "slug": "packaged_nitrogen_gas_recipe",
+    "name": "Packaged Nitrogen Gas",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NitrogenGas_C",
+        "perMinute": 240
+      },
+      {
+        "itemClass": "Desc_GasTank_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PackagedNitrogenGas_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_UnpackageNitrogen_C": {
+    "slug": "unpackage_nitrogen_gas_recipe",
+    "name": "Unpackage Nitrogen Gas",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PackagedNitrogenGas_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NitrogenGas_C",
+        "perMinute": 240
+      },
+      {
+        "itemClass": "Desc_GasTank_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_DilutedFuel_C": {
+    "slug": "alternate_diluted_fuel_recipe",
+    "name": "Alternate: Diluted Fuel",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 50
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 100
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidFuel_C",
+        "perMinute": 100
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_ElectricMotor_C": {
+    "slug": "alternate_electric_motor_recipe",
+    "name": "Alternate: Electric Motor",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_ElectromagneticControlRod_C",
+        "perMinute": 3.75
+      },
+      {
+        "itemClass": "Desc_Rotor_C",
+        "perMinute": 7.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "perMinute": 7.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_FertileUranium_C": {
+    "slug": "alternate_fertile_uranium_recipe",
+    "name": "Alternate: Fertile Uranium",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreUranium_C",
+        "perMinute": 25
+      },
+      {
+        "itemClass": "Desc_NuclearWaste_C",
+        "perMinute": 25
+      },
+      {
+        "itemClass": "Desc_NitricAcid_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_SulfuricAcid_C",
+        "perMinute": 25
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NonFissibleUranium_C",
+        "perMinute": 100
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 40
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_PlutoniumCell_C": {
+    "slug": "encased_plutonium_cell_recipe",
+    "name": "Encased Plutonium Cell",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PlutoniumPellet_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_Cement_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PlutoniumCell_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_PressureConversionCube_C": {
+    "slug": "pressure_conversion_cube_recipe",
+    "name": "Pressure Conversion Cube",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_ModularFrameFused_C",
+        "perMinute": 1
+      },
+      {
+        "itemClass": "Desc_ModularFrameLightweight_C",
+        "perMinute": 2
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PressureConversionCube_C",
+        "perMinute": 1
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_CopperDust_C": {
+    "slug": "copper_powder_recipe",
+    "name": "Copper Powder",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 300
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CopperDust_C",
+        "perMinute": 50
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Plutonium_C": {
+    "slug": "plutonium_pellet_recipe",
+    "name": "Plutonium Pellet",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NonFissibleUranium_C",
+        "perMinute": 100
+      },
+      {
+        "itemClass": "Desc_NuclearWaste_C",
+        "perMinute": 25
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PlutoniumPellet_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_HadronCollider_C",
+    "isFicsmas": false
+  },
+  "Recipe_PlutoniumFuelRod_C": {
+    "slug": "plutonium_fuel_rod_recipe",
+    "name": "Plutonium Fuel Rod",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PlutoniumCell_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_SteelPlate_C",
+        "perMinute": 4.5
+      },
+      {
+        "itemClass": "Desc_ElectromagneticControlRod_C",
+        "perMinute": 1.5
+      },
+      {
+        "itemClass": "Desc_AluminumPlateReinforced_C",
+        "perMinute": 2.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PlutoniumFuelRod_C",
+        "perMinute": 0.25
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_PackagedNitricAcid_C": {
+    "slug": "packaged_nitric_acid_recipe",
+    "name": "Packaged Nitric Acid",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NitricAcid_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_GasTank_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PackagedNitricAcid_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_SpaceElevatorPart_9_C": {
+    "slug": "nuclear_pasta_recipe",
+    "name": "Nuclear Pasta",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperDust_C",
+        "perMinute": 100
+      },
+      {
+        "itemClass": "Desc_PressureConversionCube_C",
+        "perMinute": 0.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_9_C",
+        "perMinute": 0.5
+      }
+    ],
+    "producedIn": "Desc_HadronCollider_C",
+    "isFicsmas": false
+  },
+  "Recipe_UnpackageNitricAcid_C": {
+    "slug": "unpackage_nitric_acid_recipe",
+    "name": "Unpackage Nitric Acid",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PackagedNitricAcid_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NitricAcid_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_GasTank_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_Packager_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_HeatFusedFrame_C": {
+    "slug": "alternate_heat_fused_frame_recipe",
+    "name": "Alternate: Heat-Fused Frame",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "perMinute": 3
+      },
+      {
+        "itemClass": "Desc_AluminumIngot_C",
+        "perMinute": 150
+      },
+      {
+        "itemClass": "Desc_NitricAcid_C",
+        "perMinute": 24
+      },
+      {
+        "itemClass": "Desc_LiquidFuel_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrameFused_C",
+        "perMinute": 3
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_InstantPlutoniumCell_C": {
+    "slug": "alternate_instant_plutonium_cell_recipe",
+    "name": "Alternate: Instant Plutonium Cell",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NonFissibleUranium_C",
+        "perMinute": 75
+      },
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PlutoniumCell_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_HadronCollider_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_InstantScrap_C": {
+    "slug": "alternate_instant_scrap_recipe",
+    "name": "Alternate: Instant Scrap",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreBauxite_C",
+        "perMinute": 150
+      },
+      {
+        "itemClass": "Desc_Coal_C",
+        "perMinute": 100
+      },
+      {
+        "itemClass": "Desc_SulfuricAcid_C",
+        "perMinute": 50
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminumScrap_C",
+        "perMinute": 300
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 50
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_OCSupercomputer_C": {
+    "slug": "alternate_oc_supercomputer_recipe",
+    "name": "Alternate: OC Supercomputer",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_ModularFrameLightweight_C",
+        "perMinute": 9
+      },
+      {
+        "itemClass": "Desc_CoolingSystem_C",
+        "perMinute": 9
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ComputerSuper_C",
+        "perMinute": 3
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_PlutoniumFuelUnit_C": {
+    "slug": "alternate_plutonium_fuel_unit_recipe",
+    "name": "Alternate: Plutonium Fuel Unit",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PlutoniumCell_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_PressureConversionCube_C",
+        "perMinute": 0.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PlutoniumFuelRod_C",
+        "perMinute": 0.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_RadioControlSystem_C": {
+    "slug": "alternate_radio_control_system_recipe",
+    "name": "Alternate: Radio Control System",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CrystalOscillator_C",
+        "perMinute": 1.5
+      },
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 90
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 45
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrameLightweight_C",
+        "perMinute": 4.5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_SloppyAlumina_C": {
+    "slug": "alternate_sloppy_alumina_recipe",
+    "name": "Alternate: Sloppy Alumina",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreBauxite_C",
+        "perMinute": 200
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 200
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminaSolution_C",
+        "perMinute": 240
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_SuperStateComputer_C": {
+    "slug": "alternate_super_state_computer_recipe",
+    "name": "Alternate: Super-State Computer",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Computer_C",
+        "perMinute": 3.6
+      },
+      {
+        "itemClass": "Desc_ElectromagneticControlRod_C",
+        "perMinute": 2.4
+      },
+      {
+        "itemClass": "Desc_Battery_C",
+        "perMinute": 24
+      },
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 54
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ComputerSuper_C",
+        "perMinute": 2.4
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_ElectromagneticControlRod_C": {
+    "slug": "electromagnetic_control_rod_recipe",
+    "name": "Electromagnetic Control Rod",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Stator_C",
+        "perMinute": 6
+      },
+      {
+        "itemClass": "Desc_CircuitBoardHighSpeed_C",
+        "perMinute": 4
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ElectromagneticControlRod_C",
+        "perMinute": 4
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_NuclearFuelRod_C": {
+    "slug": "uranium_fuel_rod_recipe",
+    "name": "Uranium Fuel Rod",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_UraniumCell_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_SteelPlateReinforced_C",
+        "perMinute": 1.2
+      },
+      {
+        "itemClass": "Desc_ElectromagneticControlRod_C",
+        "perMinute": 2
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NuclearFuelRod_C",
+        "perMinute": 0.4
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SpaceElevatorPart_6_C": {
+    "slug": "magnetic_field_generator_recipe",
+    "name": "Magnetic Field Generator",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_2_C",
+        "perMinute": 2.5
+      },
+      {
+        "itemClass": "Desc_ElectromagneticControlRod_C",
+        "perMinute": 1
+      },
+      {
+        "itemClass": "Desc_Battery_C",
+        "perMinute": 5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_6_C",
+        "perMinute": 1
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_TurboBlendFuel_C": {
+    "slug": "alternate_turbo_blend_fuel_recipe",
+    "name": "Alternate: Turbo Blend Fuel",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidFuel_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_Sulfur_C",
+        "perMinute": 22.5
+      },
+      {
+        "itemClass": "Desc_PetroleumCoke_C",
+        "perMinute": 22.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidTurboFuel_C",
+        "perMinute": 45
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_TurboPressureMotor_C": {
+    "slug": "alternate_turbo_pressure_motor_recipe",
+    "name": "Alternate: Turbo Pressure Motor",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_PressureConversionCube_C",
+        "perMinute": 1.875
+      },
+      {
+        "itemClass": "Desc_PackagedNitrogenGas_C",
+        "perMinute": 45
+      },
+      {
+        "itemClass": "Desc_Stator_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_MotorLightweight_C",
+        "perMinute": 3.75
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Beacon_1_C": {
+    "slug": "alternate_crystal_beacon_recipe",
+    "name": "Alternate: Crystal Beacon",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelPlate_C",
+        "perMinute": 2
+      },
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 8
+      },
+      {
+        "itemClass": "Desc_CrystalOscillator_C",
+        "perMinute": 0.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Beacon_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Cable_1_C": {
+    "slug": "alternate_insulated_cable_recipe",
+    "name": "Alternate: Insulated Cable",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 45
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Cable_C",
+        "perMinute": 100
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Cable_2_C": {
+    "slug": "alternate_quickwire_cable_recipe",
+    "name": "Alternate: Quickwire Cable",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Cable_C",
+        "perMinute": 27.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_IngotCaterium_C": {
+    "slug": "caterium_ingot_recipe",
+    "name": "Caterium Ingot",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreGold_C",
+        "perMinute": 45
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_GoldIngot_C",
+        "perMinute": 15
+      }
+    ],
+    "producedIn": "Desc_SmelterMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_CircuitBoard_1_C": {
+    "slug": "alternate_silicon_circuit_board_recipe",
+    "name": "Alternate: Silicon Circuit Board",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "perMinute": 27.5
+      },
+      {
+        "itemClass": "Desc_Silica_C",
+        "perMinute": 27.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 12.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_CircuitBoard_2_C": {
+    "slug": "alternate_caterium_circuit_board_recipe",
+    "name": "Alternate: Caterium Circuit Board",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 12.5
+      },
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 37.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 8.75
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Computer_1_C": {
+    "slug": "alternate_caterium_computer_recipe",
+    "name": "Alternate: Caterium Computer",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 26.25
+      },
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 105
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 45
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Computer_C",
+        "perMinute": 3.75
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Computer_2_C": {
+    "slug": "alternate_crystal_computer_recipe",
+    "name": "Alternate: Crystal Computer",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_CrystalOscillator_C",
+        "perMinute": 2.8125
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Computer_C",
+        "perMinute": 2.8125
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Concrete_C": {
+    "slug": "alternate_fine_concrete_recipe",
+    "name": "Alternate: Fine Concrete",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Silica_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_Stone_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Cement_C",
+        "perMinute": 25
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_CrystalOscillator_C": {
+    "slug": "alternate_insulated_crystal_oscillator_recipe",
+    "name": "Alternate: Insulated Crystal Oscillator",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_QuartzCrystal_C",
+        "perMinute": 18.75
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 13.125
+      },
+      {
+        "itemClass": "Desc_CircuitBoardHighSpeed_C",
+        "perMinute": 1.875
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CrystalOscillator_C",
+        "perMinute": 1.875
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_ElectromagneticControlRod_1_C": {
+    "slug": "alternate_electromagnetic_connection_rod_recipe",
+    "name": "Alternate: Electromagnetic Connection Rod",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Stator_C",
+        "perMinute": 8
+      },
+      {
+        "itemClass": "Desc_HighSpeedConnector_C",
+        "perMinute": 4
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ElectromagneticControlRod_C",
+        "perMinute": 8
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Gunpowder_1_C": {
+    "slug": "alternate_fine_black_powder_recipe",
+    "name": "Alternate: Fine Black Powder",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Sulfur_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_CompactedCoal_C",
+        "perMinute": 3.75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Gunpowder_C",
+        "perMinute": 15
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_HeatSink_1_C": {
+    "slug": "alternate_heat_exchanger_recipe",
+    "name": "Alternate: Heat Exchanger",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AluminumPlateReinforced_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_ModularFrameHeavy_C": {
+    "slug": "alternate_heavy_encased_frame_recipe",
+    "name": "Alternate: Heavy Encased Frame",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_ModularFrame_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_SteelPlateReinforced_C",
+        "perMinute": 9.375
+      },
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 33.75
+      },
+      {
+        "itemClass": "Desc_Cement_C",
+        "perMinute": 20.625
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "perMinute": 2.8125
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_HighSpeedConnector_C": {
+    "slug": "alternate_silicon_high_speed_connector_recipe",
+    "name": "Alternate: Silicon High-Speed Connector",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 90
+      },
+      {
+        "itemClass": "Desc_Silica_C",
+        "perMinute": 37.5
+      },
+      {
+        "itemClass": "Desc_CircuitBoard_C",
+        "perMinute": 3
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_HighSpeedConnector_C",
+        "perMinute": 3
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_IngotIron_C": {
+    "slug": "alternate_iron_alloy_ingot_recipe",
+    "name": "Alternate: Iron Alloy Ingot",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreIron_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_OreCopper_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronIngot_C",
+        "perMinute": 50
+      }
+    ],
+    "producedIn": "Desc_FoundryMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_IngotSteel_1_C": {
+    "slug": "alternate_solid_steel_ingot_recipe",
+    "name": "Alternate: Solid Steel Ingot",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronIngot_C",
+        "perMinute": 40
+      },
+      {
+        "itemClass": "Desc_Coal_C",
+        "perMinute": 40
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SteelIngot_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_FoundryMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_IngotSteel_2_C": {
+    "slug": "alternate_compacted_steel_ingot_recipe",
+    "name": "Alternate: Compacted Steel Ingot",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreIron_C",
+        "perMinute": 22.5
+      },
+      {
+        "itemClass": "Desc_CompactedCoal_C",
+        "perMinute": 11.25
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SteelIngot_C",
+        "perMinute": 37.5
+      }
+    ],
+    "producedIn": "Desc_FoundryMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_ModularFrame_C": {
+    "slug": "alternate_steeled_frame_recipe",
+    "name": "Alternate: Steeled Frame",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "perMinute": 2
+      },
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrame_C",
+        "perMinute": 3
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Motor_1_C": {
+    "slug": "alternate_rigour_motor_recipe",
+    "name": "Alternate: Rigour Motor",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Rotor_C",
+        "perMinute": 3.75
+      },
+      {
+        "itemClass": "Desc_Stator_C",
+        "perMinute": 3.75
+      },
+      {
+        "itemClass": "Desc_CrystalOscillator_C",
+        "perMinute": 1.25
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "perMinute": 7.5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_NuclearFuelRod_1_C": {
+    "slug": "alternate_uranium_fuel_unit_recipe",
+    "name": "Alternate: Uranium Fuel Unit",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_UraniumCell_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_ElectromagneticControlRod_C",
+        "perMinute": 2
+      },
+      {
+        "itemClass": "Desc_CrystalOscillator_C",
+        "perMinute": 0.6
+      },
+      {
+        "itemClass": "Desc_Beacon_C",
+        "perMinute": 1.2
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NuclearFuelRod_C",
+        "perMinute": 0.6
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Plastic_1_C": {
+    "slug": "alternate_recycled_plastic_recipe",
+    "name": "Alternate: Recycled Plastic",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_LiquidFuel_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Plastic_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Quickwire_C": {
+    "slug": "alternate_fused_quickwire_recipe",
+    "name": "Alternate: Fused Quickwire",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_GoldIngot_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 37.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 90
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_RadioControlUnit_1_C": {
+    "slug": "alternate_radio_connection_unit_recipe",
+    "name": "Alternate: Radio Connection Unit",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AluminumPlateReinforced_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_HighSpeedConnector_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_QuartzCrystal_C",
+        "perMinute": 45
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_ModularFrameLightweight_C",
+        "perMinute": 3.75
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_ReinforcedIronPlate_1_C": {
+    "slug": "alternate_bolted_iron_plate_recipe",
+    "name": "Alternate: Bolted Iron Plate",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 90
+      },
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 250
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "perMinute": 15
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_ReinforcedIronPlate_2_C": {
+    "slug": "alternate_stitched_iron_plate_recipe",
+    "name": "Alternate: Stitched Iron Plate",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 18.75
+      },
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 37.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "perMinute": 5.625
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_EncasedIndustrialBeam_C": {
+    "slug": "alternate_encased_industrial_pipe_recipe",
+    "name": "Alternate: Encased Industrial Pipe",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 28
+      },
+      {
+        "itemClass": "Desc_Cement_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SteelPlateReinforced_C",
+        "perMinute": 4
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Rotor_C": {
+    "slug": "alternate_steel_rotor_recipe",
+    "name": "Alternate: Steel Rotor",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Rotor_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Screw_C": {
+    "slug": "alternate_cast_screw_recipe",
+    "name": "Alternate: Cast Screw",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronIngot_C",
+        "perMinute": 12.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 50
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Screw_2_C": {
+    "slug": "alternate_steel_screw_recipe",
+    "name": "Alternate: Steel Screw",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelPlate_C",
+        "perMinute": 5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_IronScrew_C",
+        "perMinute": 260
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Silica_C": {
+    "slug": "alternate_cheap_silica_recipe",
+    "name": "Alternate: Cheap Silica",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_RawQuartz_C",
+        "perMinute": 11.25
+      },
+      {
+        "itemClass": "Desc_Stone_C",
+        "perMinute": 18.75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Silica_C",
+        "perMinute": 26.25
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Silica_C": {
+    "slug": "silica_recipe",
+    "name": "Silica",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_RawQuartz_C",
+        "perMinute": 22.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Silica_C",
+        "perMinute": 37.5
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Stator_C": {
+    "slug": "alternate_quickwire_stator_recipe",
+    "name": "Alternate: Quickwire Stator",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 16
+      },
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 60
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Stator_C",
+        "perMinute": 8
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Turbofuel_C": {
+    "slug": "turbofuel_recipe",
+    "name": "Turbofuel",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_LiquidFuel_C",
+        "perMinute": 22.5
+      },
+      {
+        "itemClass": "Desc_CompactedCoal_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_LiquidTurboFuel_C",
+        "perMinute": 18.75
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_TurboMotor_1_C": {
+    "slug": "alternate_turbo_electric_motor_recipe",
+    "name": "Alternate: Turbo Electric Motor",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "perMinute": 6.5625
+      },
+      {
+        "itemClass": "Desc_ModularFrameLightweight_C",
+        "perMinute": 8.4375
+      },
+      {
+        "itemClass": "Desc_ElectromagneticControlRod_C",
+        "perMinute": 4.6875
+      },
+      {
+        "itemClass": "Desc_Rotor_C",
+        "perMinute": 6.5625
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_MotorLightweight_C",
+        "perMinute": 2.8125
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_MotorTurbo_C": {
+    "slug": "turbo_motor_recipe",
+    "name": "Turbo Motor",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CoolingSystem_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_ModularFrameLightweight_C",
+        "perMinute": 3.75
+      },
+      {
+        "itemClass": "Desc_Motor_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 45
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_MotorLightweight_C",
+        "perMinute": 1.875
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SpaceElevatorPart_8_C": {
+    "slug": "thermal_propulsion_rocket_recipe",
+    "name": "Thermal Propulsion Rocket",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_4_C",
+        "perMinute": 2.5
+      },
+      {
+        "itemClass": "Desc_MotorLightweight_C",
+        "perMinute": 1
+      },
+      {
+        "itemClass": "Desc_CoolingSystem_C",
+        "perMinute": 3
+      },
+      {
+        "itemClass": "Desc_ModularFrameFused_C",
+        "perMinute": 1
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpaceElevatorPart_8_C",
+        "perMinute": 1
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_UraniumCell_1_C": {
+    "slug": "alternate_infused_uranium_cell_recipe",
+    "name": "Alternate: Infused Uranium Cell",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_OreUranium_C",
+        "perMinute": 25
+      },
+      {
+        "itemClass": "Desc_Silica_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_Sulfur_C",
+        "perMinute": 25
+      },
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_UraniumCell_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Wire_1_C": {
+    "slug": "alternate_iron_wire_recipe",
+    "name": "Alternate: Iron Wire",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronIngot_C",
+        "perMinute": 12.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 22.5
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_Wire_2_C": {
+    "slug": "alternate_caterium_wire_recipe",
+    "name": "Alternate: Caterium Wire",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_GoldIngot_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 120
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Beacon_C": {
+    "slug": "beacon_recipe",
+    "name": "Beacon",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "perMinute": 22.5
+      },
+      {
+        "itemClass": "Desc_IronRod_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_Wire_C",
+        "perMinute": 112.5
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Beacon_C",
+        "perMinute": 7.5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Biofuel_C": {
+    "slug": "solid_biofuel_recipe",
+    "name": "Solid Biofuel",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_GenericBiomass_C",
+        "perMinute": 120
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Biofuel_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_FilterGasMask_C": {
+    "slug": "gas_filter_recipe",
+    "name": "Gas Filter",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Coal_C",
+        "perMinute": 37.5
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_Fabric_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Filter_C",
+        "perMinute": 7.5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_FilterHazmat_C": {
+    "slug": "iodine_infused_filter_recipe",
+    "name": "Iodine Infused Filter",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Filter_C",
+        "perMinute": 3.75
+      },
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 3.75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_HazmatFilter_C",
+        "perMinute": 3.75
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Protein_Hog_C": {
+    "slug": "hog_protein_recipe",
+    "name": "Hog Protein",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HogParts_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AlienProtein_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_SpikedRebar_C": {
+    "slug": "iron_rebar_recipe",
+    "name": "Iron Rebar",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_IronRod_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SpikedRebar_C",
+        "perMinute": 15
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Protein_Spitter_C": {
+    "slug": "spitter_protein_recipe",
+    "name": "Spitter Protein",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SpitterParts_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AlienProtein_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_AlienDNACapsule_C": {
+    "slug": "organic_data_capsule_recipe",
+    "name": "Organic Data Capsule",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AlienProtein_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AlienDNACapsule_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Biomass_AlienProtein_C": {
+    "slug": "biomass_alien_protein_recipe",
+    "name": "Biomass (Alien Protein)",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_AlienProtein_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_GenericBiomass_C",
+        "perMinute": 1500
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Protein_Crab_C": {
+    "slug": "hatcher_protein_recipe",
+    "name": "Hatcher Protein",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_HatcherParts_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AlienProtein_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Protein_Stinger_C": {
+    "slug": "stinger_protein_recipe",
+    "name": "Stinger Protein",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_StingerParts_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_AlienProtein_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Quickwire_C": {
+    "slug": "quickwire_recipe",
+    "name": "Quickwire",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_GoldIngot_C",
+        "perMinute": 12
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 60
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Rebar_Stunshot_C": {
+    "slug": "stun_rebar_recipe",
+    "name": "Stun Rebar",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SpikedRebar_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "perMinute": 50
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Rebar_Stunshot_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_CartridgeSmart_C": {
+    "slug": "homing_rifle_ammo_recipe",
+    "name": "Homing Rifle Ammo",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CartridgeStandard_C",
+        "perMinute": 50
+      },
+      {
+        "itemClass": "Desc_HighSpeedConnector_C",
+        "perMinute": 2.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CartridgeSmartProjectile_C",
+        "perMinute": 25
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Biomass_Mycelia_C": {
+    "slug": "biomass_mycelia_recipe",
+    "name": "Biomass (Mycelia)",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Mycelia_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_GenericBiomass_C",
+        "perMinute": 150
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Fabric_C": {
+    "slug": "fabric_recipe",
+    "name": "Fabric",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Mycelia_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_GenericBiomass_C",
+        "perMinute": 75
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Fabric_C",
+        "perMinute": 15
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Alternate_PolyesterFabric_C": {
+    "slug": "alternate_polyester_fabric_recipe",
+    "name": "Alternate: Polyester Fabric",
+    "isAlternate": true,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PolymerResin_C",
+        "perMinute": 30
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 30
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Fabric_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_NobeliskGas_C": {
+    "slug": "gas_nobelisk_recipe",
+    "name": "Gas Nobelisk",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NobeliskExplosive_C",
+        "perMinute": 5
+      },
+      {
+        "itemClass": "Desc_GenericBiomass_C",
+        "perMinute": 50
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NobeliskGas_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_PowerCrystalShard_1_C": {
+    "slug": "power_shard_1_recipe",
+    "name": "Power Shard (1)",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Crystal_C",
+        "perMinute": 7.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CrystalShard_C",
+        "perMinute": 7.5
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_PowerCrystalShard_2_C": {
+    "slug": "power_shard_2_recipe",
+    "name": "Power Shard (2)",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Crystal_mk2_C",
+        "perMinute": 5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CrystalShard_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_PowerCrystalShard_3_C": {
+    "slug": "power_shard_5_recipe",
+    "name": "Power Shard (5)",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Crystal_mk3_C",
+        "perMinute": 2.5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CrystalShard_C",
+        "perMinute": 12.5
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Rebar_Spreadshot_C": {
+    "slug": "shatter_rebar_recipe",
+    "name": "Shatter Rebar",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SpikedRebar_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_QuartzCrystal_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Rebar_Spreadshot_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_NobeliskShockwave_C": {
+    "slug": "pulse_nobelisk_recipe",
+    "name": "Pulse Nobelisk",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NobeliskExplosive_C",
+        "perMinute": 5
+      },
+      {
+        "itemClass": "Desc_CrystalOscillator_C",
+        "perMinute": 1
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NobeliskShockwave_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Gunpowder_C": {
+    "slug": "black_powder_recipe",
+    "name": "Black Powder",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Coal_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_Sulfur_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Gunpowder_C",
+        "perMinute": 30
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_GunpowderMK2_C": {
+    "slug": "smokeless_powder_recipe",
+    "name": "Smokeless Powder",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Gunpowder_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_HeavyOilResidue_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_GunpowderMK2_C",
+        "perMinute": 20
+      }
+    ],
+    "producedIn": "Desc_OilRefinery_C",
+    "isFicsmas": false
+  },
+  "Recipe_Nobelisk_C": {
+    "slug": "nobelisk_recipe",
+    "name": "Nobelisk",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Gunpowder_C",
+        "perMinute": 20
+      },
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NobeliskExplosive_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_NobeliskCluster_C": {
+    "slug": "cluster_nobelisk_recipe",
+    "name": "Cluster Nobelisk",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NobeliskExplosive_C",
+        "perMinute": 7.5
+      },
+      {
+        "itemClass": "Desc_GunpowderMK2_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NobeliskCluster_C",
+        "perMinute": 2.5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Cartridge_C": {
+    "slug": "rifle_ammo_recipe",
+    "name": "Rifle Ammo",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_GunpowderMK2_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CartridgeStandard_C",
+        "perMinute": 75
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_Rebar_Explosive_C": {
+    "slug": "explosive_rebar_recipe",
+    "name": "Explosive Rebar",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_SpikedRebar_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_GunpowderMK2_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Rebar_Explosive_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_NobeliskNuke_C": {
+    "slug": "nuke_nobelisk_recipe",
+    "name": "Nuke Nobelisk",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NobeliskExplosive_C",
+        "perMinute": 2.5
+      },
+      {
+        "itemClass": "Desc_UraniumCell_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_GunpowderMK2_C",
+        "perMinute": 5
+      },
+      {
+        "itemClass": "Desc_CircuitBoardHighSpeed_C",
+        "perMinute": 3
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NobeliskNuke_C",
+        "perMinute": 0.5
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_CartridgeChaos_C": {
+    "slug": "turbo_rifle_ammo_recipe",
+    "name": "Turbo Rifle Ammo",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CartridgeStandard_C",
+        "perMinute": 125
+      },
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_LiquidTurboFuel_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CartridgeChaos_C",
+        "perMinute": 250
+      }
+    ],
+    "producedIn": "Desc_Blender_C",
+    "isFicsmas": false
+  },
+  "Recipe_CartridgeChaos_Packaged_C": {
+    "slug": "turbo_rifle_ammo_packaged_recipe",
+    "name": "Turbo Rifle Ammo",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_CartridgeStandard_C",
+        "perMinute": 125
+      },
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_TurboFuel_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CartridgeChaos_C",
+        "perMinute": 250
+      }
+    ],
+    "producedIn": "Desc_ManufacturerMk1_C",
+    "isFicsmas": false
+  },
+  "Recipe_CandyCane_C": {
+    "slug": "candy_cane_recipe",
+    "name": "Candy Cane",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Gift_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_CandyCane_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_XmasBow_C": {
+    "slug": "ficsmas_bow_recipe",
+    "name": "FICSMAS Bow",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Gift_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_XmasBow_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_Snow_C": {
+    "slug": "actual_snow_recipe",
+    "name": "Actual Snow",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Gift_C",
+        "perMinute": 25
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_Snow_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_XmasBall3_C": {
+    "slug": "copper_ficsmas_ornament_recipe",
+    "name": "Copper FICSMAS Ornament",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_XmasBall1_C",
+        "perMinute": 10
+      },
+      {
+        "itemClass": "Desc_CopperIngot_C",
+        "perMinute": 10
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_XmasBall3_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_FoundryMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_XmasBall4_C": {
+    "slug": "iron_ficsmas_ornament_recipe",
+    "name": "Iron FICSMAS Ornament",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_XmasBall2_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_IronIngot_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_XmasBall4_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_FoundryMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_XmasBall1_C": {
+    "slug": "red_ficsmas_ornament_recipe",
+    "name": "Red FICSMAS Ornament",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Gift_C",
+        "perMinute": 5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_XmasBall1_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_SmelterMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_XmasBall2_C": {
+    "slug": "blue_ficsmas_ornament_recipe",
+    "name": "Blue FICSMAS Ornament",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Gift_C",
+        "perMinute": 5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_XmasBall2_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_SmelterMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_XmasBallCluster_C": {
+    "slug": "ficsmas_ornament_bundle_recipe",
+    "name": "FICSMAS Ornament Bundle",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_XmasBall3_C",
+        "perMinute": 5
+      },
+      {
+        "itemClass": "Desc_XmasBall4_C",
+        "perMinute": 5
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_XmasBallCluster_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_XmasWreath_C": {
+    "slug": "ficsmas_decoration_recipe",
+    "name": "FICSMAS Decoration",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_XmasBranch_C",
+        "perMinute": 15
+      },
+      {
+        "itemClass": "Desc_XmasBallCluster_C",
+        "perMinute": 6
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_XmasWreath_C",
+        "perMinute": 2
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_XmasStar_C": {
+    "slug": "ficsmas_wonder_star_recipe",
+    "name": "FICSMAS Wonder Star",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_XmasWreath_C",
+        "perMinute": 5
+      },
+      {
+        "itemClass": "Desc_CandyCane_C",
+        "perMinute": 20
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_XmasStar_C",
+        "perMinute": 1
+      }
+    ],
+    "producedIn": "Desc_AssemblerMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_Snowball_C": {
+    "slug": "snowball_recipe",
+    "name": "Snowball",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_Snow_C",
+        "perMinute": 15
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_SnowballProjectile_C",
+        "perMinute": 5
+      }
+    ],
+    "producedIn": "Desc_ConstructorMk1_C",
+    "isFicsmas": true
+  },
+  "Recipe_CUSTOM_NuclearPower_C": {
+    "slug": "uranium_power_recipe",
+    "name": "Uranium Power",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_NuclearFuelRod_C",
+        "perMinute": 0.2
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 300
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_NuclearWaste_C",
+        "perMinute": 10
+      }
+    ],
+    "producedIn": "Desc_GeneratorNuclear_C",
+    "isFicsmas": false
+  },
+  "Recipe_CUSTOM_PlutoniumPower_C": {
+    "slug": "plutonium_power_recipe",
+    "name": "Plutonium Power",
+    "isAlternate": false,
+    "ingredients": [
+      {
+        "itemClass": "Desc_PlutoniumFuelRod_C",
+        "perMinute": 0.1
+      },
+      {
+        "itemClass": "Desc_Water_C",
+        "perMinute": 300
+      }
+    ],
+    "products": [
+      {
+        "itemClass": "Desc_PlutoniumWaste_C",
+        "perMinute": 1
+      }
+    ],
+    "producedIn": "Desc_GeneratorNuclear_C",
+    "isFicsmas": false
+  }
+}

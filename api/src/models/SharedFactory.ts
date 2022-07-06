@@ -1,9 +1,10 @@
 import DB from 'db';
 import Joi from 'joi';
 import { nanoid } from 'nanoid';
+import { ALLOWED_GAME_VERSIONS } from 'game-data';
 
 export const factoryConfigSchema = Joi.object({
-  gameVersion: Joi.string().required(),
+  gameVersion: Joi.string().allow(...ALLOWED_GAME_VERSIONS).only().required(),
   productionItems: Joi.array().items(Joi.object({
     itemKey: Joi.string().required(),
     mode: Joi.string().required(),
@@ -34,7 +35,7 @@ export const factoryConfigSchema = Joi.object({
 interface SharedFactorySchema {
   id: number,
   key: string,
-  factory_config: object,
+  factory_config: any,
 }
 
 export default class SharedFactory {
@@ -48,7 +49,7 @@ export default class SharedFactory {
     return factory;
   }
 
-  public static async create(config: object): Promise<SharedFactorySchema> {
+  public static async create(config: any): Promise<SharedFactorySchema> {
     const validation = factoryConfigSchema.validate(config);
     if (validation.error) throw validation.error;
 

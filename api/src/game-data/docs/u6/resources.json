@@ -1,0 +1,62 @@
+{
+  "Desc_Sulfur_C": {
+    "itemClass": "Desc_Sulfur_C",
+    "maxExtraction": 6840,
+    "relativeValue": 1028
+  },
+  "Desc_Coal_C": {
+    "itemClass": "Desc_Coal_C",
+    "maxExtraction": 30900,
+    "relativeValue": 227
+  },
+  "Desc_OreCopper_C": {
+    "itemClass": "Desc_OreCopper_C",
+    "maxExtraction": 28860,
+    "relativeValue": 243
+  },
+  "Desc_OreGold_C": {
+    "itemClass": "Desc_OreGold_C",
+    "maxExtraction": 11040,
+    "relativeValue": 637
+  },
+  "Desc_OreIron_C": {
+    "itemClass": "Desc_OreIron_C",
+    "maxExtraction": 70380,
+    "relativeValue": 100
+  },
+  "Desc_RawQuartz_C": {
+    "itemClass": "Desc_RawQuartz_C",
+    "maxExtraction": 10500,
+    "relativeValue": 670
+  },
+  "Desc_Stone_C": {
+    "itemClass": "Desc_Stone_C",
+    "maxExtraction": 52860,
+    "relativeValue": 133
+  },
+  "Desc_Water_C": {
+    "itemClass": "Desc_Water_C",
+    "maxExtraction": null,
+    "relativeValue": 1
+  },
+  "Desc_LiquidOil_C": {
+    "itemClass": "Desc_LiquidOil_C",
+    "maxExtraction": 11700,
+    "relativeValue": 601
+  },
+  "Desc_OreBauxite_C": {
+    "itemClass": "Desc_OreBauxite_C",
+    "maxExtraction": 9780,
+    "relativeValue": 719
+  },
+  "Desc_OreUranium_C": {
+    "itemClass": "Desc_OreUranium_C",
+    "maxExtraction": 2100,
+    "relativeValue": 3351
+  },
+  "Desc_NitrogenGas_C": {
+    "itemClass": "Desc_NitrogenGas_C",
+    "maxExtraction": 12000,
+    "relativeValue": 586
+  }
+}

@@ -1,10 +1,3 @@
-import buildingsRaw from './json/buildings.json';
-import recipesRaw from './json/recipes.json';
-import resourcesRaw from './json/resources.json';
-import itemsRaw from './json/items.json';
-import handGatheredItemsRaw from './json/handGatheredItems.json';
-
-
 export type ItemRate = {
   itemClass: string,
   perMinute: number,

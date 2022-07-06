@@ -1,4 +1,5 @@
 import express, { ErrorRequestHandler, RequestHandler } from 'express';
+import cors from 'cors';
 import helmet from 'helmet';
 import 'express-async-errors';
 import { createLogger } from 'util/logger';
@@ -40,6 +41,7 @@ export default class App {
 
     App.server.use(express.json());
     App.server.use(helmet());
+    App.server.use(cors({ origin: process.env.CLIENT_APP_URL }));
 
     registerRoutes();
 

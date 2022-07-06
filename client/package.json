@@ -14,8 +14,7 @@
     "predeploy": "npm run build && echo www.satisfactory-planner.net > ./build/CNAME",
     "deploy": "gh-pages -d build",
     "predeploy:staging": "npm run build:staging",
-    "deploy:staging": "gh-pages -d build-staging -o staging",
-    "parse-docs": "node ./scripts/parse-docs.mjs"
+    "deploy:staging": "gh-pages -d build-staging -o staging"
   },
   "eslintConfig": {
     "extends": [

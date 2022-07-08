@@ -60,7 +60,7 @@ const Drawer = (props: Props) => {
                   Click here to get started!
                 </TooltipText>
                 <TooltipConfirmContainer>
-                  <TooltipConfirm onClick={(e) => { setTooltipDismissed('true'); e.stopPropagation(); }}>
+                  <TooltipConfirm onClick={(e: any) => { setTooltipDismissed('true'); e.stopPropagation(); }}>
                     Dismiss
                   </TooltipConfirm>
                 </TooltipConfirmContainer>
@@ -235,7 +235,7 @@ const TooltipConfirmContainer = styled.div`
   justify-content: flex-end;
 `;
 
-const TooltipConfirm = styled(UnstyledButton)`
+const TooltipConfirm: any = styled(UnstyledButton)`
   pointer-events: auto;
   color: ${({ theme }) => theme.white};
   text-decoration: underline;

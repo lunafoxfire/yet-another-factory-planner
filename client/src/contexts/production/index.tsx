@@ -127,7 +127,6 @@ export const ProductionProvider = ({ gameData, initializer, triggerInitialize, c
   
   useEffect(() => {
     if (triggerInitialize) {
-      console.log('LOAD');
       if (initializer?.factoryConfig) {
         dispatch({ type: 'LOAD_FROM_SHARED_FACTORY', config: initializer.factoryConfig, gameData });
       } else if (initializer?.legacyEncoding) {

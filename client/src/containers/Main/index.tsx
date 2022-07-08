@@ -12,7 +12,7 @@ const Main = () => {
   return (
     <AppShell
       padding='md'
-      header={<SHeader height={theme.other.headerHeight} padding='sm'><SiteHeader /></SHeader>}
+      header={<SHeader height={theme.other.headerHeight}><SiteHeader /></SHeader>}
     >
       <MainContainer fluid>
         <ErrorBoundary>

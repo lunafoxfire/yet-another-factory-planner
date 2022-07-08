@@ -16,7 +16,7 @@ const PlannerResults = () => {
   return (
     <Tabs variant='outline'>
       <Tabs.Tab label='Production Graph' icon={<Share2 size={18} />} sx={tabSx}>
-        <Container fluid padding={0}>
+        <Container fluid style={{ padding: '0px' }}>
           <ProductionGraphTab />
         </Container>
       </Tabs.Tab>

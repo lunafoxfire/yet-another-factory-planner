@@ -18,7 +18,7 @@ const SocialIcon = (props: Props) => {
 
 export default SocialIcon;
 
-const SAnchor = styled(Anchor)`
+const SAnchor: any = styled(Anchor)`
   display: flex;
   align-items: center;
   justify-content: center;

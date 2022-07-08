@@ -3,6 +3,7 @@ import { useApi } from "../../useApi";
 import { FactoryOptions } from '../../../contexts/production/types';
 
 interface PostSharedFactoryRequest {
+  gameVersion: string,
   factoryConfig: FactoryOptions,
 }
 
@@ -14,7 +15,7 @@ export function usePostSharedFactory() {
   return useApi<PostSharedFactoryResponse, PostSharedFactoryRequest>(async (req) => {
     const body = {
       factoryConfig: {
-        gameVersion: req.factoryConfig.gameVersion,
+        gameVersion: req.gameVersion,
         productionItems: req.factoryConfig.productionItems.map((i) => ({
           itemKey: i.itemKey,
           mode: i.mode,

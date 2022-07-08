@@ -83,11 +83,12 @@ const _handleCalculateFactory = _.debounce(async (
 // PROVIDER
 type PropTypes = {
   gameData: GameData,
+  gameVersion: string,
   initializer: FactoryInitializer | null,
   triggerInitialize: boolean,
   children: React.ReactNode,
 };
-export const ProductionProvider = ({ gameData, initializer, triggerInitialize, children }: PropTypes) => {
+export const ProductionProvider = ({ gameData, gameVersion, initializer, triggerInitialize, children }: PropTypes) => {
   const [state, dispatch] = useReducer(reducer, getInitialState(gameData));
   const prevState = usePrevious(state);
   const [solverResults, setSolverResults] = useState<SolverResults | null>(null);
@@ -113,7 +114,7 @@ export const ProductionProvider = ({ gameData, initializer, triggerInitialize, c
   };
 
   const handleGenerateShareLink = () => {
-    postSharedFactory.request({ factoryConfig: state });
+    postSharedFactory.request({ factoryConfig: state, gameVersion });
   };
 
   const shareLink: ShareLinkProps = useMemo(() => {
@@ -135,8 +136,8 @@ export const ProductionProvider = ({ gameData, initializer, triggerInitialize, c
         dispatch({ type: 'LOAD_FROM_SHARED_FACTORY', config: initializer.factoryConfig, gameData });
       } else if (initializer?.legacyEncoding) {
         dispatch({ type: 'LOAD_FROM_LEGACY_ENCODING', encoding: initializer.legacyEncoding, gameData });
-      } else if (window.sessionStorage?.getItem('state')) {
-        dispatch({ type: 'LOAD_FROM_SESSION_STORAGE', gameData });
+      } else if (initializer?.sessionState) {
+        dispatch({ type: 'LOAD_FROM_SESSION_STORAGE', sessionState: initializer?.sessionState, gameData });
       } else {
         dispatch({ type: 'RESET_FACTORY', gameData });
       }
@@ -153,10 +154,12 @@ export const ProductionProvider = ({ gameData, initializer, triggerInitialize, c
 
   useEffect(() => {
       try {
+        window.sessionStorage.setItem('game-version', gameVersion);
         window.sessionStorage.setItem('state', JSON.stringify(state));
       } catch (e) {
         console.error(e);
       }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   const ctxValue = useMemo(() => {
@@ -178,6 +181,7 @@ export const ProductionProvider = ({ gameData, initializer, triggerInitialize, c
     gameData,
     calculating,
     solverResults,
+    handleCalculateFactory,
     autoCalculateBool,
     shareLink,
   ]);

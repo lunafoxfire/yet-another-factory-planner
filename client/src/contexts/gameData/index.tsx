@@ -3,6 +3,7 @@ import { useGetInitialize } from '../../api/modules/initialize/useGetInitialize'
 import { GameData } from './types';
 import { DEFAULT_GAME_VERSION, LEGACY_GAME_VERSION, SHARE_QUERY_PARAM } from './consts';
 import { usePrevious } from '../../hooks/usePrevious';
+import { FactoryOptions } from '../production/types';
 
 
 // TYPE
@@ -10,6 +11,7 @@ export type FactoryInitializer = {
   factoryConfig: any | null,
   shareKey: string | null,
   legacyEncoding: string | null,
+  sessionState: FactoryOptions | null,
 };
 
 export type GameDataContextType = {
@@ -60,14 +62,17 @@ export const GameDataProvider = ({ children }: PropTypes) => {
       const params = new URLSearchParams(window.location.search);
       const shareKey = params.get(SHARE_QUERY_PARAM);
       const legacyEncoding = params.get('f');
+      const sessionVersion = window.sessionStorage?.getItem('game-version');
+      const sessionState = window.sessionStorage?.getItem('state');
+
       if (shareKey) {
         getInitialize.request({ factoryKey: shareKey });
       } else if (legacyEncoding) {
         getInitialize.request({ gameVersion: LEGACY_GAME_VERSION });
-      } else if (gameVersion) {
-        getInitialize.request({ gameVersion: gameVersion });
+      } else if (sessionVersion && sessionState) {
+        getInitialize.request({ gameVersion: sessionVersion });
       } else {
-        getInitialize.request({ gameVersion: DEFAULT_GAME_VERSION });
+        getInitialize.request({ gameVersion: gameVersion || DEFAULT_GAME_VERSION });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,12 +86,27 @@ export const GameDataProvider = ({ children }: PropTypes) => {
       const params = new URLSearchParams(window.location.search);
       const shareKey = params.get(SHARE_QUERY_PARAM);
       const legacyEncoding = params.get('f');
+      const sessionVersion = window.sessionStorage?.getItem('game-version');
+      let sessionState: FactoryOptions | null = null;
+      try {
+        const sessionStateJSON = window.sessionStorage?.getItem('state');
+        if (sessionVersion && sessionStateJSON) {
+          sessionState = JSON.parse(sessionStateJSON);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
       window.history.replaceState(null, '', `${window.location.pathname}`);
+      window.sessionStorage?.removeItem('game-version');
+      window.sessionStorage?.removeItem('state');
 
       if (factoryConfig?.gameVersion) {
         setGameVersion(factoryConfig.gameVersion);
       } else if (legacyEncoding) {
         setGameVersion(LEGACY_GAME_VERSION);
+      } else if (sessionVersion && sessionState) {
+        setGameVersion(sessionVersion);
       } else {
         setGameVersion(gameVersion || DEFAULT_GAME_VERSION);
       }
@@ -96,6 +116,7 @@ export const GameDataProvider = ({ children }: PropTypes) => {
         factoryConfig,
         shareKey,
         legacyEncoding,
+        sessionState,
       });
       setLoading(false);
     }
@@ -106,6 +127,8 @@ export const GameDataProvider = ({ children }: PropTypes) => {
     if (version !== gameVersion) {
       setGameVersion(version);
       setNeedToFetchGameData(true);
+      window.sessionStorage?.removeItem('game-version');
+      window.sessionStorage?.removeItem('state');
     }
   }, [gameVersion]);
 

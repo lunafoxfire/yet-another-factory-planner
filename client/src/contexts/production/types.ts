@@ -26,7 +26,6 @@ export type RecipeSelectionMap = {
 
 export type FactoryOptions = {
   key: string,
-  gameVersion: string,
   productionItems: ProductionItemOptions[],
   inputItems: InputItemOptions[],
   inputResources: InputItemOptions[],

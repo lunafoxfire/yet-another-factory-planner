@@ -5,7 +5,6 @@ import { decodeState_v3_U5 } from './legacy-state-decoders/v3_U5';
 import { ProductionItemOptions, InputItemOptions, WeightingOptions, RecipeSelectionMap, FactoryOptions } from './types';
 import { GameData, RecipeMap, ResourceMap } from '../gameData/types';
 import { MAX_PRIORITY } from './consts';
-import { DEFAULT_GAME_VERSION } from '../gameData/consts';
 
 // DEFAULTS
 function getDefaultProductionItem(): ProductionItemOptions {
@@ -89,7 +88,6 @@ function getInitialAllowedRecipes(recipes: RecipeMap): RecipeSelectionMap {
 export function getInitialState(gameData: GameData): FactoryOptions {
   return {
     key: nanoid(),
-    gameVersion: DEFAULT_GAME_VERSION,
     productionItems: [],
     inputItems: [],
     inputResources: getInitialInputResources(gameData.resources),
@@ -121,7 +119,7 @@ export type FactoryAction =
   | { type: 'MASS_SET_RECIPES_ACTIVE', recipes: string[], active: boolean }
   | { type: 'LOAD_FROM_SHARED_FACTORY', config: any, gameData: GameData }
   | { type: 'LOAD_FROM_LEGACY_ENCODING', encoding: string, gameData: GameData }
-  | { type: 'LOAD_FROM_SESSION_STORAGE', gameData: GameData };
+  | { type: 'LOAD_FROM_SESSION_STORAGE', sessionState: FactoryOptions, gameData: GameData };
 
 export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
   switch (action.type) {
@@ -262,7 +260,6 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
     case 'LOAD_FROM_SHARED_FACTORY': {
       try {
         const newState: FactoryOptions = getInitialState(action.gameData);
-        newState.gameVersion = action.config.gameVersion;
         newState.productionItems = (action.config.productionItems as any[]).map((i) => ({
           ...getDefaultProductionItem(),
           itemKey: i.itemKey,
@@ -308,8 +305,8 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
     }
     case 'LOAD_FROM_SESSION_STORAGE': {
       try {
-        const newState = JSON.parse((window.sessionStorage.getItem('state') as string));
-        return newState;
+        // TODO: some validation
+        return action.sessionState;
       } catch (e) {
         console.error(e);
         return getInitialState(action.gameData);

@@ -22,7 +22,7 @@ const ProductionPlanner = () => {
       );
     }
     return (
-      <ProductionProvider gameData={gdCtx.gameData} initializer={gdCtx.initializer} triggerInitialize={gdCtx.completedThisFrame}>
+      <ProductionProvider gameData={gdCtx.gameData} gameVersion={gdCtx.gameVersion} initializer={gdCtx.initializer} triggerInitialize={gdCtx.completedThisFrame}>
         <Factory />
       </ProductionProvider>
     );

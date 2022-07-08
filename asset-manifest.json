@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "https://www.satisfactory-planner.net/static/css/main.cd4b3bab.chunk.css",
-    "main.js": "https://www.satisfactory-planner.net/static/js/main.f2f885bc.chunk.js",
-    "main.js.map": "https://www.satisfactory-planner.net/static/js/main.f2f885bc.chunk.js.map",
-    "runtime-main.js": "https://www.satisfactory-planner.net/static/js/runtime-main.824b4a0b.js",
-    "runtime-main.js.map": "https://www.satisfactory-planner.net/static/js/runtime-main.824b4a0b.js.map",
-    "static/js/2.feb8ddfb.chunk.js": "https://www.satisfactory-planner.net/static/js/2.feb8ddfb.chunk.js",
-    "static/js/2.feb8ddfb.chunk.js.map": "https://www.satisfactory-planner.net/static/js/2.feb8ddfb.chunk.js.map",
+    "main.js": "https://www.satisfactory-planner.net/static/js/main.aa1a139e.chunk.js",
+    "main.js.map": "https://www.satisfactory-planner.net/static/js/main.aa1a139e.chunk.js.map",
+    "runtime-main.js": "https://www.satisfactory-planner.net/static/js/runtime-main.d382fea5.js",
+    "runtime-main.js.map": "https://www.satisfactory-planner.net/static/js/runtime-main.d382fea5.js.map",
+    "static/js/2.57b71650.chunk.js": "https://www.satisfactory-planner.net/static/js/2.57b71650.chunk.js",
+    "static/js/2.57b71650.chunk.js.map": "https://www.satisfactory-planner.net/static/js/2.57b71650.chunk.js.map",
     "index.html": "https://www.satisfactory-planner.net/index.html",
     "static/css/main.cd4b3bab.chunk.css.map": "https://www.satisfactory-planner.net/static/css/main.cd4b3bab.chunk.css.map",
-    "static/js/2.feb8ddfb.chunk.js.LICENSE.txt": "https://www.satisfactory-planner.net/static/js/2.feb8ddfb.chunk.js.LICENSE.txt",
+    "static/js/2.57b71650.chunk.js.LICENSE.txt": "https://www.satisfactory-planner.net/static/js/2.57b71650.chunk.js.LICENSE.txt",
     "static/media/satisfactory_logo_full_color_small.da5e9783.png": "https://www.satisfactory-planner.net/static/media/satisfactory_logo_full_color_small.da5e9783.png",
     "static/media/stripe-bg.ddc4de7e.png": "https://www.satisfactory-planner.net/static/media/stripe-bg.ddc4de7e.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.824b4a0b.js",
-    "static/js/2.feb8ddfb.chunk.js",
+    "static/js/runtime-main.d382fea5.js",
+    "static/js/2.57b71650.chunk.js",
     "static/css/main.cd4b3bab.chunk.css",
-    "static/js/main.f2f885bc.chunk.js"
+    "static/js/main.aa1a139e.chunk.js"
   ]
 }

@@ -1,3 +1,4 @@
+declare module 'framer-motion/dist/framer-motion';
 declare module 'cytoscape-klay';
 declare module 'glpk.js' {
   interface Var {

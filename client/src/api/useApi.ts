@@ -31,7 +31,7 @@ export function useApi<RES extends APIResponseData = APIResponseData, REQ extend
     data,
     error,
     loading,
-    completedThisFrame: !loading && prevLoading,
+    completedThisFrame: !loading && !!prevLoading,
     request: requestHandler,
   }), [data, error, loading, prevLoading, requestHandler]);
 

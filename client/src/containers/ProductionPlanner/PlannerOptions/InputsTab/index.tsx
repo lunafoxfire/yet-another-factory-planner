@@ -1,25 +1,25 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Button, Select, TextInput, Checkbox, Group, Title, Divider, Text } from '@mantine/core';
-import { items, resources } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
 import TrashButton from '../../../../components/TrashButton';
 import { Section, SectionDescription } from '../../../../components/Section';
 import LabelWithTooltip from '../../../../components/LabelWithTooltip';
 
-const itemOptions = Object.keys(items)
-  .filter((key) => items[key].producedFromRecipes.length !== 0 && items[key].usedInRecipes.length !== 0 && !resources[key])
-  .map((key) => ({
-    value: key,
-    label: items[key].name,
-  }))
-  .sort((a, b) => {
-    return a.label > b.label ? 1 : -1;
-  });
 
 
 const InputsTab = () => {
   const ctx = useProductionContext();
+  
+  const itemOptions = useMemo(() => Object.keys(ctx.gameData.items)
+    .filter((key) => ctx.gameData.items[key].producedFromRecipes.length !== 0 && ctx.gameData.items[key].usedInRecipes.length !== 0 && !ctx.gameData.resources[key])
+    .map((key) => ({
+      value: key,
+      label: ctx.gameData.items[key].name,
+    }))
+    .sort((a, b) => {
+      return a.label > b.label ? 1 : -1;
+    }), [ctx.gameData])
 
   function renderItemInputs() {
     return ctx.state.inputItems.map((data) => {
@@ -156,7 +156,7 @@ const InputsTab = () => {
     return ctx.state.inputResources.map((data) => (
       <ItemContainer key={data.key}>
         <Row>
-          <Text style={{ fontWeight: 'bold' }}>{items[data.itemKey].name}</Text>
+          <Text style={{ fontWeight: 'bold' }}>{ctx.gameData.items[data.itemKey].name}</Text>
         </Row>
         <Row>
           <TextInput
@@ -225,7 +225,7 @@ const InputsTab = () => {
           Adjust the weights affecting the importance of various properties of the factory. A value of 0 indicates that that property is not considered during factory layout.
         </SectionDescription>
         {renderWeightInputs()}
-        <Button color='danger' onClick={() => { ctx.dispatch({ type: 'SET_ALL_WEIGHTS_DEFAULT' }) }} style={{ marginTop: '15px' }}>
+        <Button color='danger' onClick={() => { ctx.dispatch({ type: 'SET_ALL_WEIGHTS_DEFAULT', gameData: ctx.gameData }) }} style={{ marginTop: '15px' }}>
           Reset All Weights
         </Button>
       </Section>
@@ -235,7 +235,7 @@ const InputsTab = () => {
           Select the raw resources that are available to your factory. The default values are set to the map limits. The weight value is a number representing how valuable that resource is when comparing recipes. The defaults are calculated automatically according to node rarity.
         </SectionDescription>
         <Group style={{ marginBottom: '15px' }}>
-          <Button color='danger' onClick={() => { ctx.dispatch({ type: 'SET_RESOURCES_TO_MAP_LIMITS' }) }}>
+          <Button color='danger' onClick={() => { ctx.dispatch({ type: 'SET_RESOURCES_TO_MAP_LIMITS', gameData: ctx.gameData }) }}>
             Set All To Maximum
           </Button>
           <Button color='danger' onClick={() => { ctx.dispatch({ type: 'SET_RESOURCES_TO_0' }) }}>

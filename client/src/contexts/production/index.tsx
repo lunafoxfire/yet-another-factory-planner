@@ -1,88 +1,32 @@
 import React, { createContext, useContext, useReducer, useState, useEffect, useMemo, useCallback } from 'react';
 import _ from 'lodash';
-import seedrandom from 'seedrandom';
+import { useLocalStorageValue } from '@mantine/hooks';
 import { usePrevious } from '../../hooks/usePrevious';
 import { ProductionSolver, SolverResults } from '../../utilities/production-solver';
-import { reducer, FactoryOptions, FactoryAction, getInitialState, SHARE_QUERY_KEY } from './reducer';
-import { useLocalStorageValue } from '@mantine/hooks';
 import { GraphError } from '../../utilities/error/GraphError';
 import { usePostSharedFactory } from '../../api/modules/shared-factories/usePostSharedFactory';
-import { useGetSharedFactory } from '../../api/modules/shared-factories/useGetSharedFactory';
+import { reducer, FactoryAction, getInitialState } from './reducer';
+import { FactoryOptions } from './types';
+import { FactoryInitializer } from '../gameData';
+import { GameData } from '../gameData/types';
+import { SHARE_QUERY_PARAM } from '../gameData/consts';
 
+
+export type ShareLinkProps = { link: string, copyToClipboard: boolean, loading: boolean };
+
+// TYPE
 export type ProductionContextType = {
   state: FactoryOptions,
   dispatch: React.Dispatch<FactoryAction>,
+  gameData: GameData,
   calculating: boolean,
   solverResults: SolverResults | null,
   calculate: () => void,
   autoCalculate: boolean,
   setAutoCalculate: (value: boolean) => void,
   generateShareLink: () => void,
-  shareLinkLoading: boolean,
-  shareLink: string,
-  ficsitTip: string,
-  engineerId: string,
+  shareLink: ShareLinkProps,
 };
-
-const ONE_HOUR = 1000 * 60 * 60;
-const seed = Math.floor(new Date().getTime() / (0.5 * ONE_HOUR));
-const rng = seedrandom(String(seed));
-
-const TIPS = [
-  'Pet the lizard doggo!',
-  'Get back to work!',
-  'Update 6 now available!',
-  'Arachnophobia mode enabled.',
-  'FICSIT does not waste.',
-  'Linear programming!',
-  'Do not pet the spiders.',
-  'Just slap some beams on it!',
-  'Just 5 more minutes...',
-  'Thanks, Jace. Helps a lot!',
-  'Thanks, Snutt. Helps a lot!',
-  'Check out the new Spire Coast!',
-  'ADA says it\'s my turn to play with the nuke nobelisk.',
-  'Harvest.',
-];
-
-const TIP_INDEX = Math.floor(rng() * TIPS.length);
-const TIP = `FICSIT Tip #${TIP_INDEX}: ${TIPS[TIP_INDEX]}`;
-
-const ID = Math.floor(Math.random() * 1e7).toString().padStart(7, '0');
-
-const _setCalculating = _.debounce((value: boolean, setCalculating: React.Dispatch<React.SetStateAction<boolean>>) => {
-  setCalculating(value);
-}, 300, { leading: false, trailing: true });
-
-const _handleCalculateFactory = _.debounce(async (
-    state: FactoryOptions,
-    setSolverResults: React.Dispatch<React.SetStateAction<SolverResults | null>>,
-    setCalculating: React.Dispatch<React.SetStateAction<boolean>>,
-  ) => {
-    _setCalculating(true, setCalculating);
-    try {
-      const solver = new ProductionSolver(state);
-      const results = await solver.exec();
-      setSolverResults((prevState) => {
-        if (!prevState || prevState.timestamp < results.timestamp) {
-          console.log(`Computed in: ${results.computeTime}ms`);
-          return results;
-        }
-        return prevState;
-      });
-    } catch (e: unknown) {
-      setSolverResults({
-        productionGraph: null,
-        report: null,
-        timestamp: performance.now(),
-        computeTime: 0,
-        error: e as GraphError,
-      });
-    } finally {
-      _setCalculating(false, setCalculating);
-    }
-  }, 300, { leading: true, trailing: true });
-
 
 
 // CONTEXT
@@ -100,27 +44,62 @@ export function useProductionContext() {
 }
 
 
+const _setCalculating = _.debounce((value: boolean, setCalculating: React.Dispatch<React.SetStateAction<boolean>>) => {
+  setCalculating(value);
+}, 300, { leading: false, trailing: true });
+
+const _handleCalculateFactory = _.debounce(async (
+  state: FactoryOptions,
+  gameData: GameData,
+  setSolverResults: React.Dispatch<React.SetStateAction<SolverResults | null>>,
+  setCalculating: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  _setCalculating(true, setCalculating);
+  try {
+    const solver = new ProductionSolver(state, gameData);
+    const results = await solver.exec();
+    setSolverResults((prevState) => {
+      if (!prevState || prevState.timestamp < results.timestamp) {
+        console.log(`Computed in: ${results.computeTime}ms`);
+        return results;
+      }
+      return prevState;
+    });
+  } catch (e: unknown) {
+    setSolverResults({
+      productionGraph: null,
+      report: null,
+      timestamp: performance.now(),
+      computeTime: 0,
+      error: e as GraphError,
+    });
+  } finally {
+    _setCalculating(false, setCalculating);
+  }
+}, 300, { leading: true, trailing: true });
+
+
 // PROVIDER
-type PropTypes = { children: React.ReactNode };
-export const ProductionProvider = ({ children }: PropTypes) => {
-  const [state, dispatch] = useReducer(reducer, getInitialState());
-  const [initialized, setInitialized] = useState(false);
-  const [loadingSharedFactory, setLoadingSharedFactory] = useState(false);
-  const [firstCalculationDone, setFirstCalculationDone] = useState(false);
-  const [autoCalculate, setAutoCalculate] = useLocalStorageValue<'false' | 'true'>({ key: 'auto-calculate', defaultValue: 'true' });
-  const [calculating, setCalculating] = useState(false);
-  const [solverResults, setSolverResults] = useState<SolverResults | null>(null);
-  const [engineerId] = useLocalStorageValue<string>({ key: 'engineer-id', defaultValue: ID });
+type PropTypes = {
+  gameData: GameData,
+  initializer: FactoryInitializer | null,
+  triggerInitialize: boolean,
+  children: React.ReactNode,
+};
+export const ProductionProvider = ({ gameData, initializer, triggerInitialize, children }: PropTypes) => {
+  const [state, dispatch] = useReducer(reducer, getInitialState(gameData));
   const prevState = usePrevious(state);
+  const [solverResults, setSolverResults] = useState<SolverResults | null>(null);
 
-  const postSharedFactory = usePostSharedFactory();
-  const getSharedFactory = useGetSharedFactory();
-
+  const [calculating, setCalculating] = useState(false);
+  const [autoCalculate, setAutoCalculate] = useLocalStorageValue<'false' | 'true'>({ key: 'auto-calculate', defaultValue: 'true' });
   const autoCalculateBool = autoCalculate === 'true' ? true : false;
 
+  const postSharedFactory = usePostSharedFactory();
+
   const handleCalculateFactory = useCallback(() => {
-    _handleCalculateFactory(state, setSolverResults, setCalculating)
-  }, [state]);
+    _handleCalculateFactory(state, gameData, setSolverResults, setCalculating)
+  }, [gameData, state]);
 
   const handleSetAutoCalculate = (checked: boolean) => {
     setAutoCalculate(checked ? 'true' : 'false');
@@ -133,56 +112,45 @@ export const ProductionProvider = ({ children }: PropTypes) => {
     postSharedFactory.request({ factoryConfig: state });
   };
 
-  const shareLink = useMemo(() => {
-    const key = postSharedFactory.data?.key;
+  const shareLink: ShareLinkProps = useMemo(() => {
+    let link = '';
+    const key = postSharedFactory.data?.key || initializer?.shareKey;
     if (key) {
-      return `${window.location.protocol}//${window.location.host}${window.location.pathname}?${SHARE_QUERY_KEY}=${key}`;
+      link = `${window.location.protocol}//${window.location.host}${window.location.pathname}?${SHARE_QUERY_PARAM}=${key}`;
     }
-    return '';
-  }, [postSharedFactory.data?.key]);
-
-  useEffect(() => {
-    if (initialized) {
-      if (!firstCalculationDone) {
-        handleCalculateFactory();
-        setFirstCalculationDone(true);
-      } else if (autoCalculateBool && prevState !== state) {
-        handleCalculateFactory();
-      }
+    return {
+      link,
+      copyToClipboard: !!postSharedFactory.data?.key,
+      loading: postSharedFactory.loading,
     }
-  }, [autoCalculateBool, firstCalculationDone, handleCalculateFactory, initialized, prevState, state]);
-
-  useEffect(() => {
-    if (!initialized && !loadingSharedFactory) {
-      const params = new URLSearchParams(window.location.search);
-      const shareKey = params.get(SHARE_QUERY_KEY);
-      const legacyParamEncoding = params.get('f');
-      if (shareKey) {
-        getSharedFactory.request({ factoryKey: shareKey });
-        setLoadingSharedFactory(true);
-        params.delete(SHARE_QUERY_KEY);
-        window.history.replaceState(null, '', `${window.location.pathname}`);
-      } else if (legacyParamEncoding) {
-        dispatch({ type: 'LEGACY_LOAD_FROM_QUERY_PARAM' });
-        setInitialized(true);
-      } else {
-        setInitialized(true);
-      }
-    }
-  }, [getSharedFactory, initialized, loadingSharedFactory]);
+  }, [initializer?.shareKey, postSharedFactory.data?.key, postSharedFactory.loading]);
   
   useEffect(() => {
-    if (getSharedFactory.completedThisFrame && getSharedFactory.data?.factory_config) {
-      dispatch({ type: 'LOAD_FROM_SHARED_FACTORY', data: getSharedFactory.data.factory_config });
-      setLoadingSharedFactory(false);
-      setInitialized(true);
+    if (triggerInitialize) {
+      console.log('LOAD');
+      if (initializer?.factoryConfig) {
+        dispatch({ type: 'LOAD_FROM_SHARED_FACTORY', config: initializer.factoryConfig, gameData });
+      } else if (initializer?.legacyEncoding) {
+        dispatch({ type: 'LOAD_FROM_LEGACY_ENCODING', encoding: initializer.legacyEncoding, gameData });
+      } else {
+        dispatch({ type: 'RESET_FACTORY', gameData });
+      }
+      handleCalculateFactory();
     }
-  }, [getSharedFactory]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [triggerInitialize]);
+
+  useEffect(() => {
+    if (autoCalculateBool && prevState !== state) {
+      handleCalculateFactory();
+    }
+  }, [autoCalculateBool, handleCalculateFactory, prevState, state]);
 
   const ctxValue = useMemo(() => {
     return {
       state,
       dispatch,
+      gameData,
       calculating,
       solverResults,
       calculate: handleCalculateFactory,
@@ -190,12 +158,16 @@ export const ProductionProvider = ({ children }: PropTypes) => {
       setAutoCalculate: handleSetAutoCalculate,
       generateShareLink: handleGenerateShareLink,
       shareLink,
-      shareLinkLoading: postSharedFactory.loading,
-      ficsitTip: TIP,
-      engineerId,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoCalculateBool, calculating, handleCalculateFactory, solverResults, state, shareLink, postSharedFactory.loading]);
+  }, [
+    state,
+    gameData,
+    calculating,
+    solverResults,
+    autoCalculateBool,
+    shareLink,
+  ]);
 
   return (
     <ProductionContext.Provider value={ctxValue}>

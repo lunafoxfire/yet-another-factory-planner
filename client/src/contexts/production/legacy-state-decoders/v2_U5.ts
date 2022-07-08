@@ -1,7 +1,8 @@
 import { nanoid } from 'nanoid';
-import { recipes, items } from '../../../data'
 import { POINTS_ITEM_KEY } from '../../../utilities/production-solver';
-import { FactoryOptions, getInitialState } from '../reducer';
+import { GameData, ItemMap, RecipeMap } from '../../gameData/types';
+import { getInitialState } from '../reducer';
+import { FactoryOptions } from '../types';
 
 const FACTORY_SETTINGS_VERSION = 'v2_U5';
 
@@ -9,7 +10,7 @@ const SEP0 = ',';
 const SEP1 = '|';
 const SEP2 = ':';
 
-function getItemBySlug(slug: string) {
+function getItemBySlug(slug: string, items: ItemMap) {
   if (slug === 'points') {
     return POINTS_ITEM_KEY;
   }
@@ -20,7 +21,7 @@ function getItemBySlug(slug: string) {
   throw new Error('INVALID ITEM SLUG');
 }
 
-function getModeBySlug(slug: string) {
+function getModeBySlug(slug: string, recipes: RecipeMap) {
   if (slug === 'per_minute') return 'per-minute';
   if (slug === 'maximize') return 'maximize';
   const recipeEntry = Object.entries(recipes).find(([key, recipe]) => recipe.slug === slug);
@@ -30,8 +31,8 @@ function getModeBySlug(slug: string) {
   throw new Error('INVALID RECIPE SLUG');
 }
 
-export function decodeState_v2_U5(stateStr: string): FactoryOptions {
-  const newState: FactoryOptions = getInitialState();
+export function decodeState_v2_U5(stateStr: string, gameData: GameData): FactoryOptions {
+  const newState: FactoryOptions = getInitialState(gameData);
 
   const fields = stateStr.split(SEP0);
   if (fields[0] !== FACTORY_SETTINGS_VERSION) throw new Error('VERSION MISMATCH');
@@ -59,8 +60,8 @@ export function decodeState_v2_U5(stateStr: string): FactoryOptions {
       if (values.length !== 3) throw new Error('INVALID DATA [productionItems]');
       newState.productionItems.push({
         key: nanoid(),
-        itemKey: getItemBySlug(values[0]),
-        mode: getModeBySlug(values[1]),
+        itemKey: getItemBySlug(values[0], gameData.items),
+        mode: getModeBySlug(values[1], gameData.recipes),
         value: values[2],
       });
     });
@@ -73,7 +74,7 @@ export function decodeState_v2_U5(stateStr: string): FactoryOptions {
       if (values.length !== 4) throw new Error('INVALID DATA [inputItems]');
       newState.inputItems.push({
         key: nanoid(),
-        itemKey: getItemBySlug(values[0]),
+        itemKey: getItemBySlug(values[0], gameData.items),
         value: values[1],
         weight: values[2],
         unlimited: !!parseInt(values[3]),

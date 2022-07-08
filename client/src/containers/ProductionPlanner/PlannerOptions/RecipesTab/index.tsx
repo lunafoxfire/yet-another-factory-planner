@@ -2,33 +2,39 @@ import React, { useState, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import { List, Checkbox, TextInput, Button, Group, Title, Grid, Col } from '@mantine/core';
 import { Search } from 'react-feather';
-import { recipes } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
 import { Section, SectionDescription } from '../../../../components/Section';
 
 const cleanAltNameRegex = /^Alternate: /;
-const baseRecipes: { key: string, label: string }[] = [];
-const altRecipes: { key: string, label: string }[] = [];
-Object.entries(recipes)
-  .forEach(([key, data]) => {
-    if (data.isAlternate) {
-      altRecipes.push({
-        key,
-        label: data.name.replace(cleanAltNameRegex, ''),
-      });
-    } else {
-      baseRecipes.push({
-        key,
-        label: data.name,
-      });
-    }
-  });
-baseRecipes.sort((a, b) => (a.label > b.label ? 1 : -1));
-altRecipes.sort((a, b) => (a.label > b.label ? 1 : -1));
 
 const RecipesTab = () => {
   const ctx = useProductionContext();
   const [searchValue, setSearchValue] = useState('');
+
+  const { baseRecipes, altRecipes } = useMemo(() => {
+    const baseR: { key: string, label: string }[] = [];
+    const altR: { key: string, label: string }[] = [];
+    Object.entries(ctx.gameData.recipes)
+      .forEach(([key, data]) => {
+        if (data.isAlternate) {
+          altR.push({
+            key,
+            label: data.name.replace(cleanAltNameRegex, ''),
+          });
+        } else {
+          baseR.push({
+            key,
+            label: data.name,
+          });
+        }
+      });
+    baseR.sort((a, b) => (a.label > b.label ? 1 : -1));
+    altR.sort((a, b) => (a.label > b.label ? 1 : -1));
+    return {
+      baseRecipes: baseR,
+      altRecipes: altR,
+    }
+  }, [ctx.gameData]);
 
   const renderRecipeList = useCallback((recipeList: { key: string, label: string }[]) => {
     return recipeList.map(({ key, label }) => ({

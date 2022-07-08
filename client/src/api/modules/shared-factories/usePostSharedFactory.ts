@@ -1,6 +1,6 @@
 import { post } from '../..';
 import { useApi } from "../../useApi";
-import { FactoryOptions } from "../../../contexts/production/reducer";
+import { FactoryOptions } from '../../../contexts/production/types';
 
 interface PostSharedFactoryRequest {
   factoryConfig: FactoryOptions,

@@ -3,7 +3,6 @@ import { Container, MantineTheme, Tabs, useMantineTheme } from '@mantine/core';
 import { Share2, Edit } from 'react-feather';
 import ProductionGraphTab from './ProductionGraphTab';
 import ReportTab from './ReportTab';
-import { SolverResults } from '../../../utilities/production-solver';
 import Card from '../../../components/Card';
 
 const tabSx = (theme: MantineTheme) => ({

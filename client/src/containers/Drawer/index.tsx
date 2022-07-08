@@ -68,7 +68,7 @@ const Drawer = (props: Props) => {
             )
           }
         </DrawerToggle>
-        <DrawerContent className='custom-scrollbar' aria-hidden={!open} fullyClosed={fullyClosed} fluid>
+        <DrawerContent className='custom-scrollbar' aria-hidden={!open} $fullyClosed={fullyClosed} fluid>
           {children}
         </DrawerContent>
       </DrawerContainer>
@@ -241,8 +241,8 @@ const TooltipConfirm = styled(UnstyledButton)`
   text-decoration: underline;
 `;
 
-const DrawerContent = styled(Container)<{ fullyClosed: boolean }>`
-  visibility: ${({ fullyClosed }) => fullyClosed ? 'hidden' : 'visible'};
+const DrawerContent = styled(Container)<{ $fullyClosed: boolean }>`
+  visibility: ${({ $fullyClosed }) => $fullyClosed ? 'hidden' : 'visible'};
   position: absolute;
   top: 0px;
   bottom: 0px;

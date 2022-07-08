@@ -8,11 +8,11 @@ import popper from 'cytoscape-popper';
 import { Text, Container, Center, Group, Loader } from '@mantine/core';
 import { AlertCircle } from 'react-feather';
 import { GraphNode, GraphEdge, NODE_TYPE } from '../../../../utilities/production-solver';
-import { items, recipes, buildings } from '../../../../data';
 import { graphColors } from '../../../../theme';
 import GraphTooltip from '../../../../components/GraphTooltip';
 import { truncateFloat } from '../../../../utilities/number';
 import { useProductionContext } from '../../../../contexts/production';
+import { GameData } from '../../../../contexts/gameData/types';
 
 Cytoscape.use(popper);
 Cytoscape.use(klay);
@@ -227,15 +227,15 @@ const NODE_COLOR_CLASS = {
   [NODE_TYPE.RECIPE]: 'recipe',
 };
 
-function getNodeLabel(node: GraphNode) {
+function getNodeLabel(node: GraphNode, gameData: GameData) {
   let label = '';
   let amountText = '';
   if (node.type === NODE_TYPE.RECIPE) {
-    const recipe = recipes[node.key];
+    const recipe = gameData.recipes[node.key];
     label = recipe.name;
-    amountText = `${truncateFloat(node.multiplier)}x ${buildings[recipe.producedIn].name}`;
+    amountText = `${truncateFloat(node.multiplier)}x ${gameData.buildings[recipe.producedIn].name}`;
   } else {
-    const item = items[node.key];
+    const item = gameData.items[node.key];
     if (node.type === NODE_TYPE.SIDE_PRODUCT) {
       label = `Side Product:\n${item.name}`;
     } else {
@@ -246,11 +246,11 @@ function getNodeLabel(node: GraphNode) {
   return `${label}\n${amountText}`;
 }
 
-function getNodeClasses(node: GraphNode) {
+function getNodeClasses(node: GraphNode, gameData: GameData) {
   const classes = [];
   if (node.type === NODE_TYPE.RECIPE) {
     classes.push('recipe-shape');
-    const recipe = recipes[node.key];
+    const recipe = gameData.recipes[node.key];
     if (recipe.producedIn === 'Desc_GeneratorNuclear_C') {
       classes.push('nuclear');
     } else {
@@ -263,8 +263,8 @@ function getNodeClasses(node: GraphNode) {
   return classes;
 }
 
-function getEdgeLabel(edge: GraphEdge) {
-  const item = items[edge.key];
+function getEdgeLabel(edge: GraphEdge, gameData: GameData) {
+  const item = gameData.items[edge.key];
   const label = item.name;
   const amountText = `${truncateFloat(edge.productionRate)} / min`;
   return `${label}\n${amountText}`;
@@ -405,9 +405,9 @@ const ProductionGraphTab = () => {
         group: 'nodes',
         data: {
           ...node,
-          label: getNodeLabel(node),
+          label: getNodeLabel(node, ctx.gameData),
         },
-        classes: getNodeClasses(node),
+        classes: getNodeClasses(node, ctx.gameData),
       });
     });
     resultsGraph.edges.forEach((edge) => {
@@ -417,7 +417,7 @@ const ProductionGraphTab = () => {
           ...edge,
           source: edge.from,
           target: edge.to,
-          label: getEdgeLabel(edge),
+          label: getEdgeLabel(edge, ctx.gameData),
         },
         classes: edge.from === edge.to ? ['loop'] : undefined,
       });

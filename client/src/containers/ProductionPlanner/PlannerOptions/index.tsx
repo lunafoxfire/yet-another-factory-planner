@@ -12,17 +12,17 @@ const PlannerOptions = () => {
   const ctx = useProductionContext();
   const [popoverOpened, setPopoverOpened] = useState(false);
 
-  const prevShareLink = usePrevious(ctx.shareLink);
+  const prevShareLink = usePrevious(ctx.shareLink.link);
   useEffect(() => {
-    if (ctx.shareLink && ctx.shareLink !== prevShareLink) {
-      navigator.clipboard.writeText(ctx.shareLink);
+    if (ctx.shareLink.copyToClipboard && ctx.shareLink.link && ctx.shareLink.link !== prevShareLink) {
+      navigator.clipboard.writeText(ctx.shareLink.link);
       setPopoverOpened(true);
     }
   }, [ctx.shareLink, prevShareLink]);
 
   const handleLinkInputClicked = () => {
     if (ctx.shareLink) {
-      navigator.clipboard.writeText(ctx.shareLink);
+      navigator.clipboard.writeText(ctx.shareLink.link);
       setPopoverOpened(true);
     }
   }
@@ -51,7 +51,7 @@ const PlannerOptions = () => {
           <Button
             color='positive'
             onClick={() => { ctx.generateShareLink(); }}
-            loading={ctx.shareLinkLoading}
+            loading={ctx.shareLink.loading}
             style={{ width: '125px' }}
           >
             Save & Share
@@ -71,7 +71,7 @@ const PlannerOptions = () => {
             }}
             target={
               <TextInput
-                value={ctx.shareLink}
+                value={ctx.shareLink.link}
                 placeholder='Save factory to generate a link'
                 readOnly={true}
                 onClick={() => { handleLinkInputClicked(); }}
@@ -90,7 +90,7 @@ const PlannerOptions = () => {
         <Group style={{ marginBottom: '15px' }} position='right'>
           <Button
             color='danger'
-            onClick={() => { ctx.dispatch({ type: 'RESET_FACTORY' }) }}
+            onClick={() => { ctx.dispatch({ type: 'RESET_FACTORY', gameData: ctx.gameData }) }}
           >
             Reset ALL Factory Options
           </Button>

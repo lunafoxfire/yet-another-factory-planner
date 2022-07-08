@@ -1,7 +1,7 @@
 import loadGLPK, { GLPK, LP, Var } from 'glpk.js';
 import { nanoid } from 'nanoid';
-import { FactoryOptions, RecipeMap } from '../../contexts/production/reducer';
-import { buildings, items, recipes, resources, handGatheredItems } from '../../data';
+import { FactoryOptions, RecipeSelectionMap } from '../../contexts/production/types';
+import { GameData } from '../../contexts/gameData/types';
 import { GraphError } from '../error/GraphError';
 
 const EPSILON = 1e-8;
@@ -112,22 +112,25 @@ type ItemMap = {
 }
 
 export class ProductionSolver {
+  private gameData: GameData;
   private globalWeights: GlobalWeights;
   private inputs: Inputs;
   private rateTargets: RateTargets;
   private maximizeTargets: MaximizeTargets[];
   private hasPointsTarget: boolean;
-  private allowedRecipes: RecipeMap;
+  private allowedRecipes: RecipeSelectionMap;
   private allowedItems: ItemMap;
   private scale: number;
 
-  public constructor(options: FactoryOptions) {
+  public constructor(options: FactoryOptions, gameData: GameData) {
+    this.gameData = gameData;
+
     this.allowedRecipes = options.allowedRecipes;
     this.allowedItems = {};
 
     Object.entries(this.allowedRecipes).forEach(([recipeKey, allowed]) => {
       if (!allowed) return;
-      const recipeInfo = recipes[recipeKey];
+      const recipeInfo = this.gameData.recipes[recipeKey];
       recipeInfo.ingredients.forEach((i) => {
         this.allowedItems[i.itemClass] = true;
       });
@@ -163,7 +166,7 @@ export class ProductionSolver {
     this.inputs = {};
 
     options.inputResources.forEach((item) => {
-      const resourceData = resources[item.itemKey];
+      const resourceData = this.gameData.resources[item.itemKey];
       if (!resourceData) return;
       const amount = item.unlimited ? Infinity : Number(item.value);
       this.validateNumber(amount);
@@ -197,7 +200,7 @@ export class ProductionSolver {
     });
 
     if (options.allowHandGatheredItems) {
-      Object.keys(handGatheredItems).forEach((item) => {
+      Object.keys(this.gameData.handGatheredItems).forEach((item) => {
         this.inputs[item] = {
           amount: Infinity,
           weight: 1000,
@@ -257,7 +260,7 @@ export class ProductionSolver {
           break;
         default:
           const recipeKey = item.mode;
-          const recipeInfo = recipes[recipeKey];
+          const recipeInfo = this.gameData.recipes[recipeKey];
           if (recipeInfo) {
             if (!this.allowedRecipes[recipeKey]) {
               throw new GraphError('CANNOT TARGET DISABLED RECIPE', 'Make sure the recipe you are targeting is enabled in the Recipes tab.');
@@ -374,7 +377,7 @@ export class ProductionSolver {
   }
 
   private getItemPoints(itemKey: string) {
-    const itemInfo = items[itemKey];
+    const itemInfo = this.gameData.items[itemKey];
     return itemInfo.isFicsmas ? 0 : itemInfo.sinkPoints;
   }
 
@@ -393,9 +396,9 @@ export class ProductionSolver {
     const doPoints = (targetKey === RATE_TARGET_KEY && this.rateTargets[POINTS_ITEM_KEY]) || targetKey === POINTS_ITEM_KEY;
     const pointsVars: Var[] = [];
 
-    for (const [recipeKey, recipeInfo] of Object.entries(recipes)) {
+    for (const [recipeKey, recipeInfo] of Object.entries(this.gameData.recipes)) {
       if (!this.allowedRecipes[recipeKey]) continue;
-      const buildingInfo = buildings[recipeInfo.producedIn];
+      const buildingInfo = this.gameData.buildings[recipeInfo.producedIn];
       const powerScore = buildingInfo.power > 0 ? buildingInfo.power * this.globalWeights.power : 0;
       const buildingsScore = this.globalWeights.buildings;
       let resourceScore = 0;
@@ -475,7 +478,7 @@ export class ProductionSolver {
     }
 
 
-    for (const [itemKey, itemInfo] of Object.entries(items)) {
+    for (const [itemKey, itemInfo] of Object.entries(this.gameData.items)) {
       if (!this.allowedItems[itemKey]) continue;
       const vars: Var[] = [];
       
@@ -484,18 +487,18 @@ export class ProductionSolver {
 
       for (const recipeKey of itemInfo.usedInRecipes) {
         if (!this.allowedRecipes[recipeKey]) continue;
-        const recipeInfo = recipes[recipeKey];
+        const recipeInfo = this.gameData.recipes[recipeKey];
         const target = recipeInfo.ingredients.find((i) => i.itemClass === itemKey)!;
         vars.push({ name: recipeKey, coef: target.perMinute });
 
-        if (!handGatheredItems[itemKey]) {
+        if (!this.gameData.handGatheredItems[itemKey]) {
           binVars.push({ name: recipeKey, coef: -1 });
         }
       }
 
       for (const recipeKey of itemInfo.producedFromRecipes) {
         if (!this.allowedRecipes[recipeKey]) continue;
-        const recipeInfo = recipes[recipeKey];
+        const recipeInfo = this.gameData.recipes[recipeKey];
         const target = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
 
         const existingVar = vars.find((v) => v.name === recipeKey);
@@ -588,7 +591,7 @@ export class ProductionSolver {
     const result: ProductionSolution = {};
     Object.entries(solution.result.vars).forEach(([key, val]) => {
       if (val > EPSILON) {
-        if (recipes[key]) {
+        if (this.gameData.recipes[key]) {
           result[key] = val;
         }
       }
@@ -604,7 +607,7 @@ export class ProductionSolver {
     };
 
     for (const [recipeKey, multiplier] of Object.entries(productionSolution)) {
-      const recipeInfo = recipes[recipeKey];
+      const recipeInfo = this.gameData.recipes[recipeKey];
 
       for (const product of recipeInfo.products) {
         const amount = multiplier * product.perMinute;
@@ -651,7 +654,7 @@ export class ProductionSolver {
           const outputRecipe = this.rateTargets[itemKey]?.recipe;
           if (outputRecipe && outputRecipe === productionInfo.recipeKey) {
             const outputInfo = this.rateTargets[itemKey];
-            const recipeInfo = recipes[outputRecipe];
+            const recipeInfo = this.gameData.recipes[outputRecipe];
             const target = recipeInfo.products.find((p) => p.itemClass === itemKey)!;
             const recipeAmount = outputInfo.value * target.perMinute;
             productionInfo.amount -= recipeAmount;
@@ -793,9 +796,9 @@ export class ProductionSolver {
 
     for (const [key, node] of Object.entries(productionGraph.nodes)) {
       if (node.type === NODE_TYPE.RECIPE) {
-        const recipeInfo = recipes[key];
+        const recipeInfo = this.gameData.recipes[key];
         const buildingKey = recipeInfo.producedIn;
-        const buildingInfo = buildings[buildingKey];
+        const buildingInfo = this.gameData.buildings[buildingKey];
         const power = node.multiplier * buildingInfo.power;
         if (power < 0) {
           report.powerUsageEstimate.generators += -power;
@@ -835,14 +838,14 @@ export class ProductionSolver {
         report.resourceEfficiencyScore += node.multiplier * this.inputs[key].weight;
         let power = 0;
         if (key === 'Desc_Water_C') {
-          power = node.multiplier / 120 * buildings['Desc_WaterPump_C'].power;
+          power = node.multiplier / 120 * this.gameData.buildings['Desc_WaterPump_C'].power;
 
           const numExtractors = Math.ceil(node.multiplier / 120);
           report.buildingsUsed['Desc_WaterPump_C'] = {
             count: numExtractors,
             materialCost: {},
           };
-          for (const ingredient of buildings['Desc_WaterPump_C'].buildCost) {
+          for (const ingredient of this.gameData.buildings['Desc_WaterPump_C'].buildCost) {
             const amount = numExtractors * ingredient.quantity;
             report.buildingsUsed['Desc_WaterPump_C'].materialCost[ingredient.itemClass] = amount;
             if (!report.totalMaterialCost[ingredient.itemClass]) {
@@ -853,11 +856,11 @@ export class ProductionSolver {
           }
 
         } else if (key === 'Desc_LiquidOil_C') {
-          power = node.multiplier / 120 * buildings['Desc_OilPump_C'].power;
+          power = node.multiplier / 120 * this.gameData.buildings['Desc_OilPump_C'].power;
         } else if (key === 'Desc_NitrogenGas_C') {
           // SKIP
         } else {
-          power = node.multiplier / 240 * buildings['Desc_MinerMk3_C'].power;
+          power = node.multiplier / 240 * this.gameData.buildings['Desc_MinerMk3_C'].power;
         }
         report.powerUsageEstimate.extraction += power;
         report.powerUsageEstimate.total += power;

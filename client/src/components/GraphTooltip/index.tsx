@@ -1,11 +1,11 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 import { Title, Text, Divider, List, useMantineTheme, Paper } from '@mantine/core';
-import { buildings, items, recipes } from '../../data';
 import { truncateFloat } from '../../utilities/number';
 import { NODE_TYPE } from '../../utilities/production-solver';
 import { NodeData } from '../../containers/ProductionPlanner/PlannerResults/ProductionGraphTab';
 import Portal from '../Portal';
+import { useProductionContext } from '../../contexts/production';
 
 interface Props {
   currentNode: any | null,
@@ -14,6 +14,7 @@ interface Props {
 const GraphTooltip = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { currentNode } = props;
   const theme = useMantineTheme();
+  const ctx = useProductionContext();
 
   function renderInner() {
     const data = currentNode.data() as NodeData;
@@ -34,7 +35,7 @@ const GraphTooltip = forwardRef<HTMLDivElement, Props>((props, ref) => {
   }
 
   function renderRecipeInfo(data: NodeData) {
-    const recipeInfo = recipes[data.key];
+    const recipeInfo = ctx.gameData.recipes[data.key];
     const primaryProduct = recipeInfo.products[0];
 
     const totalBuildings = Math.ceil(data.multiplier);
@@ -46,7 +47,7 @@ const GraphTooltip = forwardRef<HTMLDivElement, Props>((props, ref) => {
         <TooltipTitle order={3}>Recipe: [{recipeInfo.name}]</TooltipTitle>
         <TooltipDivider />
         <TooltipText>
-          <b>Buildings:</b> {totalBuildings}x {buildings[recipeInfo.producedIn].name}
+          <b>Buildings:</b> {totalBuildings}x {ctx.gameData.buildings[recipeInfo.producedIn].name}
         </TooltipText>
         <TooltipText>
           <b>Clock speed:</b> {truncateFloat(clockPercentage)}% each
@@ -60,7 +61,7 @@ const GraphTooltip = forwardRef<HTMLDivElement, Props>((props, ref) => {
           {
             recipeInfo.ingredients.map((ingredient) => (
               <List.Item>
-                <TooltipText>{items[ingredient.itemClass].name}: {truncateFloat(ingredient.perMinute * data.multiplier)} / min</TooltipText>
+                <TooltipText>{ctx.gameData.items[ingredient.itemClass].name}: {truncateFloat(ingredient.perMinute * data.multiplier)} / min</TooltipText>
               </List.Item>
             ))
           }
@@ -70,7 +71,7 @@ const GraphTooltip = forwardRef<HTMLDivElement, Props>((props, ref) => {
           {
             recipeInfo.products.map((product) => (
               <List.Item>
-                <TooltipText>{items[product.itemClass].name}: {truncateFloat(product.perMinute * data.multiplier)} / min</TooltipText>
+                <TooltipText>{ctx.gameData.items[product.itemClass].name}: {truncateFloat(product.perMinute * data.multiplier)} / min</TooltipText>
               </List.Item>
             ))
           }
@@ -80,7 +81,7 @@ const GraphTooltip = forwardRef<HTMLDivElement, Props>((props, ref) => {
   }
 
   function renderMinerInfo(data: NodeData) {
-    const itemInfo = items[data.key];
+    const itemInfo = ctx.gameData.items[data.key];
     const baseNumMiners = data.multiplier / 60;
     return (
       <Tooltip>
@@ -126,7 +127,7 @@ const GraphTooltip = forwardRef<HTMLDivElement, Props>((props, ref) => {
   }
 
   function renderWaterExtractorInfo(data: NodeData) {
-    const itemInfo = items[data.key];
+    const itemInfo = ctx.gameData.items[data.key];
     return (
       <Tooltip>
         <TooltipTitle order={3}>Resource: [{itemInfo.name}]</TooltipTitle>
@@ -137,7 +138,7 @@ const GraphTooltip = forwardRef<HTMLDivElement, Props>((props, ref) => {
   }
 
   function renderOilExtractorInfo(data: NodeData) {
-    const itemInfo = items[data.key];
+    const itemInfo = ctx.gameData.items[data.key];
     const baseNumExtractors = data.multiplier / 120;
     return (
       <Tooltip>

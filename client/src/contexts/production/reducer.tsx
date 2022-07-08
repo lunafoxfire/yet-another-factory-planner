@@ -1,51 +1,11 @@
 import { nanoid } from 'nanoid';
-import { resources, recipes } from '../../data'
-import { decodeState_v1_U5 } from './state-decoders/v1_U5';
-import { decodeState_v2_U5 } from './state-decoders/v2_U5';
-import { decodeState_v3_U5 } from './state-decoders/v3_U5';
-
-export const GAME_VERSION = 'U5';
-export const SHARE_QUERY_KEY = 'factory';
-export const MAX_PRIORITY = 20;
-
-// TYPES
-export type ProductionItemOptions = {
-  key: string,
-  itemKey: string,
-  mode: 'per-minute' | 'maximize' | string,
-  value: string,
-};
-
-export type WeightingOptions = {
-  resources: string,
-  power: string,
-  complexity: string,
-  buildings: string,
-};
-
-export type InputItemOptions = {
-  key: string,
-  itemKey: string,
-  value: string,
-  weight: string,
-  unlimited: boolean,
-};
-
-export type RecipeMap = {
-  [key: string]: boolean,
-};
-
-export type FactoryOptions = {
-  gameVersion: string,
-  key: string,
-  productionItems: ProductionItemOptions[],
-  inputItems: InputItemOptions[],
-  inputResources: InputItemOptions[],
-  allowHandGatheredItems: boolean,
-  weightingOptions: WeightingOptions,
-  allowedRecipes: RecipeMap,
-};
-
+import { decodeState_v1_U5 } from './legacy-state-decoders/v1_U5';
+import { decodeState_v2_U5 } from './legacy-state-decoders/v2_U5';
+import { decodeState_v3_U5 } from './legacy-state-decoders/v3_U5';
+import { ProductionItemOptions, InputItemOptions, WeightingOptions, RecipeSelectionMap, FactoryOptions } from './types';
+import { GameData, RecipeMap, ResourceMap } from '../gameData/types';
+import { MAX_PRIORITY } from './consts';
+import { DEFAULT_GAME_VERSION } from '../gameData/consts';
 
 // DEFAULTS
 function getDefaultProductionItem(): ProductionItemOptions {
@@ -82,7 +42,7 @@ const ORDERED_RESOURCES = [
   'Desc_Water_C',
 ];
 
-function getInitialInputResources(): InputItemOptions[] {
+function getInitialInputResources(resources: ResourceMap): InputItemOptions[] {
   return Object.entries(resources)
     .map(([key, data]) => {
       let value = '0';
@@ -118,31 +78,31 @@ function getInitialWeightingOptions(): WeightingOptions {
   };
 }
 
-function getInitialAllowedRecipes(): RecipeMap {
-  const recipeMap: RecipeMap = {};
+function getInitialAllowedRecipes(recipes: RecipeMap): RecipeSelectionMap {
+  const recipeMap: RecipeSelectionMap = {};
   Object.entries(recipes).forEach(([key, data]) => {
     recipeMap[key] = !data.isAlternate;
   });
   return recipeMap;
 }
 
-export function getInitialState(): FactoryOptions {
+export function getInitialState(gameData: GameData): FactoryOptions {
   return {
-    gameVersion: GAME_VERSION,
     key: nanoid(),
+    gameVersion: DEFAULT_GAME_VERSION,
     productionItems: [],
     inputItems: [],
-    inputResources: getInitialInputResources(),
+    inputResources: getInitialInputResources(gameData.resources),
     allowHandGatheredItems: false,
     weightingOptions: getInitialWeightingOptions(),
-    allowedRecipes: getInitialAllowedRecipes(),
+    allowedRecipes: getInitialAllowedRecipes(gameData.recipes),
   };
 }
 
 
 // REDUCER
 export type FactoryAction =
-  | { type: 'RESET_FACTORY' }
+  | { type: 'RESET_FACTORY', gameData: GameData }
   | { type: 'ADD_PRODUCTION_ITEM' }
   | { type: 'DELETE_PRODUCTION_ITEM', key: string }
   | { type: 'SET_PRODUCTION_ITEM', data: { key: string, itemKey: string } }
@@ -152,20 +112,20 @@ export type FactoryAction =
   | { type: 'DELETE_INPUT_ITEM', key: string }
   | { type: 'UPDATE_INPUT_ITEM', data: InputItemOptions }
   | { type: 'UPDATE_INPUT_RESOURCE', data: InputItemOptions }
-  | { type: 'SET_RESOURCES_TO_MAP_LIMITS' }
+  | { type: 'SET_RESOURCES_TO_MAP_LIMITS', gameData: GameData }
   | { type: 'SET_RESOURCES_TO_0' }
   | { type: 'SET_ALLOW_HAND_GATHERED_ITEMS', active: boolean }
   | { type: 'UPDATE_WEIGHTING_OPTIONS', data: WeightingOptions }
-  | { type: 'SET_ALL_WEIGHTS_DEFAULT' }
+  | { type: 'SET_ALL_WEIGHTS_DEFAULT', gameData: GameData }
   | { type: 'SET_RECIPE_ACTIVE', key: string, active: boolean }
   | { type: 'MASS_SET_RECIPES_ACTIVE', recipes: string[], active: boolean }
-  | { type: 'LOAD_FROM_SHARED_FACTORY', data: any }
-  | { type: 'LEGACY_LOAD_FROM_QUERY_PARAM' };
+  | { type: 'LOAD_FROM_SHARED_FACTORY', config: any, gameData: GameData }
+  | { type: 'LOAD_FROM_LEGACY_ENCODING', encoding: string, gameData: GameData };
 
 export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
   switch (action.type) {
     case 'RESET_FACTORY': {
-      return getInitialState();
+      return getInitialState(action.gameData);
     }
     case 'ADD_PRODUCTION_ITEM': {
       const newProductionItems = [
@@ -265,7 +225,7 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
       return { ...state, inputResources: newInputResources };
     }
     case 'SET_RESOURCES_TO_MAP_LIMITS': {
-      const newInputResources = getInitialInputResources();
+      const newInputResources = getInitialInputResources(action.gameData.resources);
       return { ...state, inputResources: newInputResources };
     }
     case 'SET_RESOURCES_TO_0': {
@@ -283,7 +243,7 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
     case 'SET_ALL_WEIGHTS_DEFAULT': {
       const newWeightingOptions = getInitialWeightingOptions();
       const newInputResources = state.inputResources
-        .map((i) => ({ ...i, weight: String(resources[i.itemKey].relativeValue) }));
+        .map((i) => ({ ...i, weight: String(action.gameData.resources[i.itemKey].relativeValue) }));
       return { ...state, weightingOptions: newWeightingOptions, inputResources: newInputResources };
     }
     case 'SET_RECIPE_ACTIVE': {
@@ -300,15 +260,15 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
     }
     case 'LOAD_FROM_SHARED_FACTORY': {
       try {
-        const newState: FactoryOptions = getInitialState();
-        newState.gameVersion = action.data.gameVersion;
-        newState.productionItems = (action.data.productionItems as any[]).map((i) => ({
+        const newState: FactoryOptions = getInitialState(action.gameData);
+        newState.gameVersion = action.config.gameVersion;
+        newState.productionItems = (action.config.productionItems as any[]).map((i) => ({
           ...getDefaultProductionItem(),
           itemKey: i.itemKey,
           mode: i.mode,
           value: String(i.value),
         }));
-        newState.inputItems = (action.data.inputItems as any[]).map((i) => ({
+        newState.inputItems = (action.config.inputItems as any[]).map((i) => ({
           ...getDefaultInputItem(),
           itemKey: i.itemKey,
           value: String(i.value),
@@ -316,17 +276,17 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
           unlimited: i.unlimited,
         }));
         newState.inputResources.forEach((r) => {
-          const resourceOptions = (action.data.inputResources as any[]).find((i) => r.itemKey === i.itemKey);
+          const resourceOptions = (action.config.inputResources as any[]).find((i) => r.itemKey === i.itemKey);
           r.value = String(resourceOptions.value);
           r.weight = String(resourceOptions.weight);
           r.unlimited = resourceOptions.unlimited;
         });
-        newState.allowHandGatheredItems = action.data.allowHandGatheredItems;
-        newState.weightingOptions.resources = String(action.data.weightingOptions.resources);
-        newState.weightingOptions.power = String(action.data.weightingOptions.power);
-        newState.weightingOptions.complexity = String(action.data.weightingOptions.complexity);
-        newState.weightingOptions.buildings = String(action.data.weightingOptions.buildings);
-        (action.data.allowedRecipes as any[]).forEach((key) => {
+        newState.allowHandGatheredItems = action.config.allowHandGatheredItems;
+        newState.weightingOptions.resources = String(action.config.weightingOptions.resources);
+        newState.weightingOptions.power = String(action.config.weightingOptions.power);
+        newState.weightingOptions.complexity = String(action.config.weightingOptions.complexity);
+        newState.weightingOptions.buildings = String(action.config.weightingOptions.buildings);
+        (action.config.allowedRecipes as any[]).forEach((key) => {
           if (newState.allowedRecipes[key] != null) {
             newState.allowedRecipes[key] = true;
           }
@@ -337,17 +297,13 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
       }
       return state;
     }
-    case 'LEGACY_LOAD_FROM_QUERY_PARAM': {
-      const params = new URLSearchParams(window.location.search);
-      const encodedState = params.get('f');
-      if (encodedState) {
-        try {
-          return decodeState_LEGACY(encodedState);
-        } catch (e) {
-          console.error(e);
-        }
+    case 'LOAD_FROM_LEGACY_ENCODING': {
+      try {
+        return decodeState_LEGACY(action.encoding, action.gameData);
+      } catch (e) {
+        console.error(e);
+        return state;
       }
-      return state;
     }
     default:
       return state;
@@ -356,14 +312,14 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
 
 
 // ENCODE/DECODE STATE
-function decodeState_LEGACY(stateStr: string): FactoryOptions {
+function decodeState_LEGACY(stateStr: string, gameData: GameData): FactoryOptions {
   const version = stateStr.substring(0, 5);
   if (version === 'v1_U5') {
-    return decodeState_v1_U5(stateStr);
+    return decodeState_v1_U5(stateStr, gameData);
   } else if (version === 'v2_U5') {
-    return decodeState_v2_U5(stateStr);
+    return decodeState_v2_U5(stateStr, gameData);
   } else if (version === 'v3_U5') {
-    return decodeState_v3_U5(stateStr);
+    return decodeState_v3_U5(stateStr, gameData);
   } else {
     throw new Error('INVALID VERSION');
   }

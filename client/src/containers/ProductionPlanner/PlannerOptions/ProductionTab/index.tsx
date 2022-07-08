@@ -1,27 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Button, Select, TextInput, Group, Divider, Title } from '@mantine/core';
-import { items, recipes, resources } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
-import { MAX_PRIORITY } from '../../../../contexts/production/reducer';
 import { POINTS_ITEM_KEY } from '../../../../utilities/production-solver';
+import { MAX_PRIORITY } from '../../../../contexts/production/consts';
 import { Section, SectionDescription } from '../../../../components/Section';
 import TrashButton from '../../../../components/TrashButton';
 
-const itemOptions = Object.keys(items)
-  .filter((key) => items[key].producedFromRecipes.length !== 0 && !resources[key])
-  .map((key) => ({
-    value: key,
-    label: items[key].name,
-  }))
-  .sort((a, b) => {
-    return a.label > b.label ? 1 : -1;
-  });
-
-itemOptions.unshift({
-  value: POINTS_ITEM_KEY,
-  label: 'AWESOME Sink Points (x1000)'
-});
 
 const baseModeOptions = [
   { value: 'per-minute', label: 'Items Per Min' },
@@ -29,21 +14,40 @@ const baseModeOptions = [
 ];
 
 const priorityOptions = Array(MAX_PRIORITY)
-  .fill('')
+.fill('')
   .map((_, i) => ({ value: `${i + 1}`, label: `Priority: ${i + 1}` }))
   .reverse();
 
 const ProductionTab = () => {
   const ctx = useProductionContext();
 
+  const itemOptions = useMemo(() => {
+    const opts = Object.keys(ctx.gameData.items)
+      .filter((key) => ctx.gameData.items[key].producedFromRecipes.length !== 0 && !ctx.gameData.resources[key])
+      .map((key) => ({
+        value: key,
+        label: ctx.gameData.items[key].name,
+      }))
+      .sort((a, b) => {
+        return a.label > b.label ? 1 : -1;
+      });
+
+    opts.unshift({
+      value: POINTS_ITEM_KEY,
+      label: 'AWESOME Sink Points (x1000)'
+    });
+
+    return opts;
+  }, [ctx.gameData]);
+    
   function renderItemInputs() {
     return ctx.state.productionItems.map((data) => {
       const modeOptions = [...baseModeOptions];
       if (data.itemKey) {
-        const itemInfo = items[data.itemKey];
+        const itemInfo = ctx.gameData.items[data.itemKey];
         const recipeList = itemInfo?.producedFromRecipes || [];
         recipeList.forEach((recipeKey) => {
-          const recipeInfo = recipes[recipeKey];
+          const recipeInfo = ctx.gameData.recipes[recipeKey];
           const target = recipeInfo?.products.find((p) => p.itemClass === data.itemKey);
           if (target) {
             const name = itemInfo.name === recipeInfo.name ? 'Base Recipe' : recipeInfo.name.replace('Alternate: ', '');

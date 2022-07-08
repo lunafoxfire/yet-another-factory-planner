@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Title, List, Divider, Text, Container, Group } from '@mantine/core';
 import { AlertCircle } from 'react-feather';
-import { buildings, items } from '../../../../data';
 import { useProductionContext } from '../../../../contexts/production';
 
 function formatFloat(n: number) {
@@ -62,7 +61,7 @@ const ReportTab = () => {
                   })
                   .map(([itemKey, count]) => (
                     <List.Item key={itemKey}>
-                      <ItemLabel>{items[itemKey].name}</ItemLabel> <Count>x{formatFloat(count)}</Count>
+                      <ItemLabel>{ctx.gameData.items[itemKey].name}</ItemLabel> <Count>x{formatFloat(count)}</Count>
                     </List.Item>
                   ))
               }
@@ -83,7 +82,7 @@ const ReportTab = () => {
       .map(([buildingKey, usageInfo]) => (
       <List.Item key={buildingKey} style={{ paddingBottom: '10px' }}>
         <Title order={3} style={{ marginBottom: '8px' }}>
-          {buildings[buildingKey].name} <Count>x{formatFloat(usageInfo.count)}</Count>
+          {ctx.gameData.buildings[buildingKey].name} <Count>x{formatFloat(usageInfo.count)}</Count>
         </Title>
         <ListWithLine withPadding listStyleType='none' style={{ marginBottom: '10px' }}>
           {
@@ -95,7 +94,7 @@ const ReportTab = () => {
               })
               .map(([itemKey, count]) => (
                 <List.Item key={itemKey}>
-                  <ItemLabel>{items[itemKey].name}</ItemLabel>  <Count>x{formatFloat(count)}</Count>
+                  <ItemLabel>{ctx.gameData.items[itemKey].name}</ItemLabel>  <Count>x{formatFloat(count)}</Count>
                 </List.Item>
               ))
           }

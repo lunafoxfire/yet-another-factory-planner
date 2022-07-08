@@ -1,11 +1,11 @@
 import React from 'react';
-import { useLocalStorageValue } from '@mantine/hooks';
 import Drawer from '../Drawer';
 import PlannerOptions from './PlannerOptions';
 import PlannerResults from './PlannerResults';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 const Factory = () => {
-  const [drawerOpen, setDrawerOpen] = useLocalStorageValue<'false' | 'true'>({ key: 'drawer-open', defaultValue: 'false' });
+  const [drawerOpen, setDrawerOpen] = useSessionStorage<'false' | 'true'>({ key: 'drawer-open', defaultValue: 'false' });
   return (
     <>
       <PlannerResults />

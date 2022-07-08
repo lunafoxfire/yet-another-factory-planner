@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useState, useEffect, useMemo, useCallback } from 'react';
 import _ from 'lodash';
-import { useLocalStorageValue } from '@mantine/hooks';
 import { usePrevious } from '../../hooks/usePrevious';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { ProductionSolver, SolverResults } from '../../utilities/production-solver';
 import { GraphError } from '../../utilities/error/GraphError';
 import { usePostSharedFactory } from '../../api/modules/shared-factories/usePostSharedFactory';
@@ -92,7 +92,7 @@ export const ProductionProvider = ({ gameData, initializer, triggerInitialize, c
   const [solverResults, setSolverResults] = useState<SolverResults | null>(null);
 
   const [calculating, setCalculating] = useState(false);
-  const [autoCalculate, setAutoCalculate] = useLocalStorageValue<'false' | 'true'>({ key: 'auto-calculate', defaultValue: 'true' });
+  const [autoCalculate, setAutoCalculate] = useSessionStorage<'false' | 'true'>({ key: 'auto-calculate', defaultValue: 'true' });
   const autoCalculateBool = autoCalculate === 'true' ? true : false;
 
   const postSharedFactory = usePostSharedFactory();
@@ -131,6 +131,8 @@ export const ProductionProvider = ({ gameData, initializer, triggerInitialize, c
         dispatch({ type: 'LOAD_FROM_SHARED_FACTORY', config: initializer.factoryConfig, gameData });
       } else if (initializer?.legacyEncoding) {
         dispatch({ type: 'LOAD_FROM_LEGACY_ENCODING', encoding: initializer.legacyEncoding, gameData });
+      } else if (window.sessionStorage?.getItem('state')) {
+        dispatch({ type: 'LOAD_FROM_SESSION_STORAGE', gameData });
       } else {
         dispatch({ type: 'RESET_FACTORY', gameData });
       }
@@ -144,6 +146,14 @@ export const ProductionProvider = ({ gameData, initializer, triggerInitialize, c
       handleCalculateFactory();
     }
   }, [autoCalculateBool, handleCalculateFactory, prevState, state]);
+
+  useEffect(() => {
+      try {
+        window.sessionStorage.setItem('state', JSON.stringify(state));
+      } catch (e) {
+        console.error(e);
+      }
+  }, [state]);
 
   const ctxValue = useMemo(() => {
     return {

@@ -120,7 +120,8 @@ export type FactoryAction =
   | { type: 'SET_RECIPE_ACTIVE', key: string, active: boolean }
   | { type: 'MASS_SET_RECIPES_ACTIVE', recipes: string[], active: boolean }
   | { type: 'LOAD_FROM_SHARED_FACTORY', config: any, gameData: GameData }
-  | { type: 'LOAD_FROM_LEGACY_ENCODING', encoding: string, gameData: GameData };
+  | { type: 'LOAD_FROM_LEGACY_ENCODING', encoding: string, gameData: GameData }
+  | { type: 'LOAD_FROM_SESSION_STORAGE', gameData: GameData };
 
 export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
   switch (action.type) {
@@ -294,15 +295,24 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
         return newState;
       } catch (e) {
         console.error(e);
+        return getInitialState(action.gameData);
       }
-      return state;
     }
     case 'LOAD_FROM_LEGACY_ENCODING': {
       try {
         return decodeState_LEGACY(action.encoding, action.gameData);
       } catch (e) {
         console.error(e);
-        return state;
+        return getInitialState(action.gameData);
+      }
+    }
+    case 'LOAD_FROM_SESSION_STORAGE': {
+      try {
+        const newState = JSON.parse((window.sessionStorage.getItem('state') as string));
+        return newState;
+      } catch (e) {
+        console.error(e);
+        return getInitialState(action.gameData);
       }
     }
     default:

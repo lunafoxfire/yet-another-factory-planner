@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { UnstyledButton, Paper, Text, Container } from '@mantine/core';
-import { useLocalStorageValue } from '@mantine/hooks';
+import { useLocalStorage } from '@mantine/hooks';
 import { ChevronsLeft, ChevronsRight } from 'react-feather';
 import { useDrawerContext } from '../../contexts/drawer';
 import Portal from '../../components/Portal';
@@ -15,7 +15,7 @@ interface Props {
 const Drawer = (props: Props) => {
   const { open, onToggle, children } = props;
   const [fullyClosed, setFullyClosed] = useState(!open);
-  const [tooltipDismissed, setTooltipDismissed] = useLocalStorageValue<'false' | 'true'>({ key: 'tooltip-dismissed', defaultValue: 'false' });
+  const [tooltipDismissed, setTooltipDismissed] = useLocalStorage<'false' | 'true'>({ key: 'tooltip-dismissed', defaultValue: 'false' });
   const ctx = useDrawerContext();
 
   const showTooltip = tooltipDismissed === 'false';

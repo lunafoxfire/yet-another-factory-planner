@@ -10,6 +10,7 @@ import { FactoryOptions } from './types';
 import { FactoryInitializer } from '../gameData';
 import { GameData } from '../gameData/types';
 import { SHARE_QUERY_PARAM } from '../gameData/consts';
+import { useGlobalContext } from '../global';
 
 
 export type ShareLinkProps = { link: string, copyToClipboard: boolean, loading: boolean };
@@ -95,11 +96,14 @@ export const ProductionProvider = ({ gameData, initializer, triggerInitialize, c
   const [autoCalculate, setAutoCalculate] = useSessionStorage<'false' | 'true'>({ key: 'auto-calculate', defaultValue: 'true' });
   const autoCalculateBool = autoCalculate === 'true' ? true : false;
 
+  const ctx = useGlobalContext();
+
   const postSharedFactory = usePostSharedFactory();
 
   const handleCalculateFactory = useCallback(() => {
+    ctx.refreshTip();
     _handleCalculateFactory(state, gameData, setSolverResults, setCalculating)
-  }, [gameData, state]);
+  }, [ctx, gameData, state]);
 
   const handleSetAutoCalculate = (checked: boolean) => {
     setAutoCalculate(checked ? 'true' : 'false');

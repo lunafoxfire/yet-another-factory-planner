@@ -4,6 +4,7 @@ import { GameData } from './types';
 import { DEFAULT_GAME_VERSION, LEGACY_GAME_VERSION, SHARE_QUERY_PARAM } from './consts';
 import { usePrevious } from '../../hooks/usePrevious';
 import { FactoryOptions } from '../production/types';
+import { usePageTitle } from '../../hooks/usePageTitle';
 
 
 // TYPE
@@ -51,6 +52,17 @@ export const GameDataProvider = ({ children }: PropTypes) => {
   const completedThisFrame = useMemo(() => !loading && loading !== prevLoading, [loading, prevLoading]);
 
   const getInitialize = useGetInitialize();
+
+  const pageTitle = useMemo(() => {
+    const base = 'Yet Another Factory Planner';
+    let versionPart = '';
+    if (gameVersion) {
+      versionPart = `[${gameVersion}] `;
+    }
+    return versionPart + base;
+  }, [gameVersion]);
+
+  usePageTitle(pageTitle);
 
   useEffect(() => {
     if (needToFetchGameData) {

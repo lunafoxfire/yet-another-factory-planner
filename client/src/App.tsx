@@ -2,9 +2,11 @@ import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { MantineProvider, useMantineTheme } from '@mantine/core';
 import Main from './containers/Main';
-import { DrawerProvider } from './contexts/drawer';
 import { theme, styles } from './theme';
 import GlobalStylesheet from './global-stylesheet';
+import { DrawerProvider } from './contexts/drawer';
+import { GlobalContextProvider } from './contexts/global';
+import { GameDataProvider } from './contexts/gameData';
 
 function App() {
   return (
@@ -25,7 +27,11 @@ const ThemeTransfer = () => {
     <ThemeProvider theme={mergedTheme}>
       <GlobalStylesheet />
       <DrawerProvider>
-        <Main />
+        <GlobalContextProvider>
+          <GameDataProvider>
+            <Main />
+          </GameDataProvider>
+        </GlobalContextProvider>
       </DrawerProvider>
     </ThemeProvider>
   );

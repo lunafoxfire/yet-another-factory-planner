@@ -1,24 +1,12 @@
 import React from 'react';
 import { Center, Loader, Divider, Text, Title } from '@mantine/core';
-import { GameDataProvider, useGameDataContext } from '../../contexts/gameData';
+import { useGameDataContext } from '../../contexts/gameData';
+import { useGlobalContext } from '../../contexts/global';
 import { ProductionProvider } from '../../contexts/production';
 import Card from '../../components/Card';
 import Factory from './Factory';
-import { GlobalContextProvider, useGlobalContext } from '../../contexts/global';
 
 const ProductionPlanner = () => {
-  return (
-    <GlobalContextProvider>
-      <GameDataProvider>
-        <ProductionPlannerInner />
-      </GameDataProvider>
-    </GlobalContextProvider>
-  );
-};
-
-export default ProductionPlanner;
-
-const ProductionPlannerInner = () => {
   const globalCtx = useGlobalContext();
   const gdCtx = useGameDataContext();
 
@@ -59,3 +47,5 @@ const ProductionPlannerInner = () => {
     </>
   )
 };
+
+export default ProductionPlanner;

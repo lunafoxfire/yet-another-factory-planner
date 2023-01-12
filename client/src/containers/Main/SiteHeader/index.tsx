@@ -15,7 +15,6 @@ const SiteHeader = () => {
     <HeaderContainer fluid>
       <img src={logo} height={42} alt='Satisfactory logo' />
       <MainTitle>[Yet Another Factory Planner]</MainTitle>
-      <BetaTag>(BETA)</BetaTag>
       <RightAlign>
         <Select
           aria-label="Game version"
@@ -26,7 +25,6 @@ const SiteHeader = () => {
           style={{ width: '200px' }}
         />
         <SocialIcon href='https://github.com/lydianlights/yet-another-factory-planner' icon={<FontAwesomeIcon icon={faGithub} fontSize={32} />} />
-        <SocialIcon href='https://discord.gg/p7e9ZzRHCm' icon={<FontAwesomeIcon icon={faDiscord} fontSize={32} />} />
         <SocialIcon href='https://twitter.com/LydianLights' icon={<FontAwesomeIcon icon={faTwitter} fontSize={32} />} />
       </RightAlign>
     </HeaderContainer>
@@ -49,16 +47,6 @@ const MainTitle = styled(Title)`
   margin-left: 25px;
   white-space: nowrap;
   font-family: 'Indie Flower', sans-serif;
-`;
-
-const BetaTag = styled.div`
-  position: relative;
-  left: 7px;
-  top: 3px;
-  font-size: 24px;
-  color: #fff;
-  font-family: 'Fjalla One', sans-serif;
-  transform: rotate(20deg);
 `;
 
 const RightAlign = styled(Group)`

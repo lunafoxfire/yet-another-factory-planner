@@ -21,7 +21,7 @@ const Main = () => {
         <Footer>
           <FooterContent>
             Made with ♥ by <ExternalLink href='https://github.com/lydianlights'>LydianLights</ExternalLink> -
-            Questions or bugs? File an <ExternalLink href='https://github.com/lydianlights/yet-another-factory-planner/issues'>issue on github</ExternalLink> or <ExternalLink href='https://discord.gg/p7e9ZzRHCm'>check out the discord</ExternalLink>
+            Questions or bugs? File an <ExternalLink href='https://github.com/lydianlights/yet-another-factory-planner/issues'>issue on github</ExternalLink>
           </FooterContent>
           <PaypalButton />
         </Footer>

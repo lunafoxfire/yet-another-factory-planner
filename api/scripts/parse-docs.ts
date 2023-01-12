@@ -1,11 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import parseDocs from 'satisfactory-docs-parser';
 
 const ROOT_DIR = path.join(__dirname, '..');
-const DOCS_DIR = path.join(ROOT_DIR, 'src/data/docs/u6');
+const DOCS_DIR = path.join(ROOT_DIR, 'src/game-data/docs/u7');
 const DOCS_PATH = path.join(DOCS_DIR, 'Docs.json');
 
 const data = parseDocs(fs.readFileSync(DOCS_PATH));
@@ -83,7 +82,7 @@ recipes['Recipe_CUSTOM_NuclearPower_C'] = {
   slug: 'uranium_power_recipe',
   name: 'Uranium Power',
   isAlternate: false,
-  ingredients: [{ itemClass: 'Desc_NuclearFuelRod_C', perMinute: 0.2 }, { itemClass: 'Desc_Water_C', perMinute: 300 }],
+  ingredients: [{ itemClass: 'Desc_NuclearFuelRod_C', perMinute: 0.2 }, { itemClass: 'Desc_Water_C', perMinute: 240 }],
   products: [{ itemClass: 'Desc_NuclearWaste_C', perMinute: 10 }],
   producedIn: 'Desc_GeneratorNuclear_C',
   isFicsmas: false,
@@ -92,7 +91,7 @@ recipes['Recipe_CUSTOM_PlutoniumPower_C'] = {
   slug: 'plutonium_power_recipe',
   name: 'Plutonium Power',
   isAlternate: false,
-  ingredients: [{ itemClass: 'Desc_PlutoniumFuelRod_C', perMinute: 0.1 }, { itemClass: 'Desc_Water_C', perMinute: 300 }],
+  ingredients: [{ itemClass: 'Desc_PlutoniumFuelRod_C', perMinute: 0.1 }, { itemClass: 'Desc_Water_C', perMinute: 240 }],
   products: [{ itemClass: 'Desc_PlutoniumWaste_C', perMinute: 1 }],
   producedIn: 'Desc_GeneratorNuclear_C',
   isFicsmas: false,

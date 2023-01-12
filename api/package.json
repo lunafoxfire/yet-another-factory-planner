@@ -1,6 +1,6 @@
 {
   "name": "yet-another-factory-planner-api",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -52,6 +52,6 @@
     "eslint-plugin-node": "^11.1.0",
     "lint-staged": "^13.0.3",
     "nodemon": "^2.0.18",
-    "satisfactory-docs-parser": "^6.0.0"
+    "satisfactory-docs-parser": "7.0.1"
   }
 }

@@ -1,0 +1,495 @@
+{
+  "Desc_FrackingSmasher_C": {
+    "slug": "resource_well_pressurizer",
+    "name": "Resource Well Pressurizer",
+    "power": 150,
+    "area": 400,
+    "buildCost": [
+      {
+        "itemClass": "Desc_Wire_C",
+        "quantity": 200
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "quantity": 50
+      },
+      {
+        "itemClass": "Desc_SteelPlateReinforced_C",
+        "quantity": 50
+      },
+      {
+        "itemClass": "Desc_Motor_C",
+        "quantity": 50
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_FrackingExtractor_C": {
+    "slug": "resource_well_extractor",
+    "name": "Resource Well Extractor",
+    "power": 0,
+    "area": 16,
+    "buildCost": [
+      {
+        "itemClass": "Desc_SteelPlate_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_Plastic_C",
+        "quantity": 10
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_GeneratorBiomass_C": {
+    "slug": "biomass_burner",
+    "name": "Biomass Burner",
+    "power": -30,
+    "area": 64,
+    "buildCost": [
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "quantity": 15
+      },
+      {
+        "itemClass": "Desc_IronRod_C",
+        "quantity": 15
+      },
+      {
+        "itemClass": "Desc_Wire_C",
+        "quantity": 25
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_GeneratorCoal_C": {
+    "slug": "coal_generator",
+    "name": "Coal Generator",
+    "power": -75,
+    "area": 260,
+    "buildCost": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "quantity": 20
+      },
+      {
+        "itemClass": "Desc_Rotor_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "quantity": 30
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_GeneratorFuel_C": {
+    "slug": "fuel_generator",
+    "name": "Fuel Generator",
+    "power": -150,
+    "area": 400,
+    "buildCost": [
+      {
+        "itemClass": "Desc_Computer_C",
+        "quantity": 5
+      },
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_Motor_C",
+        "quantity": 15
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "quantity": 50
+      },
+      {
+        "itemClass": "Desc_HighSpeedWire_C",
+        "quantity": 50
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_GeneratorGeoThermal_C": {
+    "slug": "geothermal_generator",
+    "name": "Geothermal Generator",
+    "power": -200,
+    "area": 380,
+    "buildCost": [
+      {
+        "itemClass": "Desc_ComputerSuper_C",
+        "quantity": 8
+      },
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "quantity": 16
+      },
+      {
+        "itemClass": "Desc_HighSpeedConnector_C",
+        "quantity": 16
+      },
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "quantity": 40
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "quantity": 80
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_GeneratorNuclear_C": {
+    "slug": "nuclear_power_plant",
+    "name": "Nuclear Power Plant",
+    "power": -2500,
+    "area": 1634,
+    "buildCost": [
+      {
+        "itemClass": "Desc_Cement_C",
+        "quantity": 250
+      },
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "quantity": 25
+      },
+      {
+        "itemClass": "Desc_ComputerSuper_C",
+        "quantity": 5
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "quantity": 100
+      },
+      {
+        "itemClass": "Desc_AluminumPlate_C",
+        "quantity": 100
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_ConstructorMk1_C": {
+    "slug": "constructor",
+    "name": "Constructor",
+    "power": 4,
+    "area": 80,
+    "buildCost": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "quantity": 2
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "quantity": 8
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_SmelterMk1_C": {
+    "slug": "smelter",
+    "name": "Smelter",
+    "power": 4,
+    "area": 54,
+    "buildCost": [
+      {
+        "itemClass": "Desc_IronRod_C",
+        "quantity": 5
+      },
+      {
+        "itemClass": "Desc_Wire_C",
+        "quantity": 8
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_FoundryMk1_C": {
+    "slug": "foundry",
+    "name": "Foundry",
+    "power": 16,
+    "area": 90,
+    "buildCost": [
+      {
+        "itemClass": "Desc_ModularFrame_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_Rotor_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_Cement_C",
+        "quantity": 20
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_OilRefinery_C": {
+    "slug": "refinery",
+    "name": "Refinery",
+    "power": 30,
+    "area": 200,
+    "buildCost": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_SteelPlateReinforced_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "quantity": 30
+      },
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "quantity": 20
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_AssemblerMk1_C": {
+    "slug": "assembler",
+    "name": "Assembler",
+    "power": 15,
+    "area": 150,
+    "buildCost": [
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "quantity": 8
+      },
+      {
+        "itemClass": "Desc_Rotor_C",
+        "quantity": 4
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "quantity": 10
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Packager_C": {
+    "slug": "packager",
+    "name": "Packager",
+    "power": 10,
+    "area": 64,
+    "buildCost": [
+      {
+        "itemClass": "Desc_SteelPlate_C",
+        "quantity": 20
+      },
+      {
+        "itemClass": "Desc_Rubber_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_Plastic_C",
+        "quantity": 10
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_Blender_C": {
+    "slug": "blender",
+    "name": "Blender",
+    "power": 75,
+    "area": 288,
+    "buildCost": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "quantity": 20
+      },
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_AluminumCasing_C",
+        "quantity": 50
+      },
+      {
+        "itemClass": "Desc_ModularFrameLightweight_C",
+        "quantity": 5
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_ManufacturerMk1_C": {
+    "slug": "manufacturer",
+    "name": "Manufacturer",
+    "power": 55,
+    "area": 342,
+    "buildCost": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "quantity": 5
+      },
+      {
+        "itemClass": "Desc_ModularFrameHeavy_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "quantity": 50
+      },
+      {
+        "itemClass": "Desc_Plastic_C",
+        "quantity": 50
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_HadronCollider_C": {
+    "slug": "particle_accelerator",
+    "name": "Particle Accelerator",
+    "power": 875,
+    "area": 912,
+    "buildCost": [
+      {
+        "itemClass": "Desc_ModularFrameLightweight_C",
+        "quantity": 25
+      },
+      {
+        "itemClass": "Desc_ElectromagneticControlRod_C",
+        "quantity": 100
+      },
+      {
+        "itemClass": "Desc_ComputerSuper_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_CoolingSystem_C",
+        "quantity": 50
+      },
+      {
+        "itemClass": "Desc_ModularFrameFused_C",
+        "quantity": 20
+      },
+      {
+        "itemClass": "Desc_MotorLightweight_C",
+        "quantity": 10
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_MinerMk1_C": {
+    "slug": "miner_mk_1",
+    "name": "Miner Mk.1",
+    "power": 5,
+    "area": 84,
+    "buildCost": [
+      {
+        "itemClass": "Desc_PortableMiner_C",
+        "quantity": 1
+      },
+      {
+        "itemClass": "Desc_IronPlate_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_Cement_C",
+        "quantity": 10
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_MinerMk2_C": {
+    "slug": "miner_mk_2",
+    "name": "Miner Mk.2",
+    "power": 12,
+    "area": 84,
+    "buildCost": [
+      {
+        "itemClass": "Desc_PortableMiner_C",
+        "quantity": 2
+      },
+      {
+        "itemClass": "Desc_SteelPlateReinforced_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "quantity": 20
+      },
+      {
+        "itemClass": "Desc_ModularFrame_C",
+        "quantity": 10
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_MinerMk3_C": {
+    "slug": "miner_mk_3",
+    "name": "Miner Mk.3",
+    "power": 30,
+    "area": 84,
+    "buildCost": [
+      {
+        "itemClass": "Desc_PortableMiner_C",
+        "quantity": 3
+      },
+      {
+        "itemClass": "Desc_SteelPipe_C",
+        "quantity": 50
+      },
+      {
+        "itemClass": "Desc_ComputerSuper_C",
+        "quantity": 5
+      },
+      {
+        "itemClass": "Desc_ModularFrameFused_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_MotorLightweight_C",
+        "quantity": 3
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_OilPump_C": {
+    "slug": "oil_extractor",
+    "name": "Oil Extractor",
+    "power": 40,
+    "area": 240,
+    "buildCost": [
+      {
+        "itemClass": "Desc_Motor_C",
+        "quantity": 15
+      },
+      {
+        "itemClass": "Desc_SteelPlateReinforced_C",
+        "quantity": 20
+      },
+      {
+        "itemClass": "Desc_Cable_C",
+        "quantity": 60
+      }
+    ],
+    "isFicsmas": false
+  },
+  "Desc_WaterPump_C": {
+    "slug": "water_extractor",
+    "name": "Water Extractor",
+    "power": 20,
+    "area": 390,
+    "buildCost": [
+      {
+        "itemClass": "Desc_CopperSheet_C",
+        "quantity": 20
+      },
+      {
+        "itemClass": "Desc_IronPlateReinforced_C",
+        "quantity": 10
+      },
+      {
+        "itemClass": "Desc_Rotor_C",
+        "quantity": 10
+      }
+    ],
+    "isFicsmas": false
+  }
+}

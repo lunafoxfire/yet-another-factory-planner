@@ -1,6 +1,6 @@
 import React from 'react';
 import { Loader, Divider, Text, Title } from '@mantine/core';
-import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import styled from 'styled-components';
 import bgImage from '../../assets/stripe-bg.png';
 import { useGameDataContext } from '../../contexts/gameData';

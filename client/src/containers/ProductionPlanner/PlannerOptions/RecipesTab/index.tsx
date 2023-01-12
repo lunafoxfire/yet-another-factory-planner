@@ -59,7 +59,9 @@ const RecipesTab = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctx.state, ctx.dispatch]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const renderedBaseRecipes = useMemo(() => renderRecipeList(baseRecipes), [renderRecipeList]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const renderedAltRecipes = useMemo(() => renderRecipeList(altRecipes), [renderRecipeList]);
 
   function renderRecipeOptions(alternates: boolean) {

@@ -424,6 +424,7 @@ const ProductionGraphTab = () => {
     });
     
     return { key, elements };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resultsGraph]);
 
   return (

@@ -15,29 +15,6 @@ const ReportTab = () => {
   function renderReport() {
     return (
       <>
-        <Title order={2} style={{ marginTop: '30px' }}>Raw Resources Recap</Title>
-        <SDivider />
-        <List listStyleType='none'>
-          <List.Item>
-            <ListWithLine withPadding listStyleType='none'>
-              {
-                Object.entries(report!.totalRawResources)
-                  .sort((a, b) => {
-                    if (a[1] > b[1]) return -1;
-                    if (a[1] < b[1]) return 1;
-                    return 0;
-                  })
-                  .map(([itemKey, count]) => (
-                    <List.Item key={itemKey}>
-                      <ItemLabel>{itemKey}</ItemLabel> <Count>{formatFloat(count)} per min</Count>
-                    </List.Item>
-                  ))
-              }
-            </ListWithLine>
-          </List.Item>
-        </List>
-
-        <SDivider />
         <Title order={2}>Statistics</Title>
         <SDivider />
         <SmallerTitle order={3}>Points Produced</SmallerTitle>
@@ -66,6 +43,29 @@ const ReportTab = () => {
         <SDivider />
         <SmallerTitle order={3}>Total {report!.powerUsageEstimate.total < 0 ? 'Production' : 'Usage'}</SmallerTitle>
         <Text>{formatFloat(Math.abs(report!.powerUsageEstimate.total))} MW</Text>
+        <SDivider />
+
+        <Title order={2} style={{ marginTop: '30px' }}>Total Raw Resources</Title>
+        <SDivider />
+        <List listStyleType='none'>
+          <List.Item>
+            <ListWithLine withPadding listStyleType='none'>
+              {
+                Object.entries(report!.totalRawResources)
+                  .sort((a, b) => {
+                    if (a[1] > b[1]) return -1;
+                    if (a[1] < b[1]) return 1;
+                    return 0;
+                  })
+                  .map(([itemKey, count]) => (
+                    <List.Item key={itemKey}>
+                      <ItemLabel>{itemKey}</ItemLabel> <Count>{formatFloat(count)} / min</Count>
+                    </List.Item>
+                  ))
+              }
+            </ListWithLine>
+          </List.Item>
+        </List>
         <SDivider />
 
         <Title order={2} style={{ marginTop: '30px' }}>Buildings</Title>

@@ -86,6 +86,9 @@ export type Report = {
   totalMaterialCost: {
     [key: string]: number,
   },
+  totalRawResources: {
+    [key: string]: number,
+  }
 }
 
 export type ProductionGraph = {
@@ -792,8 +795,15 @@ export class ProductionSolver {
       estimatedFoundations: 0,
       buildingsUsed: {},
       totalMaterialCost: {},
+      totalRawResources: {}
     };
 
+    for (const [key, edge] of Object.entries(productionGraph.edges)) {
+      if (this.gameData.resources[edge.key])
+      {
+        report.totalRawResources[this.gameData.items[edge.key].name] = edge.productionRate;
+      }
+    }
     for (const [key, node] of Object.entries(productionGraph.nodes)) {
       if (node.type === NODE_TYPE.RECIPE) {
         const recipeInfo = this.gameData.recipes[key];

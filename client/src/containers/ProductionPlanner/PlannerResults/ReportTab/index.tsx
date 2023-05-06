@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Title, List, Divider, Text, Container, Group } from '@mantine/core';
 import { AlertCircle } from 'react-feather';
 import { useProductionContext } from '../../../../contexts/production';
+import { ProducedItemInformation } from '../../../../utilities/production-solver';
 
 function formatFloat(n: number) {
   return n.toLocaleString(undefined, { maximumFractionDigits: 3 });
@@ -45,26 +46,10 @@ const ReportTab = () => {
         <Text>{formatFloat(Math.abs(report!.powerUsageEstimate.total))} MW</Text>
         <SDivider />
 
-        <Title order={2} style={{ marginTop: '30px' }}>Total Raw Resources</Title>
+        <Title order={2} style={{ marginTop: '30px' }}>Summary of produced items</Title>
         <SDivider />
         <List listStyleType='none'>
-          <List.Item>
-            <ListWithLine withPadding listStyleType='none'>
-              {
-                Object.entries(report!.totalRawResources)
-                  .sort((a, b) => {
-                    if (a[1] > b[1]) return -1;
-                    if (a[1] < b[1]) return 1;
-                    return 0;
-                  })
-                  .map(([itemKey, count]) => (
-                    <List.Item key={itemKey}>
-                      <ItemLabel>{itemKey}</ItemLabel> <Count>{formatFloat(count)} / min</Count>
-                    </List.Item>
-                  ))
-              }
-            </ListWithLine>
-          </List.Item>
+          {renderSteps()}
         </List>
         <SDivider />
 
@@ -93,6 +78,29 @@ const ReportTab = () => {
         </List>
       </>
     );
+  }
+
+  function renderSteps(){
+    return Object.entries(groupBy(report!.totalItemsRecap, i=> i.step)).map((value, index) => (
+      <List.Item key={value[0]} style={{ paddingBottom: '10px' }}>
+        <Title order={3} style={{ marginBottom: '8px' }}>
+          Step {value[0]}
+        </Title>
+        <ListWithLine withPadding listStyleType='none' style={{ marginBottom: '10px' }}>
+          {
+            renderItems(value[1])
+          }
+        </ListWithLine>
+      </List.Item>
+    ));
+  }
+  
+  function renderItems(itemsList: ProducedItemInformation[]) {
+    return Object.entries(itemsList).map(([key, itemInfo]) => (
+      <List.Item key={itemInfo.key}>
+        <ItemLabel>{itemInfo.name}</ItemLabel>  <Count>x{formatFloat(itemInfo.amount)}/min</Count>
+      </List.Item>
+    ));
   }
 
   function renderBuildingsUsed() {
@@ -125,7 +133,7 @@ const ReportTab = () => {
       </List.Item>
     ))
   }
-  
+
   return (
     <ReportContainer fluid>
       {
@@ -143,6 +151,12 @@ const ReportTab = () => {
     </ReportContainer>
   );
 };
+
+const groupBy = <T, K extends keyof any>(arr: T[], key: (i: T) => K) =>
+  arr.reduce((groups, item) => {
+    (groups[key(item)] ||= []).push(item);
+    return groups;
+  }, {} as Record<K, T[]>);
 
 export default ReportTab;
 

@@ -920,28 +920,30 @@ export class ProductionSolver {
     }
 
     keys = keys.filter((key) => !usedKeys.includes(key));
+    //We use this to keep the currently worked on recipes out of the current loop
+    //Otherwise we can have cases where a recipe we just added to the current step contributes
+    //to another recipe that should have been in the next step
+    let loopKeys = [] as string[];
 
     while (keys.length > 0){
       for (var key of keys){
         const recipe = this.gameData.recipes[key];
         const applicableIngredientsAmount = recipe.ingredients.filter((ingredient) => usedKeys.includes(ingredient.itemClass)).length;
         if (applicableIngredientsAmount == recipe.ingredients.length){
-          // for (var ingredient of recipe.ingredients){
-          //   this.UpdateStepInItemList(itemsList, ingredient.itemClass, step);
-          // }
           for (var product of recipe.products){
             if (!this.gameData.resources[product.itemClass])
             {
               this.UpdateStepInItemList(itemsList, product.itemClass, step+1);
             }
-            if (!usedKeys.includes(product.itemClass)){
-              usedKeys.push(product.itemClass);
+            if (!loopKeys.includes(product.itemClass)){
+              loopKeys.push(product.itemClass);
             }
           }
-          usedKeys.push(key);
+          loopKeys.push(key);
         }
       }
       
+      usedKeys = [...usedKeys, ...loopKeys];
       keys = keys.filter((key) => !usedKeys.includes(key));
       step++;
     }

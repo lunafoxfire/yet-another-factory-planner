@@ -94,6 +94,7 @@ export function getInitialState(gameData: GameData): FactoryOptions {
     allowHandGatheredItems: false,
     weightingOptions: getInitialWeightingOptions(),
     allowedRecipes: getInitialAllowedRecipes(gameData.recipes),
+    nodePositions: []
   };
 }
 

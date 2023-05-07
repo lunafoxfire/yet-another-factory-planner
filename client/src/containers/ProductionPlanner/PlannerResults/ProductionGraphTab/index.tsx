@@ -357,6 +357,22 @@ const ProductionGraphTab = () => {
         deactivatePopper(cy);
       }
     });
+
+    cy.on('position', 'node', function(e){
+      //console.log(e.target);
+      updateNodePosition(e.target.data('key'), e.target.position('x'), e.target.position('y'));
+    });
+  }
+
+  function updateNodePosition(key: string, x: number, y: number){
+    let existingNode = ctx.state.nodePositions.find(node => node.key === key);
+    if (existingNode){
+      existingNode.x = x;
+      existingNode.y = y;
+    }
+    else{
+      ctx.state.nodePositions.push({key: key, x: x, y: y });
+    }
   }
 
   function activatePopper(cy: Cytoscape.Core, node: any) {

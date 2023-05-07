@@ -1,3 +1,5 @@
+import { type } from "os";
+
 export type ProductionItemOptions = {
   key: string,
   itemKey: string,
@@ -24,6 +26,12 @@ export type RecipeSelectionMap = {
   [key: string]: boolean,
 };
 
+export type NodeInfo = {
+  key: string,
+  x: number,
+  y: number
+}
+
 export type FactoryOptions = {
   key: string,
   productionItems: ProductionItemOptions[],
@@ -32,4 +40,5 @@ export type FactoryOptions = {
   allowHandGatheredItems: boolean,
   weightingOptions: WeightingOptions,
   allowedRecipes: RecipeSelectionMap,
+  nodePositions: NodeInfo[]
 };

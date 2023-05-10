@@ -354,6 +354,9 @@ function modifyNodePositions(node: any, pos: any){
       e.target.removeClass('grabbed');
       e.target.outgoers('edge').removeClass('grabbed').removeClass('grabbed-outgoing');
       e.target.incomers('edge').removeClass('grabbed').removeClass('grabbed-incoming');
+      if (nodesUpdated){
+        ctx.dispatch({ type: 'UPDATE_NODES_POSTIONS', nodesPositions: nodesPositions })
+      }
     });
 
     cy.on('mouseover', 'node', function (e) {
@@ -375,20 +378,23 @@ function modifyNodePositions(node: any, pos: any){
     });
     cy.on('free', 'node', function(e){
       console.log(e);
-      ctx.dispatch({ type: 'UPDATE_NODES_POSTIONS', nodesPositions: nodesPositions })
+      
     });
   }
 
   function updateNodePosition(key: string, x: number, y: number){
     let existingNode = nodesPositions?.find(node => node.key === key);
     if (existingNode){
-      existingNode.x = x;
-      existingNode.y = y;
+      if (existingNode.x !== x || existingNode.y !== y){
+        existingNode.x = x;
+        existingNode.y = y;
+        nodesUpdated = true;
+      }
     }
     else{
       nodesPositions.push({key: key, x: x, y: y });
+      nodesUpdated = true;
     }
-    nodesUpdated = true;
   }
 
   function activatePopper(cy: Cytoscape.Core, node: any) {

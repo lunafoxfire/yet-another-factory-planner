@@ -40,5 +40,5 @@ export type FactoryOptions = {
   allowHandGatheredItems: boolean,
   weightingOptions: WeightingOptions,
   allowedRecipes: RecipeSelectionMap,
-  nodePositions: NodeInfo[]
+  nodesPositions: NodeInfo[]
 };

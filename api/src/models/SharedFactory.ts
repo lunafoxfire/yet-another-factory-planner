@@ -30,7 +30,7 @@ export const factoryConfigSchema = Joi.object({
     buildings: Joi.number().strict().required(),
   }).required(),
   allowedRecipes: Joi.array().items(Joi.string()).required(),
-  nodePositions: Joi.array().items(Joi.object({
+  nodesPositions: Joi.array().items(Joi.object({
     key: Joi.string().required(),
     x: Joi.number().strict().required(),
     y: Joi.number().strict().required()

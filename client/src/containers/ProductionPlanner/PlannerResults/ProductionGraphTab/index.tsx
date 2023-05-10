@@ -13,6 +13,7 @@ import GraphTooltip from '../../../../components/GraphTooltip';
 import { truncateFloat } from '../../../../utilities/number';
 import { useProductionContext } from '../../../../contexts/production';
 import { GameData } from '../../../../contexts/gameData/types';
+import { NodeInfo } from '../../../../contexts/production/types';
 
 Cytoscape.use(popper);
 Cytoscape.use(klay);
@@ -20,20 +21,6 @@ Cytoscape.use(klay);
 if (process.env.NODE_ENV !== 'development') {
   Cytoscape.warnings(false);
 }
-
-const layout = {
-  name: 'klay',
-  padding: 40,
-  klay: {
-    direction: 'RIGHT',
-    edgeRouting: 'ORTHOGONAL',
-    nodePlacement: 'LINEAR_SEGMENTS',
-    edgeSpacingFactor: 0.2,
-    inLayerSpacingFactor: 0.7,
-    spacing: 90,
-    thoroughness: 10,
-  },
-};
 
 const stylesheet: Stylesheet[] = [
   {
@@ -303,6 +290,31 @@ const ProductionGraphTab = () => {
   const resultsGraph = ctx.solverResults?.productionGraph || null;
   const graphError = ctx.solverResults?.error || null;
   const isLoading = ctx.calculating;
+  const nodesPositions = ctx.state.nodesPositions;
+  let nodesUpdated = false as boolean;
+
+  const layout = {
+    name: 'klay',
+    padding: 40,
+    transform: modifyNodePositions,
+    klay: {
+      direction: 'RIGHT',
+      edgeRouting: 'ORTHOGONAL',
+      nodePlacement: 'LINEAR_SEGMENTS',
+      edgeSpacingFactor: 0.2,
+      inLayerSpacingFactor: 0.7,
+      spacing: 90,
+      thoroughness: 10,
+    },
+  };
+  
+function modifyNodePositions(node: any, pos: any){
+  let savedNode = nodesPositions?.find(n => n.key === node.data('key'));
+  if (savedNode){
+    return {x: savedNode.x, y:savedNode.y};
+  }
+  return pos;
+}
 
   function setGraphRef(instance: HTMLDivElement | null) {
     if (instance && !graphRef.current) {
@@ -359,20 +371,24 @@ const ProductionGraphTab = () => {
     });
 
     cy.on('position', 'node', function(e){
-      //console.log(e.target);
       updateNodePosition(e.target.data('key'), e.target.position('x'), e.target.position('y'));
+    });
+    cy.on('free', 'node', function(e){
+      console.log(e);
+      ctx.dispatch({ type: 'UPDATE_NODES_POSTIONS', nodesPositions: nodesPositions })
     });
   }
 
   function updateNodePosition(key: string, x: number, y: number){
-    let existingNode = ctx.state.nodePositions.find(node => node.key === key);
+    let existingNode = nodesPositions?.find(node => node.key === key);
     if (existingNode){
       existingNode.x = x;
       existingNode.y = y;
     }
     else{
-      ctx.state.nodePositions.push({key: key, x: x, y: y });
+      nodesPositions.push({key: key, x: x, y: y });
     }
+    nodesUpdated = true;
   }
 
   function activatePopper(cy: Cytoscape.Core, node: any) {

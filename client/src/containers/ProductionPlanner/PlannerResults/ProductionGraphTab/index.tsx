@@ -291,7 +291,7 @@ const ProductionGraphTab = () => {
   const graphError = ctx.solverResults?.error || null;
   const isLoading = ctx.calculating;
   const nodesPositions = ctx.state.nodesPositions;
-  let nodesUpdated = false as boolean;
+  let currentNodePosition: NodeInfo | undefined;
 
   const layout = {
     name: 'klay',
@@ -348,14 +348,17 @@ function modifyNodePositions(node: any, pos: any){
       e.target.addClass('grabbed');
       e.target.outgoers('edge').addClass('grabbed').addClass('grabbed-outgoing');
       e.target.incomers('edge').addClass('grabbed').addClass('grabbed-incoming');
+      registerNodePosition(e.target.data('key'), e.target.position('x'), e.target.position('y'));
     });
 
     cy.on('free', 'node', function (e) {
       e.target.removeClass('grabbed');
       e.target.outgoers('edge').removeClass('grabbed').removeClass('grabbed-outgoing');
       e.target.incomers('edge').removeClass('grabbed').removeClass('grabbed-incoming');
-      if (nodesUpdated){
-        ctx.dispatch({ type: 'UPDATE_NODES_POSTIONS', nodesPositions: nodesPositions })
+      if (currentNodePosition && !areNodesSame(currentNodePosition, { key: e.target.data('key'), x: e.target.position('x'), y: e.target.position('y') })){
+        updateStateNodePosition(e.target.data('key'), e.target.position('x'), e.target.position('y'));
+        ctx.dispatch({ type: 'UPDATE_NODES_POSTIONS', nodesPositions: nodesPositions });
+        currentNodePosition = undefined;
       }
     });
 
@@ -372,28 +375,27 @@ function modifyNodePositions(node: any, pos: any){
         deactivatePopper(cy);
       }
     });
-
-    cy.on('position', 'node', function(e){
-      updateNodePosition(e.target.data('key'), e.target.position('x'), e.target.position('y'));
-    });
-    cy.on('free', 'node', function(e){
-      console.log(e);
-      
-    });
   }
 
-  function updateNodePosition(key: string, x: number, y: number){
+  function registerNodePosition(key: string, x: number, y: number){
+      currentNodePosition = { key: key, x: x, y: y };
+  }
+
+  function areNodesSame(node1: NodeInfo, node2: NodeInfo): boolean {
+     console.log(node1 == node2);
+     console.log(node1 === node2);
+    return false;
+  }
+  function updateStateNodePosition(key: string, x: number, y: number){
     let existingNode = nodesPositions?.find(node => node.key === key);
     if (existingNode){
       if (existingNode.x !== x || existingNode.y !== y){
         existingNode.x = x;
         existingNode.y = y;
-        nodesUpdated = true;
       }
     }
     else{
       nodesPositions.push({key: key, x: x, y: y });
-      nodesUpdated = true;
     }
   }
 

@@ -1,4 +1,4 @@
-import { APIError } from 'util/errors';
+import { APIError } from '@/util/errors';
 
 // U5
 import buildings_U5 from './docs/u5/buildings.json';

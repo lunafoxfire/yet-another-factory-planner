@@ -1,4 +1,4 @@
-import { dateTime } from 'util/date-time/formats';
+import { dateTime } from '@/util/date-time/formats';
 
 interface LogLevel {
   key: string,

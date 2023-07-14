@@ -1,16 +1,28 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "esnext",
-    "lib": [
-      "esnext"
-    ],
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strictPropertyInitialization": false,
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
-    "baseUrl": "./src",
-    "outDir": "build/"
-  }
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+    },
+    "outDir": "./build/",
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ],
+    "esm": true,
+  },
 }

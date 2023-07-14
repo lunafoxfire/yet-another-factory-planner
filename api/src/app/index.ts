@@ -2,8 +2,8 @@ import express, { ErrorRequestHandler, RequestHandler } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import 'express-async-errors';
-import { createLogger } from 'util/logger';
-import { registerRoutes } from 'app/api/routes';
+import { createLogger } from '@/util/logger';
+import { registerRoutes } from '@/app/api/routes';
 
 const joiErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const joiError = err.error;

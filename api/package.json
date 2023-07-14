@@ -7,16 +7,10 @@
     "directory": "git+https://github.com/lydianlights/yet-another-factory-planner.git"
   },
   "scripts": {
-    "start": "ts-node --transpile-only -r tsconfig-paths/register src/index.ts",
-    "start:dev": "ts-node -r tsconfig-paths/register src/index.ts",
-    "dev": "nodemon -e ts --exec \"npm run start:dev\"",
-    "lint": "eslint .",
-    "db:create:dev": "echo DROP DATABASE IF EXISTS satisfactory_calculator_dev; CREATE DATABASE satisfactory_calculator_dev; | psql -U postgres",
-    "db:migrate": "knex migrate:latest",
-    "db:migrate:make": "knex migrate:make -x ts",
-    "db:reset:dev": "npm run db:create:dev && npm run db:migrate",
-    "db:print-schema": "ts-node -r tsconfig-paths/register scripts/print-schema.ts",
-    "parse-docs": "ts-node -r tsconfig-paths/register scripts/parse-docs.ts"
+    "start": "node build/src/index.js",
+    "build": "tsc && tsc-alias",
+    "dev": "nodemon --exec \"ts-node src/index.ts\"",
+    "parse-docs": "ts-node scripts/parse-docs.ts"
   },
   "engines": {
     "node": "^16.0.0"
@@ -32,24 +26,20 @@
     "knex": "^2.1.0",
     "moment": "^2.29.3",
     "nanoid": "^3.0.0",
-    "pg": "^8.7.3",
-    "ts-node": "^10.8.2",
-    "tsconfig-paths": "^4.0.0",
-    "typescript": "^4.7.4"
+    "pg": "^8.7.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/node": "^18.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.30.4",
-    "@typescript-eslint/parser": "^5.30.4",
-    "eslint": "^8.19.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-node": "^11.1.0",
-    "lint-staged": "^13.0.3",
-    "nodemon": "^2.0.18",
-    "satisfactory-docs-parser": "7.0.1"
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "nodemon": "^3.0.1",
+    "satisfactory-docs-parser": "7.0.1",
+    "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.7",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.1.6"
   }
 }

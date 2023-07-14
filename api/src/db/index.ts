@@ -1,7 +1,7 @@
 import knexConfig, { Knex } from 'knex';
-import { createLogger } from 'util/logger';
-import { isTruthy } from 'util/string';
-import { knexSettings } from '../../knexfile';
+import { createLogger } from '@/util/logger';
+import { isTruthy } from '@/util/string';
+import { knexSettings } from '@/../knexfile';
 
 const logger = createLogger('db');
 

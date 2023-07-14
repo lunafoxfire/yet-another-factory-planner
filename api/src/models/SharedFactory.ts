@@ -1,7 +1,7 @@
-import DB from 'db';
 import Joi from 'joi';
 import { nanoid } from 'nanoid';
-import { ALLOWED_GAME_VERSIONS } from 'game-data';
+import DB from '@/db';
+import { ALLOWED_GAME_VERSIONS } from '@/game-data';
 
 export const factoryConfigSchema = Joi.object({
   gameVersion: Joi.string().allow(...ALLOWED_GAME_VERSIONS).only().required(),

@@ -1,4 +1,4 @@
-import './src/config';
+import '@/config';
 
 export const knexSettings = {
   client: 'pg',

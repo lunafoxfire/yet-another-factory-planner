@@ -1,8 +1,8 @@
 import path from 'path';
 import fs from 'fs';
 import { Knex } from 'knex';
-import 'config';
-import DB from 'db';
+import '@/config';
+import DB from '@/db';
 
 const OUTPUT_FILE = path.join(__dirname, '..', 'db/schema.json');
 

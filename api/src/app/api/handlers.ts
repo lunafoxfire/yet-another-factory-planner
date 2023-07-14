@@ -1,7 +1,7 @@
-import { getDataByVersion, LATEST_VERSION } from 'game-data';
 import { RequestHandler } from 'express';
-import SharedFactory from 'models/SharedFactory';
-import { APIError } from 'util/errors';
+import { getDataByVersion, LATEST_VERSION } from '@/game-data';
+import SharedFactory from '@/models/SharedFactory';
+import { APIError } from '@/util/errors';
 
 const ping: RequestHandler = async (req, res) => {
   res.status(200).json({

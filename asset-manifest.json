@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "https://www.satisfactory-planner.net/static/css/main.0c4d6a7f.css",
-    "main.js": "https://www.satisfactory-planner.net/static/js/main.5b0b5e9c.js",
-    "static/media/satisfactory_logo_full_color_small.png": "https://www.satisfactory-planner.net/static/media/satisfactory_logo_full_color_small.da5e97839853f66bc78e.png",
-    "static/media/stripe-bg.png": "https://www.satisfactory-planner.net/static/media/stripe-bg.ddc4de7e84196ac2e0f4.png",
-    "index.html": "https://www.satisfactory-planner.net/index.html",
-    "main.5b0b5e9c.js.map": "https://www.satisfactory-planner.net/static/js/main.5b0b5e9c.js.map"
+    "main.css": "/static/css/main.0c4d6a7f.css",
+    "main.js": "/static/js/main.eb251019.js",
+    "static/media/satisfactory_logo_full_color_small.png": "/static/media/satisfactory_logo_full_color_small.da5e97839853f66bc78e.png",
+    "static/media/stripe-bg.png": "/static/media/stripe-bg.ddc4de7e84196ac2e0f4.png",
+    "index.html": "/index.html",
+    "main.eb251019.js.map": "/static/js/main.eb251019.js.map"
   },
   "entrypoints": [
     "static/css/main.0c4d6a7f.css",
-    "static/js/main.5b0b5e9c.js"
+    "static/js/main.eb251019.js"
   ]
 }

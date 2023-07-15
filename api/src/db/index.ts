@@ -11,8 +11,6 @@ export default class DB {
     Parse.initialize(process.env.PARSE_APP_ID!);
     Parse.masterKey = process.env.PARSE_MASTER_KEY!;
     Parse.serverURL = process.env.PARSE_SERVER_URL!;
-
-    await Parse.Schema.all();
     this.initialized = true;
     logger.info("Database ready!");
   }

@@ -1,4 +1,4 @@
-import { dateTime } from '@/util/date-time/formats';
+import { dateTime } from "@/util/date-time/formats";
 
 interface LogLevel {
   key: string,
@@ -6,13 +6,13 @@ interface LogLevel {
 }
 
 const LogLevels = {
-  NONE: { key: 'NONE', priority: -1 },
-  ERROR: { key: 'ERROR', priority: 0 },
-  WARN: { key: 'WARN', priority: 1 },
-  INFO: { key: 'INFO', priority: 2 },
-  VERBOSE: { key: 'VERBOSE', priority: 3 },
-  DEBUG: { key: 'DEBUG', priority: 4 },
-  SILLY: { key: 'SILLY', priority: 5 },
+  NONE: { key: "NONE", priority: -1 },
+  ERROR: { key: "ERROR", priority: 0 },
+  WARN: { key: "WARN", priority: 1 },
+  INFO: { key: "INFO", priority: 2 },
+  VERBOSE: { key: "VERBOSE", priority: 3 },
+  DEBUG: { key: "DEBUG", priority: 4 },
+  SILLY: { key: "SILLY", priority: 5 },
 };
 
 const envLogLevelDefaults: { [id: string]: LogLevel } = {
@@ -79,8 +79,8 @@ class Logger {
         prefixParts.push(`[${level.key}]`);
       }
       prefixParts.push(`<${timestamp}>`);
-      const prefix = prefixParts.join(' ');
-      if (typeof message === 'string') {
+      const prefix = prefixParts.join(" ");
+      if (typeof message === "string") {
         logFunc(`${prefix} ${message}`);
       } else {
         logFunc(prefix);

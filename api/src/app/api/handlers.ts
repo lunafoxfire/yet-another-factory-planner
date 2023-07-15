@@ -1,12 +1,12 @@
-import { RequestHandler } from 'express';
-import { getDataByVersion, LATEST_VERSION } from '@/game-data';
-import SharedFactory from '@/models/SharedFactory';
-import { APIError } from '@/util/errors';
+import type { RequestHandler } from "express";
+import { getDataByVersion, LATEST_VERSION } from "@/game-data";
+import SharedFactory from "@/models/SharedFactory";
+import { APIError } from "@/util/errors";
 
 const ping: RequestHandler = async (req, res) => {
   res.status(200).json({
     data: {
-      message: 'pong',
+      message: "pong",
     },
   });
 };
@@ -18,7 +18,7 @@ const initialize: RequestHandler = async (req, res) => {
   if (factoryKey) {
     const factory = await SharedFactory.getByKey(factoryKey as string);
     if (!factory) {
-      throw new APIError(400, 'Invalid factory id');
+      throw new APIError(400, "Invalid factory id");
     }
     factory_config = factory.factory_config;
   }
@@ -38,7 +38,7 @@ const getSharedFactory: RequestHandler = async (req, res) => {
   const { factoryKey } = req.params;
   const factory = await SharedFactory.getByKey(factoryKey);
   if (!factory) {
-    throw new APIError(400, 'Invalid factory id');
+    throw new APIError(400, "Invalid factory id");
   }
   res.status(200).json({
     data: {

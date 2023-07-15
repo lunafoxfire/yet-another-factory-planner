@@ -1,25 +1,26 @@
-import knexConfig, { Knex } from 'knex';
-import { createLogger } from '@/util/logger';
-import { isTruthy } from '@/util/string';
-import { knexSettings } from '@/../knexfile';
+import type { Knex } from "knex";
+import knexConfig from "knex";
+import { createLogger } from "@/util/logger";
+import { isTruthy } from "@/util/string";
+import { knexSettings } from "@/../knexfile";
 
-const logger = createLogger('db');
+const logger = createLogger("db");
 
 export default class DB {
   public static knex: Knex;
 
   public static async init() {
-    logger.info('Connecting to database...');
+    logger.info("Connecting to database...");
     DB.knex = knexConfig({
-      client: 'pg',
+      client: "pg",
       connection: DB.getConnectionConfig(),
       pool: { min: 0, max: 7 },
       debug: isTruthy(process.env.KNEX_DEBUG),
     });
     await DB.knex.raw("SELECT 'connection test';");
-    logger.info('Running migrations...');
+    logger.info("Running migrations...");
     await DB.knex.migrate.latest(knexSettings.migrations);
-    logger.info('Database ready!');
+    logger.info("Database ready!");
   }
 
   private static getConnectionConfig(): any {

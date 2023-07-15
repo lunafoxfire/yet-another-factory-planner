@@ -1,9 +1,10 @@
-import express, { ErrorRequestHandler, RequestHandler } from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import 'express-async-errors';
-import { createLogger } from '@/util/logger';
-import { registerRoutes } from '@/app/api/routes';
+import type { ErrorRequestHandler, RequestHandler } from "express";
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import "express-async-errors";
+import { createLogger } from "@/util/logger";
+import { registerRoutes } from "@/app/api/routes";
 
 const joiErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const joiError = err.error;
@@ -19,7 +20,7 @@ const joiErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || 500;
-  const message = statusCode === 500 ? 'Internal server error' : err.message;
+  const message = statusCode === 500 ? "Internal server error" : err.message;
 
   res.status(statusCode).json({
     message,
@@ -34,7 +35,7 @@ const notFoundHandler: RequestHandler = (req, res, next) => {
 
 export default class App {
   public static server = express();
-  public static logger = createLogger('api');
+  public static logger = createLogger("api");
 
   public static async init() {
     const port = App.getPort();
@@ -45,7 +46,7 @@ export default class App {
 
     registerRoutes();
 
-    App.server.all('*', notFoundHandler);
+    App.server.all("*", notFoundHandler);
     App.server.use(joiErrorHandler);
     App.server.use(errorHandler);
 

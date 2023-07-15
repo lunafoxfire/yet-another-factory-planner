@@ -1,20 +1,20 @@
-import Joi from 'joi';
-import { createValidator } from 'express-joi-validation';
-import App from '@/app';
-import { factoryConfigSchema } from '@/models/SharedFactory';
-import { ALLOWED_GAME_VERSIONS } from '@/game-data';
-import handlers from './handlers';
+import Joi from "joi";
+import { createValidator } from "express-joi-validation";
+import App from "@/app";
+import { factoryConfigSchema } from "@/models/SharedFactory";
+import { ALLOWED_GAME_VERSIONS } from "@/game-data";
+import handlers from "./handlers";
 
 const validator = createValidator({ passError: true });
 
 export function registerRoutes() {
   App.server.get(
-    '/ping',
+    "/ping",
     handlers.ping,
   );
 
   App.server.get(
-    '/initialize',
+    "/initialize",
     validator.query(Joi.object({
       factoryKey: Joi.string(),
       gameVersion: Joi.string().allow(...ALLOWED_GAME_VERSIONS).only(),
@@ -23,7 +23,7 @@ export function registerRoutes() {
   );
 
   App.server.get(
-    '/shared-factories/:factoryKey',
+    "/shared-factories/:factoryKey",
     validator.params(Joi.object({
       factoryKey: Joi.string().required(),
     })),
@@ -31,7 +31,7 @@ export function registerRoutes() {
   );
 
   App.server.post(
-    '/share-factory',
+    "/share-factory",
     validator.body(Joi.object({
       factoryConfig: factoryConfigSchema.required(),
     }).required()),

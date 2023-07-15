@@ -1,14 +1,14 @@
-import path from 'path';
-import fs from 'fs';
-import { Knex } from 'knex';
-import '@/config';
-import DB from '@/db';
+import path from "path";
+import fs from "fs";
+import type { Knex } from "knex";
+import "@/config";
+import DB from "@/db";
 
-const OUTPUT_FILE = path.join(__dirname, '..', 'db/schema.json');
+const OUTPUT_FILE = path.join(__dirname, "..", "db/schema.json");
 
 const EXCLUDE = [
-  'knex_migrations',
-  'knex_migrations_lock',
+  "knex_migrations",
+  "knex_migrations_lock",
 ];
 
 DB.init()

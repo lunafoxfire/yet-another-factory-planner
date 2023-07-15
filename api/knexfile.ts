@@ -1,7 +1,7 @@
-import '@/config';
+import "@/config";
 
 export const knexSettings = {
-  client: 'pg',
+  client: "pg",
   connection: {
     host: process.env.PG_HOST,
     port: process.env.PG_PORT,
@@ -10,8 +10,8 @@ export const knexSettings = {
     database: process.env.PG_DATABASE,
   },
   migrations: {
-    directory: './db/migrations',
-    tableName: 'knex_migrations',
+    directory: "./db/migrations",
+    tableName: "knex_migrations",
   },
 };
 

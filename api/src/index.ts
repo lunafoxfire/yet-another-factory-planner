@@ -1,6 +1,6 @@
-import '@/config';
-import DB from '@/db';
-import App from '@/app';
+import "@/config";
+import DB from "@/db";
+import App from "@/app";
 
 (async () => {
   try {

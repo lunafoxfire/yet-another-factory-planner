@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import { nanoid } from 'nanoid';
-import DB from '@/db';
-import { ALLOWED_GAME_VERSIONS } from '@/game-data';
+import Joi from "joi";
+import { nanoid } from "nanoid";
+import DB from "@/db";
+import { ALLOWED_GAME_VERSIONS } from "@/game-data";
 
 export const factoryConfigSchema = Joi.object({
   gameVersion: Joi.string().allow(...ALLOWED_GAME_VERSIONS).only().required(),
@@ -39,13 +39,13 @@ interface SharedFactorySchema {
 }
 
 export default class SharedFactory {
-  public static TABLE_NAME = 'shared_factories';
+  public static TABLE_NAME = "shared_factories";
 
   public static async getByKey(key: string): Promise<SharedFactorySchema> {
     const factory = await DB.knex(SharedFactory.TABLE_NAME)
       .where({ key })
       .select()
-      .first('*');
+      .first("*");
     return factory;
   }
 
@@ -56,7 +56,7 @@ export default class SharedFactory {
     const key = nanoid();
     const [factory] = await DB.knex(SharedFactory.TABLE_NAME)
       .insert({ key, factory_config: JSON.stringify(config) })
-      .returning('*');
+      .returning("*");
     return factory;
   }
 }

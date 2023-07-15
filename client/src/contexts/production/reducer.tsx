@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid';
 import { decodeState_v1_U5 } from './legacy-state-decoders/v1_U5';
 import { decodeState_v2_U5 } from './legacy-state-decoders/v2_U5';
 import { decodeState_v3_U5 } from './legacy-state-decoders/v3_U5';
-import { ProductionItemOptions, InputItemOptions, WeightingOptions, RecipeSelectionMap, FactoryOptions } from './types';
+import { ProductionItemOptions, InputItemOptions, WeightingOptions, RecipeSelectionMap, FactoryOptions, NodeInfo } from './types';
 import { GameData, RecipeMap, ResourceMap } from '../gameData/types';
 import { MAX_PRIORITY } from './consts';
 
@@ -94,6 +94,7 @@ export function getInitialState(gameData: GameData): FactoryOptions {
     allowHandGatheredItems: false,
     weightingOptions: getInitialWeightingOptions(),
     allowedRecipes: getInitialAllowedRecipes(gameData.recipes),
+    nodesPositions: []
   };
 }
 
@@ -119,7 +120,8 @@ export type FactoryAction =
   | { type: 'MASS_SET_RECIPES_ACTIVE', recipes: string[], active: boolean }
   | { type: 'LOAD_FROM_SHARED_FACTORY', config: any, gameData: GameData }
   | { type: 'LOAD_FROM_LEGACY_ENCODING', encoding: string, gameData: GameData }
-  | { type: 'LOAD_FROM_SESSION_STORAGE', sessionState: FactoryOptions, gameData: GameData };
+  | { type: 'LOAD_FROM_SESSION_STORAGE', sessionState: FactoryOptions, gameData: GameData }
+  | { type: 'UPDATE_NODES_POSTIONS', nodesPositions: NodeInfo[] };
 
 export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOptions {
   switch (action.type) {
@@ -289,6 +291,7 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
             newState.allowedRecipes[key] = true;
           }
         });
+        newState.nodesPositions = action.config.nodesPositions;
         return newState;
       } catch (e) {
         console.error(e);
@@ -311,6 +314,10 @@ export function reducer(state: FactoryOptions, action: FactoryAction): FactoryOp
         console.error(e);
         return getInitialState(action.gameData);
       }
+    }
+    case 'UPDATE_NODES_POSTIONS': {
+      const updatedNodesPositions = [ ...action.nodesPositions ];
+      return { ...state, nodesPositions: updatedNodesPositions };
     }
     default:
       return state;

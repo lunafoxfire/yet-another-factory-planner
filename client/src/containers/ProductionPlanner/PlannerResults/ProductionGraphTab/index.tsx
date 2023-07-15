@@ -13,6 +13,7 @@ import GraphTooltip from '../../../../components/GraphTooltip';
 import { truncateFloat } from '../../../../utilities/number';
 import { useProductionContext } from '../../../../contexts/production';
 import { GameData } from '../../../../contexts/gameData/types';
+import { NodeInfo } from '../../../../contexts/production/types';
 
 Cytoscape.use(popper);
 Cytoscape.use(klay);
@@ -20,20 +21,6 @@ Cytoscape.use(klay);
 if (process.env.NODE_ENV !== 'development') {
   Cytoscape.warnings(false);
 }
-
-const layout = {
-  name: 'klay',
-  padding: 40,
-  klay: {
-    direction: 'RIGHT',
-    edgeRouting: 'ORTHOGONAL',
-    nodePlacement: 'LINEAR_SEGMENTS',
-    edgeSpacingFactor: 0.2,
-    inLayerSpacingFactor: 0.7,
-    spacing: 90,
-    thoroughness: 10,
-  },
-};
 
 const stylesheet: Stylesheet[] = [
   {
@@ -303,6 +290,31 @@ const ProductionGraphTab = () => {
   const resultsGraph = ctx.solverResults?.productionGraph || null;
   const graphError = ctx.solverResults?.error || null;
   const isLoading = ctx.calculating;
+  const nodesPositions = ctx.state.nodesPositions;
+  let currentNodePosition: NodeInfo | undefined;
+
+  const layout = {
+    name: 'klay',
+    padding: 40,
+    transform: modifyNodePositions,
+    klay: {
+      direction: 'RIGHT',
+      edgeRouting: 'ORTHOGONAL',
+      nodePlacement: 'LINEAR_SEGMENTS',
+      edgeSpacingFactor: 0.2,
+      inLayerSpacingFactor: 0.7,
+      spacing: 90,
+      thoroughness: 10,
+    },
+  };
+  
+function modifyNodePositions(node: any, pos: any){
+  let savedNode = nodesPositions?.find(n => n.key === node.data('key'));
+  if (savedNode){
+    return {x: savedNode.x, y:savedNode.y};
+  }
+  return pos;
+}
 
   function setGraphRef(instance: HTMLDivElement | null) {
     if (instance && !graphRef.current) {
@@ -336,12 +348,18 @@ const ProductionGraphTab = () => {
       e.target.addClass('grabbed');
       e.target.outgoers('edge').addClass('grabbed').addClass('grabbed-outgoing');
       e.target.incomers('edge').addClass('grabbed').addClass('grabbed-incoming');
+      registerNodePosition(e.target.data('key'), e.target.position('x'), e.target.position('y'));
     });
 
     cy.on('free', 'node', function (e) {
       e.target.removeClass('grabbed');
       e.target.outgoers('edge').removeClass('grabbed').removeClass('grabbed-outgoing');
       e.target.incomers('edge').removeClass('grabbed').removeClass('grabbed-incoming');
+      if (currentNodePosition && !areNodesSame(currentNodePosition, { key: e.target.data('key'), x: e.target.position('x'), y: e.target.position('y') })){
+        updateStateNodePosition(e.target.data('key'), e.target.position('x'), e.target.position('y'));
+        ctx.dispatch({ type: 'UPDATE_NODES_POSTIONS', nodesPositions: nodesPositions });
+        currentNodePosition = undefined;
+      }
     });
 
     cy.on('mouseover', 'node', function (e) {
@@ -357,6 +375,28 @@ const ProductionGraphTab = () => {
         deactivatePopper(cy);
       }
     });
+  }
+
+  function registerNodePosition(key: string, x: number, y: number){
+      currentNodePosition = { key: key, x: x, y: y };
+  }
+
+  function areNodesSame(node1: NodeInfo, node2: NodeInfo): boolean {
+     console.log(node1 == node2);
+     console.log(node1 === node2);
+    return false;
+  }
+  function updateStateNodePosition(key: string, x: number, y: number){
+    let existingNode = nodesPositions?.find(node => node.key === key);
+    if (existingNode){
+      if (existingNode.x !== x || existingNode.y !== y){
+        existingNode.x = x;
+        existingNode.y = y;
+      }
+    }
+    else{
+      nodesPositions.push({key: key, x: x, y: y });
+    }
   }
 
   function activatePopper(cy: Cytoscape.Core, node: any) {

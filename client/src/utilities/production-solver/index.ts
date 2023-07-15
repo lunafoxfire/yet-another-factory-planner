@@ -314,7 +314,7 @@ export class ProductionSolver {
     }
   }
 
-  private validateNumber(num: Number) {
+  private validateNumber(num: number) {
     if (Number.isNaN(num)) {
       throw new GraphError('INVALID VALUE: NOT A NUMBER', 'Double check your factory settings.');
     } else if (num < 0) {

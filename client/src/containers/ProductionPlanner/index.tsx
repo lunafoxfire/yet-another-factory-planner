@@ -26,10 +26,20 @@ const ProductionPlanner = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 1.0, type: 'tween' }}
             >
-              <Loader size='xl' />
-              <Title style={{ marginTop: '15px' }}>
-                Loading game data...
-              </Title>
+              {gdCtx.loadingError ? (
+                <>
+                  <Title style={{ marginTop: '15px' }}>
+                    Error connecting to server x_x
+                  </Title>
+                </>
+              ) : (
+                <>
+                  <Loader size='xl' />
+                  <Title style={{ marginTop: '15px' }}>
+                    Loading game data...
+                  </Title>
+                </>
+              )}
             </LoadingOverlay>
           )}
         </AnimatePresence>

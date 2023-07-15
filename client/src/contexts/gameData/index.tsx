@@ -19,6 +19,7 @@ export type GameDataContextType = {
   gameData: GameData | null,
   initializer: FactoryInitializer | null,
   loading: boolean,
+  loadingError: boolean,
   completedThisFrame: boolean,
   gameVersion: string,
   setGameVersion: (version: string) => void,
@@ -47,6 +48,7 @@ export const GameDataProvider = ({ children }: PropTypes) => {
   const [gameVersion, setGameVersion] = useState('');
   const [initializer, setInitializer] = useState<FactoryInitializer | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingError, setLoadingError] = useState(false);
   const prevLoading = usePrevious(loading);
   const [needToFetchGameData, setNeedToFetchGameData] = useState(true);
   const completedThisFrame = useMemo(() => !loading && loading !== prevLoading, [loading, prevLoading]);
@@ -92,6 +94,9 @@ export const GameDataProvider = ({ children }: PropTypes) => {
 
   useEffect(() => {
     if (getInitialize.completedThisFrame) {
+      if (getInitialize.error) {
+        setLoadingError(true);
+      }
       const gameData = getInitialize.data?.game_data || null;
       const factoryConfig = getInitialize.data?.factory_config || null;
 
@@ -132,7 +137,7 @@ export const GameDataProvider = ({ children }: PropTypes) => {
       });
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getInitialize]);
 
   const handleSetGameVersion = useCallback((version: string) => {
@@ -149,6 +154,7 @@ export const GameDataProvider = ({ children }: PropTypes) => {
       gameData,
       initializer,
       loading,
+      loadingError,
       completedThisFrame,
       gameVersion,
       setGameVersion: handleSetGameVersion,

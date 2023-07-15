@@ -29,7 +29,10 @@ const ProductionPlanner = () => {
               {gdCtx.loadingError ? (
                 <>
                   <Title style={{ marginTop: '15px' }}>
-                    Error connecting to server x_x
+                    Scheduled maintenance in progress x_x
+                  </Title>
+                  <Title style={{ marginTop: '15px' }}>
+                    We will return in approx 30 mins.
                   </Title>
                 </>
               ) : (

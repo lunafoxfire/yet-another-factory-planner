@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "https://www.satisfactory-planner.net/static/css/main.0c4d6a7f.css",
-    "main.js": "https://www.satisfactory-planner.net/static/js/main.459aeb73.js",
+    "main.js": "https://www.satisfactory-planner.net/static/js/main.51d03e51.js",
     "static/media/satisfactory_logo_full_color_small.png": "https://www.satisfactory-planner.net/static/media/satisfactory_logo_full_color_small.da5e97839853f66bc78e.png",
     "static/media/stripe-bg.png": "https://www.satisfactory-planner.net/static/media/stripe-bg.ddc4de7e84196ac2e0f4.png",
     "index.html": "https://www.satisfactory-planner.net/index.html",
-    "main.459aeb73.js.map": "https://www.satisfactory-planner.net/static/js/main.459aeb73.js.map"
+    "main.51d03e51.js.map": "https://www.satisfactory-planner.net/static/js/main.51d03e51.js.map"
   },
   "entrypoints": [
     "static/css/main.0c4d6a7f.css",
-    "static/js/main.459aeb73.js"
+    "static/js/main.51d03e51.js"
   ]
 }

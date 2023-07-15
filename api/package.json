@@ -7,8 +7,8 @@
     "directory": "git+https://github.com/lydianlights/yet-another-factory-planner.git"
   },
   "scripts": {
-    "start": "node build/src/index.js",
-    "build": "tsc && tsc-alias",
+    "start": "node build/index.js",
+    "build": "rimraf ./build && tsc && tsc-alias",
     "dev": "nodemon -e ts,js,json --exec \"ts-node src/index.ts\"",
     "lint": "eslint . --fix",
     "ts-node": "ts-node",
@@ -40,6 +40,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.45.0",
     "nodemon": "^3.0.1",
+    "rimraf": "^5.0.1",
     "satisfactory-docs-parser": "7.0.1",
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.8.7",

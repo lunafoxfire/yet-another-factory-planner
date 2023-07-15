@@ -1,7 +1,6 @@
-/data/**/**
-!/data/.gitkeep
-/src/data/json/**/**
-!/src/data/json/.gitkeep
+.env
+.env.*
+!.env.example
 
 # dependencies
 /node_modules

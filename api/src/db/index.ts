@@ -1,43 +1,27 @@
-import type { Knex } from "knex";
-import knexConfig from "knex";
+import Parse from "parse/node";
 import { createLogger } from "@/util/logger";
-import { isTruthy } from "@/util/string";
-import { knexSettings } from "@/../knexfile";
 
 const logger = createLogger("db");
 
 export default class DB {
-  public static knex: Knex;
+  public static initialized = false;
 
   public static async init() {
     logger.info("Connecting to database...");
-    DB.knex = knexConfig({
-      client: "pg",
-      connection: DB.getConnectionConfig(),
-      pool: { min: 0, max: 7 },
-      debug: isTruthy(process.env.KNEX_DEBUG),
-    });
-    await DB.knex.raw("SELECT 'connection test';");
-    logger.info("Running migrations...");
-    await DB.knex.migrate.latest(knexSettings.migrations);
+    Parse.initialize(process.env.PARSE_APP_ID!);
+    Parse.masterKey = process.env.PARSE_MASTER_KEY!;
+    Parse.serverURL = process.env.PARSE_SERVER_URL!;
+
+    await Parse.Schema.all();
+    this.initialized = true;
     logger.info("Database ready!");
   }
 
-  private static getConnectionConfig(): any {
-    const config: any = {
-      ssl: isTruthy(process.env.PG_SSL) ? { rejectUnauthorized: false } : false, // fix for heroku
-    };
+  public static Object<T extends Parse.Attributes>(className: string, attributes?: T): Parse.Object<T> {
+    return new Parse.Object(className, attributes) as Parse.Object<T>;
+  }
 
-    if (process.env.DATABASE_URL) {
-      config.connectionString = process.env.DATABASE_URL;
-    } else {
-      config.host = process.env.PG_HOST;
-      config.port = Number(process.env.PG_PORT);
-      config.user = process.env.PG_USER;
-      config.password = process.env.PG_PASSWORD;
-      config.database = process.env.PG_DATABASE;
-    }
-
-    return config;
+  public static Query<T extends Parse.Object<Parse.Attributes>>(className: string): Parse.Query<T> {
+    return new Parse.Query(className);
   }
 }

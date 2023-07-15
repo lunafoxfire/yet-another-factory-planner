@@ -12,7 +12,6 @@ const LogLevels = {
   INFO: { key: "INFO", priority: 2 },
   VERBOSE: { key: "VERBOSE", priority: 3 },
   DEBUG: { key: "DEBUG", priority: 4 },
-  SILLY: { key: "SILLY", priority: 5 },
 };
 
 const envLogLevelDefaults: { [id: string]: LogLevel } = {
@@ -53,10 +52,6 @@ class Logger {
     this.log(LogLevels.DEBUG, message);
   }
 
-  public silly(message: any) {
-    this.log(LogLevels.SILLY, message);
-  }
-
   private log(level: LogLevel, message: any) {
     if (level.priority <= Logger.globalLogLevel.priority) {
       let logFunc;
@@ -75,7 +70,7 @@ class Logger {
       if (this.label) {
         prefixParts.push(`[${this.label}]`);
       }
-      if (level !== LogLevels.NONE && level !== LogLevels.SILLY) {
+      if (level !== LogLevels.NONE) {
         prefixParts.push(`[${level.key}]`);
       }
       prefixParts.push(`<${timestamp}>`);

@@ -17,10 +17,10 @@ const initialize: RequestHandler = async (req, res) => {
 
   if (factoryKey) {
     const factory = await SharedFactory.getByKey(factoryKey as string);
-    if (!factory) {
+    if (!factory || !factory.factoryConfig) {
       throw new APIError(400, "Invalid factory id");
     }
-    factory_config = factory.factory_config;
+    factory_config = factory.factoryConfig;
   }
 
   const version = factory_config?.gameVersion || gameVersion || LATEST_VERSION;
@@ -37,12 +37,12 @@ const initialize: RequestHandler = async (req, res) => {
 const getSharedFactory: RequestHandler = async (req, res) => {
   const { factoryKey } = req.params;
   const factory = await SharedFactory.getByKey(factoryKey);
-  if (!factory) {
+  if (!factory || !factory.factoryConfig) {
     throw new APIError(400, "Invalid factory id");
   }
   res.status(200).json({
     data: {
-      factory_config: factory.factory_config,
+      factory_config: factory.factoryConfig,
     },
   });
 };

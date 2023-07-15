@@ -1,3 +1,4 @@
+import Parse from "parse/node";
 import Joi from "joi";
 import { nanoid } from "nanoid";
 import DB from "@/db";
@@ -32,31 +33,48 @@ export const factoryConfigSchema = Joi.object({
   allowedRecipes: Joi.array().items(Joi.string()).required(),
 });
 
-interface SharedFactorySchema {
-  id: number,
-  key: string,
-  factory_config: any,
-}
+export type SharedFactoryAttributes = {
+  key?: string;
+  factoryConfig?: Record<string, any>;
+};
 
-export default class SharedFactory {
-  public static TABLE_NAME = "shared_factories";
+export default class SharedFactory extends Parse.Object<SharedFactoryAttributes> {
+  public static TABLE_NAME = "SharedFactories";
 
-  public static async getByKey(key: string): Promise<SharedFactorySchema> {
-    const factory = await DB.knex(SharedFactory.TABLE_NAME)
-      .where({ key })
-      .select()
-      .first("*");
-    return factory;
+  public static Object(attributes?: SharedFactoryAttributes) {
+    return DB.Object<SharedFactoryAttributes>(SharedFactory.TABLE_NAME, attributes);
   }
 
-  public static async create(config: any): Promise<SharedFactorySchema> {
+  public static Query() {
+    return DB.Query<SharedFactory>(SharedFactory.TABLE_NAME);
+  }
+
+  public static ExtractAttributes(obj: SharedFactory): SharedFactoryAttributes & { id: string } {
+    return {
+      id: obj.id,
+      key: obj.get("key"),
+      factoryConfig: obj.get("factoryConfig"),
+    };
+  }
+
+  public static async getByKey(key: string): Promise<SharedFactoryAttributes | undefined> {
+    const query = new Parse.Query(SharedFactory.TABLE_NAME);
+    const factory = await query
+      .equalTo("key", key)
+      .first({ useMasterKey: true });
+    return factory ? SharedFactory.ExtractAttributes(factory) : undefined;
+  }
+
+  public static async create(config: any): Promise<SharedFactoryAttributes> {
     const validation = factoryConfigSchema.validate(config);
     if (validation.error) throw validation.error;
 
     const key = nanoid();
-    const [factory] = await DB.knex(SharedFactory.TABLE_NAME)
-      .insert({ key, factory_config: JSON.stringify(config) })
-      .returning("*");
-    return factory;
+    const factory = SharedFactory.Object({
+      key,
+      factoryConfig: config,
+    });
+    await factory.save(null, { useMasterKey: true });
+    return SharedFactory.ExtractAttributes(factory);
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Loader, Divider, Text, Title } from '@mantine/core';
 import { AnimatePresence, motion } from 'framer-motion';
 import styled from 'styled-components';
@@ -13,6 +13,18 @@ import Portal from '../../components/Portal';
 const ProductionPlanner = () => {
   const globalCtx = useGlobalContext();
   const gdCtx = useGameDataContext();
+  const [slowLoad, setSlowLoad] = useState(false);
+
+  const loaded = !!gdCtx.gameData;
+  useEffect(() => {
+    setSlowLoad(false);
+    if (!loaded) {
+      const timer = setTimeout(() => {
+        setSlowLoad(true);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [loaded]);
 
   const renderLoading = () => {
     return (
@@ -29,10 +41,7 @@ const ProductionPlanner = () => {
               {gdCtx.loadingError ? (
                 <>
                   <Title style={{ marginTop: '15px' }}>
-                    Scheduled maintenance in progress x_x
-                  </Title>
-                  <Title style={{ marginTop: '15px' }}>
-                    We will return in approx 30 mins.
+                    An error occured connecting to the server x_x
                   </Title>
                 </>
               ) : (
@@ -41,6 +50,19 @@ const ProductionPlanner = () => {
                   <Title style={{ marginTop: '15px' }}>
                     Loading game data...
                   </Title>
+                  <AnimatePresence>
+                    {slowLoad && (
+                      <motion.div
+                        initial={{ opacity: 0.0, y: 20 }}
+                        animate={{ opacity: 1.0, y: 0 }}
+                        transition={{ duration: 1.0, type: 'tween' }}
+                      >
+                        <Title style={{ marginTop: '15px' }}>
+                          Trying real hard!
+                        </Title>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </>
               )}
             </LoadingOverlay>

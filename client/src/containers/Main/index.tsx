@@ -15,9 +15,6 @@ const Main = () => {
       header={<SHeader height={theme.other.headerHeight}><SiteHeader /></SHeader>}
     >
       <MainContainer fluid>
-        <TEMP_WARNING>
-          If you are seeing this message, the server will be going down for maintenance in approx 15-20 minutes. We should be back up within a half hour! Apologies, but we are switching hosting providers... It is a pain...
-        </TEMP_WARNING>
         <ErrorBoundary>
           <ProductionPlanner />
         </ErrorBoundary>
@@ -34,15 +31,6 @@ const Main = () => {
 };
 
 export default Main;
-
-const TEMP_WARNING = styled(Container)`
-  display: flex;
-  background-color: #e74747;
-  color: #ffffff;
-  border: 1px solid #b92525;
-  padding: 10px;
-  margin-bottom: 10px;
-`;
 
 const SHeader = styled(Header)`
   position: fixed;

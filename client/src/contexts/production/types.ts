@@ -33,3 +33,13 @@ export type FactoryOptions = {
   weightingOptions: WeightingOptions,
   allowedRecipes: RecipeSelectionMap,
 };
+
+export type NodeInformation = {
+  x: number,
+  y: number,
+  key: string,
+}
+
+export type FactoryGraphChanges = {
+  nodes: NodeInformation[],
+}

@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { FactoryOptions, RecipeSelectionMap } from '../../contexts/production/types';
 import { GameData } from '../../contexts/gameData/types';
 import { GraphError } from '../error/GraphError';
+import { forEach } from 'lodash';
 
 const EPSILON = 1e-8;
 const MIN_RESOURCE_WEIGHT = 0.0001;
@@ -64,6 +65,14 @@ export type SolverResults = {
   error: GraphError | null,
 };
 
+export type ProducedItemInformation = {
+  key: string,
+  name: string,
+  amount: number,
+  step: number,
+
+}
+
 export type Report = {
   pointsProduced: number,
   powerUsageEstimate: {
@@ -88,7 +97,8 @@ export type Report = {
   },
   totalRawResources: {
     [key: string]: number,
-  }
+  },
+  totalItemsRecap: ProducedItemInformation[]
 }
 
 export type ProductionGraph = {
@@ -314,7 +324,7 @@ export class ProductionSolver {
     }
   }
 
-  private validateNumber(num: Number) {
+  private validateNumber(num: number) {
     if (Number.isNaN(num)) {
       throw new GraphError('INVALID VALUE: NOT A NUMBER', 'Double check your factory settings.');
     } else if (num < 0) {
@@ -795,13 +805,16 @@ export class ProductionSolver {
       estimatedFoundations: 0,
       buildingsUsed: {},
       totalMaterialCost: {},
-      totalRawResources: {}
+      totalRawResources: {},
+      totalItemsRecap: []
     };
 
-    for (const [key, edge] of Object.entries(productionGraph.edges)) {
-      if (this.gameData.resources[edge.key])
+    report.totalItemsRecap = this.generateItemsPerStep(productionGraph);
+
+    for (const [key, node] of Object.entries(productionGraph.nodes)) {
+      if (this.gameData.resources[node.key])
       {
-        report.totalRawResources[this.gameData.items[edge.key].name] = edge.productionRate;
+        report.totalRawResources[this.gameData.items[node.key].name] = node.multiplier;
       }
     }
     for (const [key, node] of Object.entries(productionGraph.nodes)) {
@@ -880,5 +893,83 @@ export class ProductionSolver {
     report.estimatedFoundations = Math.ceil(2 * (report.totalBuildArea / 64));
 
     return report;
+  }
+
+  //Sort all items/resources involved in the factory by the MINIMUM number of steps needed to produce them in the chain
+  private generateItemsPerStep(productionGraph: ProductionGraph) : ProducedItemInformation[] {
+    let itemsList = [] as ProducedItemInformation[];
+    let step = 1;
+    let nodes = productionGraph.nodes;
+    let keys = Object.keys(nodes);
+    let usedKeys = [] as string[];
+
+    //We only need raw resources and recipes, remove final products and side products
+    keys = keys.filter((key) => nodes[key].type === 'RESOURCE' || nodes[key].type === 'RECIPE');
+
+    //First get all the items used and produced
+    for (var edge of productionGraph.edges){
+      this.AddItemAndAmountToItemList(itemsList, edge.key, edge.productionRate, step);
+    }
+
+    //Preload raw resources since no recipe produces them
+    for (var key of keys){
+      if (this.gameData.resources[key])
+      {
+        usedKeys.push(key);
+      }
+    }
+
+    keys = keys.filter((key) => !usedKeys.includes(key));
+    //We use this to keep the currently worked on recipes out of the current loop
+    //Otherwise we can have cases where a recipe we just added to the current step contributes
+    //to another recipe that should have been in the next step
+    let loopKeys = [] as string[];
+
+    while (keys.length > 0){
+      for (var key of keys){
+        const recipe = this.gameData.recipes[key];
+        const applicableIngredientsAmount = recipe.ingredients.filter((ingredient) => usedKeys.includes(ingredient.itemClass)).length;
+        if (applicableIngredientsAmount == recipe.ingredients.length){
+          for (var product of recipe.products){
+            if (!this.gameData.resources[product.itemClass])
+            {
+              this.UpdateStepInItemList(itemsList, product.itemClass, step+1);
+            }
+            if (!loopKeys.includes(product.itemClass)){
+              loopKeys.push(product.itemClass);
+            }
+          }
+          loopKeys.push(key);
+        }
+      }
+      
+      usedKeys = [...usedKeys, ...loopKeys];
+      keys = keys.filter((key) => !usedKeys.includes(key));
+      step++;
+    }
+
+    return itemsList;
+  }
+
+  private AddItemAndAmountToItemList(itemsList: ProducedItemInformation[], key: string, amount: number, step: number) {
+    let existingItems = itemsList.filter(item => item.key === key);
+    if (existingItems && existingItems.length > 0){
+      existingItems[0].amount += amount;
+    } 
+    else {
+      itemsList.push({
+        key: key,
+        amount: amount,
+        name: this.gameData.items[key].name,
+        step: step
+      });
+    }
+  }
+
+  private UpdateStepInItemList(itemsList: ProducedItemInformation[], key: string, step: number){
+    let item = itemsList.find(item => item.key === key);
+    if (item){
+      item.step = step;
+    }
   }
 }

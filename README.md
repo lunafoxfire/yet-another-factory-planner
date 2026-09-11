@@ -1,3 +1,13 @@
+# DEPRECATED
+deprecated in favor of: https://github.com/lunafoxfire/satisfactory-planner
+
+# Why
+life is hard and i couldnt afford to keep the site hosted, and self-hosting was out of the question due to life instability. i am very sorry to all who used the site, but i really had no option other than to let it go under. but now that i am stable again i have completely modernized the architecture and rebuild the site totally from scratch. also, it is hosted for free as a cloudflare worker so it will stay up forever with zero maintenance on my part.
+
+i hope all you pioneers continue to be effective.
+
+# OLD README:
+
 # Community
 
 Very sorry I haven't been actively responding to issues and PRs. Life is hard! I've got a lot going on IRL. I hope to be making big improvements to this project in the coming month or so, though. It's not abandoned, just temporarily inactive!
